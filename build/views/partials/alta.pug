@@ -1,0 +1,23 @@
+.container 
+    h1="Carga de productos"
+    div.mb-5
+        form(action="/api/productos" enctype="application/json" method="POST")
+            div.col
+                label(for="")="Producto:" 
+                input(type="text" name="title").form-control
+            div.col
+                label(for="")="Precio:" 
+                input(type="text" name="price").form-control
+            div.col
+                label(for="")="URL Imageeeeeeeeeeen" 
+                input(type="text" name="thumbnail").form-control
+            p
+            button(type="submit").btn.btn-primary.mt-3="Cargar producto"
+
+
+
+
+
+
+
+

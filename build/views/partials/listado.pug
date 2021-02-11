@@ -1,0 +1,14 @@
+.container 
+    table.table
+        thead
+            tr
+                th(scope="col")="Producto"
+                th(scope="col")="Precio"
+                th(scope="col")="Imagen"
+        tbody 
+            each product in info
+                tr 
+                    td.align-middle=product.title
+                    td.align-middle=product.price
+                    td.align-middle
+                        img(src=product.thumbnail style="width: 100px; height: 100px") 

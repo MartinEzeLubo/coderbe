@@ -58,11 +58,5 @@
         "price": "$421999",
         "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-02006-00.jpg",
         "id": 10
-    },
-    {
-        "title": "sarasa",
-        "price": 28839,
-        "thumbnail": "www.sarasa.com",
-        "id": 11
     }
 ]
