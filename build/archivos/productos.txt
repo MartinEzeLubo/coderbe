@@ -1,0 +1,68 @@
+[
+    {
+        "title": "Forerunner 35",
+        "price": "$25999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-01689-03_1.jpg",
+        "id": 1
+    },
+    {
+        "title": "Forerunner 45",
+        "price": "$32999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-02156-01_1.jpg",
+        "id": 2
+    },
+    {
+        "title": "Forerunner 235",
+        "price": "$37999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-03717-54_1.jpg",
+        "id": 3
+    },
+    {
+        "title": "Descent Mk1",
+        "price": "$214999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-01760-01_1.jpg",
+        "id": 4
+    },
+    {
+        "title": "Instinct Tactical",
+        "price": "$42999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-02064-70_1.jpg",
+        "id": 5
+    },
+    {
+        "title": "Instinct Solar Tactical",
+        "price": "$75999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-02293-06_1.jpg",
+        "id": 6
+    },
+    {
+        "title": "Fenix 6S Pro Solar",
+        "price": "$149999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-02409-13_1.jpg",
+        "id": 7
+    },
+    {
+        "title": "Venu SQ",
+        "price": "$33999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-02427-11_1.jpg",
+        "id": 8
+    },
+    {
+        "title": "Swim 2",
+        "price": "$40999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-02247-01_1.jpg",
+        "id": 9
+    },
+    {
+        "title": "MARQ Driver",
+        "price": "$421999",
+        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-02006-00.jpg",
+        "id": 10
+    },
+    {
+        "title": "sarasa",
+        "price": 28839,
+        "thumbnail": "www.sarasa.com",
+        "id": 11
+    }
+]
