@@ -14,17 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const readWriteFiles_1 = require("./archivos/readWriteFiles");
-const express_handlebars_1 = __importDefault(require("express-handlebars"));
 const port = 8080;
 const app = express_1.default();
 const router = express_1.default.Router();
-app.engine("hbs", express_handlebars_1.default({
-    extname: ".hbs",
-    defaultLayout: 'index.hbs',
-    layoutsDir: __dirname + "/views/layouts",
-    partialDir: __dirname + "/views/partials/"
-}));
-app.set("view engine", "hbs");
+app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
@@ -37,10 +30,10 @@ app.get('/productos/vista', (req, res) => __awaiter(void 0, void 0, void 0, func
     }
     catch (err) {
     }
-    res.render("listado", { info: products });
+    res.render("pages/indexListado", { info: products });
 }));
 app.get('/productos/alta', (req, res) => {
-    res.render("alta");
+    res.render("./pages/index");
 });
 router.get('/productos', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let products = yield readWriteFiles_1.readDataFile();
@@ -68,7 +61,7 @@ router.post('/productos/', (req, res) => __awaiter(void 0, void 0, void 0, funct
     else {
         try {
             let data = yield readWriteFiles_1.writeDataFile(req.body.title, parseInt(req.body.price), req.body.thumbnail);
-            res.render("alta");
+            res.render("./pages/index");
         }
         catch (error) {
             res.status(500).send('Error de la aplicacion' + error);
@@ -106,7 +99,7 @@ router.delete('/productos/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 app.get('/', (req, res) => {
-    res.sendFile('index.html');
+    res.render('./pages/index');
 });
 app.use('/api', router);
 app.listen(port, () => {

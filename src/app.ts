@@ -6,15 +6,7 @@ const port = 8080;
 const app = express();
 const router = express.Router();
 
-app.engine("hbs", 
-  handlebars({
-    extname: ".hbs",
-    defaultLayout: 'index.hbs',
-    layoutsDir: __dirname + "/views/layouts",
-    partialDir: __dirname + "/views/partials/"
-  })
-);
-app.set("view engine", "hbs");
+app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
 
@@ -37,12 +29,12 @@ app.get('/productos/vista', async (req, res) => {
   } catch(err){
     
   }
-  res.render("listado", {info: products});
+  res.render("pages/indexListado", {info: products});
   
 });
 app.get('/productos/alta', (req, res) => {
   
-  res.render("alta");
+  res.render("./pages/index");
   
 });
 
@@ -75,7 +67,7 @@ router.post('/productos/', async (req, res) => {
   } else {
     try {
       let data = await writeDataFile(req.body.title, parseInt(req.body.price), req.body.thumbnail);
-      res.render("alta");
+      res.render("./pages/index");
       
     } catch (error) { 
       res.status(500).send('Error de la aplicacion' + error);
@@ -127,7 +119,7 @@ router.delete('/productos/:id', async (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.sendFile('index.html');
+  res.render('./pages/index');
 });
 
 app.use('/api', router);
