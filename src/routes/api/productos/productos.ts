@@ -29,6 +29,7 @@ router.post('/', async (req, res) => {
         res.status(400).send('Los parametros enviados son incorrectos');
     } else {
         let data = await saveProduct(req.body.title, parseInt(req.body.price), req.body.thumbnail);
+        res.json(data)
         try {
         } catch (error) { 
         res.status(500).send('Error de la aplicacion' + error);
@@ -49,7 +50,7 @@ router.put('/', async (req, res) => {
     }
 });
 
-router.delete('/productos/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         let products = await listProducts();
         let product = products.find(element => element.id === parseInt(req.params.id));

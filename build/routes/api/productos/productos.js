@@ -40,6 +40,7 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     else {
         let data = yield productCRUD_1.saveProduct(req.body.title, parseInt(req.body.price), req.body.thumbnail);
+        res.json(data);
         try {
         }
         catch (error) {
@@ -61,7 +62,7 @@ router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
 }));
-router.delete('/productos/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let products = yield productCRUD_1.listProducts();
         let product = products.find(element => element.id === parseInt(req.params.id));

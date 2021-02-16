@@ -1,6 +1,6 @@
 import express from 'express';
 import apiRouter from './routes/api/api';
-import webRouter from './routes/web/productos/productos';
+import webRouter from './routes/web/web';
 
 const port = 8080;
 const app = express();
