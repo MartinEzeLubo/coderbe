@@ -9,36 +9,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteItem = exports.updateDataFile = exports.writeDataFile = exports.readDataFile = void 0;
+exports.deleteProduct = exports.updateProduct = exports.saveProduct = exports.listProducts = void 0;
 const archivos_1 = require("./archivos");
 const dataSource = new archivos_1.Archivo('productos');
-function readDataFile() {
+function listProducts() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let data = yield dataSource.read();
-            let products = JSON.parse(data);
-            return products;
+            return data;
         }
         catch (err) {
             return err;
         }
     });
 }
-exports.readDataFile = readDataFile;
-function writeDataFile(title, price, thumbnail) {
+exports.listProducts = listProducts;
+function saveProduct(title, price, thumbnail) {
     return __awaiter(this, void 0, void 0, function* () {
         let data;
         try {
             data = yield dataSource.save(title, price, thumbnail);
+            return data;
         }
         catch (err) {
             return err;
         }
-        return data;
     });
 }
-exports.writeDataFile = writeDataFile;
-function updateDataFile(id, title, price, thumbnail) {
+exports.saveProduct = saveProduct;
+function updateProduct(id, title, price, thumbnail) {
     return __awaiter(this, void 0, void 0, function* () {
         let data;
         try {
@@ -50,8 +49,8 @@ function updateDataFile(id, title, price, thumbnail) {
         return data;
     });
 }
-exports.updateDataFile = updateDataFile;
-function deleteItem(id) {
+exports.updateProduct = updateProduct;
+function deleteProduct(id) {
     return __awaiter(this, void 0, void 0, function* () {
         let data;
         try {
@@ -63,5 +62,5 @@ function deleteItem(id) {
         return data;
     });
 }
-exports.deleteItem = deleteItem;
-//# sourceMappingURL=readWriteFiles.js.map
+exports.deleteProduct = deleteProduct;
+//# sourceMappingURL=productCRUD.js.map
