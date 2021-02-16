@@ -1,5 +1,6 @@
 import express from 'express';
 import {listProducts, saveProduct} from '../../../archivos/productCRUD';
+import {socket} from '../../../app';
 
 let router = express.Router();
 
