@@ -1,8 +1,8 @@
 [
     {
-        "title": "Forerunner 35",
-        "price": "$25999",
-        "thumbnail": "https://garmin.com.ar/Image/0/450_450-010-01689-03_1.jpg",
+        "title": "sarasasaedasd",
+        "price": 4444444,
+        "thumbnail": "asdasdasd",
         "id": 1
     },
     {

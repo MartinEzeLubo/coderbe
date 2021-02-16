@@ -4,15 +4,13 @@ import {listProducts, saveProduct} from '../../archivos/productCRUD';
 
 let router = express.Router();
 
+
 router.use('/productos', webProductos)
 router.use(express.json());
 
+router.get('/', (req, res) => {
+    res.render("pages/index");
 
-
-
-router.get('/', async (req, res) => {
-    let products = await listProducts();
-    res.render("pages/index", products);
 });
 
 

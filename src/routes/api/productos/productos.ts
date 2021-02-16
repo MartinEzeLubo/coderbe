@@ -1,8 +1,8 @@
 import express, { json } from 'express';
 import {listProducts, saveProduct, updateProduct, deleteProduct} from '../../../archivos/productCRUD';
+import {updateProducList} from '../../../app';
 
 let router = express.Router();
-
 
 
 router.get('/', async (req, res) => {
@@ -35,9 +35,12 @@ router.post('/', async (req, res) => {
         res.status(500).send('Error de la aplicacion' + error);
         }
     }
+    updateProducList();
+
 });
 
 router.put('/', async (req, res) => {
+    console.log(req.body);
     if((!req.body.id || req.body.id === null || !req.body.title || req.body.title === "" || req.body.price === null || req.body.price === undefined || !req.body.thumbnail || req.body.thumbnail === "") ){
         res.status(400).send('Los parametros enviados son incorrectos');
     } else {
@@ -48,6 +51,7 @@ router.put('/', async (req, res) => {
         res.send('Error de la aplicacion').status(500);
         }
     }
+    updateProducList();
 });
 
 router.delete('/:id', async (req, res) => {
@@ -63,13 +67,8 @@ router.delete('/:id', async (req, res) => {
     } catch (error) {
         res.send('Error de la aplicacion' + error).status(500);
     }
+    updateProducList();
 });
-
-
-
-
-
-
 
 
 export default router;

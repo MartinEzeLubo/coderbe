@@ -1,12 +1,13 @@
 import express from 'express';
-import { io } from 'socket.io-client';
 import apiRouter from './routes/api/api';
 import webRouter from './routes/web/web';
+import {listProducts, saveProduct} from './archivos/productCRUD';
+import { Socket } from 'dgram';
 
 const port = 8080;
 const app = express();
 const http = require('http').Server(app);
-export const socket = require('socket.io')(http);
+const io = require('socket.io')(http);
 
 
 
@@ -19,13 +20,34 @@ app.use('/api', apiRouter);
 app.use('/', webRouter);
 
 
-socket.on('new-product', (data) =>{
-  console.log(data);
+async function getProducts() {
+  let data = await listProducts();
+  return data;
+}
 
+io.on('connection', async (socket)=>{
+  updateProducList();
+
+  socket.on('newproduct', async (data)=>{
+    console.log(data);
+    let saved = saveProduct(data.title, parseInt(data.price), data.thumbnail);
+    updateProducList();  
+  })
 })
+
+export async function updateProducList(){
+  let list = await listProducts();
+  io.sockets.emit('productlist', list);
+};
+
+
+
+
 
 http.listen(port, () => {
   
   return console.log(`Servidor listo en puerto ${port}`);
 }).on('error', ()=>console.log('El puerto configurado se encuentra en uso'));
 
+
+module.exports = {updateProducList};

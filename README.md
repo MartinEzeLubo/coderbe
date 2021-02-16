@@ -1,4 +1,9 @@
-*Documentacion URLs**
+**Documentacion URLs**
+
+* **URL**
+    http://localhost:8080/
+* **Respuesta:**
+    Muestra el formulario de alta de productos y el listado de los productos actuales
 
 * **URL**
     http://localhost:8080/productos/vista
@@ -119,7 +124,7 @@
 
 * **Data Params**
 
-  ```JSON
+  ```x-www-form-urlencoded
     {
     "title": "sarasa",
     "price": 28839,

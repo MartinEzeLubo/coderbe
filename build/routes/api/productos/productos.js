@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const productCRUD_1 = require("../../../archivos/productCRUD");
+const app_1 = require("../../../app");
 let router = express_1.default.Router();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let products = yield productCRUD_1.listProducts();
@@ -47,8 +48,10 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(500).send('Error de la aplicacion' + error);
         }
     }
+    app_1.updateProducList();
 }));
 router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
     if ((!req.body.id || req.body.id === null || !req.body.title || req.body.title === "" || req.body.price === null || req.body.price === undefined || !req.body.thumbnail || req.body.thumbnail === "")) {
         res.status(400).send('Los parametros enviados son incorrectos');
     }
@@ -61,6 +64,7 @@ router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.send('Error de la aplicacion').status(500);
         }
     }
+    app_1.updateProducList();
 }));
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -77,6 +81,7 @@ router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     catch (error) {
         res.send('Error de la aplicacion' + error).status(500);
     }
+    app_1.updateProducList();
 }));
 exports.default = router;
 //# sourceMappingURL=productos.js.map

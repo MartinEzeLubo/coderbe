@@ -37,5 +37,18 @@ router.get('/vista', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     let products = yield productCRUD_1.listProducts();
     res.render("pages/indexListado", { info: products });
 }));
+// io.on('new-product', (data) =>{
+//     console.log(data);
+//     // if((!req.body.title || req.body.title === "" || req.body.price === null || req.body.price === undefined || !req.body.thumbnail || req.body.thumbnail === "") ){
+//     //     res.status(400).send('Los parametros enviados son incorrectos');
+//     // } else {
+//     //     await saveProduct(req.body.title, parseInt(req.body.price), req.body.thumbnail);
+//     //     res.redirect('/productos/alta')
+//     //     try {
+//     //     } catch (error) { 
+//     //     res.status(500).send('Error de la aplicacion' + error);
+//     //     }
+//     // }
+// });
 exports.default = router;
 //# sourceMappingURL=productos.js.map
