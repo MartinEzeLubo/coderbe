@@ -13,7 +13,7 @@ function renderList(data){
         let row = `<tr>
             <td class="align-middle">${element.title}</td>
             <td class="align-middle">${element.price}</td>
-            <td class="align-middle"><img src=${element.thumbnail} alt="" style="width: 100px; height: 100px"></td>
+            <td class="align-middle"><img src=${element.thumbnail} alt="" style="width: 70px; height: 70px"></td>
         </tr>`
         
         

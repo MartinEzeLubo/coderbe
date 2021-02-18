@@ -5,11 +5,21 @@
 
 </head>
 <body>
-    <%- include('../partials/alta');%>
-    <div class="container">
-        <table id="productList" class="table">
 
-        </table>  
+    <div class="container">
+        <%- include('../partials/alta');%>
+        <div class="col">
+            <div class="row">
+                <div class="col-8">
+                    <table id="productList" class="table"></table>  
+                </div>
+                <div class="col-4">
+                    <%- include('../partials/chat');%>
+                </div>
+            </div>
+
+        </div>
+        
     </div>
 </body>
 </html>

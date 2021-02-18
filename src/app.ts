@@ -2,7 +2,6 @@ import express from 'express';
 import apiRouter from './routes/api/api';
 import webRouter from './routes/web/web';
 import {listProducts, saveProduct} from './archivos/productCRUD';
-import { Socket } from 'dgram';
 
 const port = 8080;
 const app = express();
