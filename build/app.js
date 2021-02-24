@@ -36,10 +36,15 @@ function getProducts() {
 io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
     updateProducList();
     socket.on('newproduct', (data) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(data);
         let saved = productCRUD_1.saveProduct(data.title, parseInt(data.price), data.thumbnail);
         updateProducList();
     }));
+    socket.on('sendmessage', (data) => {
+        socket.broadcast.emit('newmessage', data);
+    });
+    socket.on('writing', (data) => {
+        socket.broadcast.emit('whoiswriting', data);
+    });
 }));
 function updateProducList() {
     return __awaiter(this, void 0, void 0, function* () {

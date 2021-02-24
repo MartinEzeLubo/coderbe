@@ -28,11 +28,20 @@ io.on('connection', async (socket)=>{
   updateProducList();
 
   socket.on('newproduct', async (data)=>{
-    console.log(data);
     let saved = saveProduct(data.title, parseInt(data.price), data.thumbnail);
     updateProducList();  
   })
-})
+
+  socket.on('sendmessage', (data)=>{
+    socket.broadcast.emit('newmessage', data);
+    
+  })
+  socket.on('writing', (data)=>{
+    socket.broadcast.emit('whoiswriting', data);
+    
+  })
+});
+
 
 export async function updateProducList(){
   let list = await listProducts();
