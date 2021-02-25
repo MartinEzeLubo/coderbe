@@ -1,26 +1,45 @@
 const socket = io();
 
+let productList;
 let chat;
+let userid;
 let input;
 let writingAdvice;
 let timeHandler;
 
+
 document.addEventListener("DOMContentLoaded", event => {
+    productList = document.getElementById('productList');
     chat = document.getElementById('chat-content');
     writingAdvice = document.getElementById('writing')
+    userid = document.getElementById("userid");
     input = document.getElementById("messagetext");
     input.addEventListener('keypress', e =>{
         if (e.key === 'Enter') {
         e.preventDefault();
         document.getElementById("sendButton").click();
         } else {
-            socket.emit('writing', socket.id);  
+            socket.emit('writing', userid.value);  
         }
      });
 });
 
 socket.on('productlist', info =>{
     renderList(info);
+});
+socket.on('chat', info =>{
+    info.forEach(element =>{
+
+        let chatMessage = `<div class="media media-chat"> 
+            <img class="avatar" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+            <div class="media-body">
+                <p>${element.sender}: ${element.message}</p>
+                <p style="color: black; background-color: white; font-size: 12px">${element.date}</p>
+            </div>
+        </div>`
+        chat.innerHTML += chatMessage;
+        chat.scrollTop = chat.scrollHeight;
+    });
 
 });
 
@@ -33,9 +52,6 @@ socket.on('whoiswriting', data =>{
 
 
 socket.on('newmessage', data =>{
-    console.log("newmessage Log");
-    
-
     let chatMessage = `<div class="media media-chat"> 
         <img class="avatar" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
         <div class="media-body">
@@ -75,7 +91,7 @@ function renderList(data){
         ${tbody}            
     </tbody>`
 
-    document.getElementById('productList').innerHTML = table;
+    productList.innerHTML = table;
 
 };
 
@@ -90,19 +106,28 @@ function saveProduct(){
 }
 
 function sendMessage(){
-    if(document.getElementById('messagetext').value === ''){
+    let messageTime = moment().format('LT');
+
+    if(userid.value === ''){
+        userid.placeholder = 'Ingrese su correo!'
+        userid.focus();
+        return false;
+    }
+    if(input.value === ''){
+        console.log("asdasd");
         return false;
     }
     let newMessage = {
-        sender: socket.id,
-        message: document.getElementById('messagetext').value
+        sender: userid.value,
+        message: input.value,
+        date: messageTime
     }
     socket.emit('sendmessage', newMessage);
 
     let chatMessage = `<div class="media media-chat media-chat-reverse">
         <div class="media-body">
-            <p>${document.getElementById('messagetext').value}</p>
-            <p style="color: black; background-color: white; font-size: 12px">${moment().format('LT')}</p>
+            <p>${input.value}</p>
+            <p style="color: black; background-color: white; font-size: 12px">${messageTime}</p>
         </div>
     </div>`
     
@@ -112,4 +137,6 @@ function sendMessage(){
     
 
 };
+
+
 

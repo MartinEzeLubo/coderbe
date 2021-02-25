@@ -303,3 +303,6 @@ textarea {
 .text-info {
     color: #48b0f7 !important
 }
+#userid::placeholder {
+    color: red
+}

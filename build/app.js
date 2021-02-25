@@ -17,29 +17,25 @@ const express_1 = __importDefault(require("express"));
 const api_1 = __importDefault(require("./routes/api/api"));
 const web_1 = __importDefault(require("./routes/web/web"));
 const productCRUD_1 = require("./archivos/productCRUD");
-const port = 8080;
+const chatLog_1 = require("./archivos/chatLog");
 const app = express_1.default();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
+app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static(__dirname + '/public'));
 app.use('/api', api_1.default);
 app.use('/', web_1.default);
-function getProducts() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let data = yield productCRUD_1.listProducts();
-        return data;
-    });
-}
 io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
     updateProducList();
+    updateChat();
     socket.on('newproduct', (data) => __awaiter(void 0, void 0, void 0, function* () {
-        let saved = productCRUD_1.saveProduct(data.title, parseInt(data.price), data.thumbnail);
         updateProducList();
     }));
     socket.on('sendmessage', (data) => {
+        chatLog_1.writeMessage(data.sender, data.message, data.date);
         socket.broadcast.emit('newmessage', data);
     });
     socket.on('writing', (data) => {
@@ -54,8 +50,18 @@ function updateProducList() {
 }
 exports.updateProducList = updateProducList;
 ;
-http.listen(port, () => {
-    return console.log(`Servidor listo en puerto ${port}`);
+function updateChat() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let chat = yield chatLog_1.listChat();
+        io.sockets.emit('chat', chat);
+    });
+}
+http.listen(app.get('PORT'), () => {
+    return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
 }).on('error', () => console.log('El puerto configurado se encuentra en uso'));
 module.exports = { updateProducList };
+// async function getProducts() {
+//   let data = await listProducts();
+//   return data;
+// }
 //# sourceMappingURL=app.js.map

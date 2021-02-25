@@ -108,5 +108,31 @@ export class Archivo{
         })
     }
 
+    async saveChat(sender: string, message: string, date: string){
+        let messageLog;
+        try{
+            let data = await fs.promises.readFile(`${__dirname}/${this.fileName}.txt`, 'utf-8');
+            
+            messageLog = JSON.parse(data);
+            let id:Number = messageLog.length+1;
+            
+            let newMessage = {sender,
+                       message,
+                       date
+            };
+            messageLog.push(newMessage);
+            
+            await fs.promises.writeFile(`${__dirname}/${this.fileName}.txt`, JSON.stringify(messageLog, null, 4));
+
+            
+            return newMessage;
+            
+
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
+    }
+
 }
 

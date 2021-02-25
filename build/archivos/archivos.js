@@ -99,6 +99,27 @@ class Archivo {
             });
         });
     }
+    saveChat(sender, message, date) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let messageLog;
+            try {
+                let data = yield fs.promises.readFile(`${__dirname}/${this.fileName}.txt`, 'utf-8');
+                messageLog = JSON.parse(data);
+                let id = messageLog.length + 1;
+                let newMessage = { sender,
+                    message,
+                    date
+                };
+                messageLog.push(newMessage);
+                yield fs.promises.writeFile(`${__dirname}/${this.fileName}.txt`, JSON.stringify(messageLog, null, 4));
+                return newMessage;
+            }
+            catch (err) {
+                console.log(err);
+                return err;
+            }
+        });
+    }
 }
 exports.Archivo = Archivo;
 //# sourceMappingURL=archivos.js.map
