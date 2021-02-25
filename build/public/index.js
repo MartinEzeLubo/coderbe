@@ -1,5 +1,8 @@
 const socket = io();
 
+let productTitle;
+let productPrice;
+let productThumbnail;
 let productList;
 let chat;
 let userid;
@@ -8,12 +11,18 @@ let writingAdvice;
 let timeHandler;
 
 
+
 document.addEventListener("DOMContentLoaded", event => {
     productList = document.getElementById('productList');
     chat = document.getElementById('chat-content');
     writingAdvice = document.getElementById('writing')
     userid = document.getElementById("userid");
     input = document.getElementById("messagetext");
+    productTitle = document.getElementById('title');
+    productPrice = document.getElementById('price');
+    productThumbnail = document.getElementById('thumbnail');
+    
+
     input.addEventListener('keypress', e =>{
         if (e.key === 'Enter') {
         e.preventDefault();
@@ -97,12 +106,12 @@ function renderList(data){
 
 function saveProduct(){
     let producto = {
-        title: document.getElementById('title').value,
-        price: document.getElementById('price').value,
-        thumbnail: document.getElementById('thumbnail').value
+        title: productTitle.value,
+        price: productPrice.value,
+        thumbnail: productThumbnail.value
     }
-
     socket.emit('newproduct', producto);
+    return false;
 }
 
 function sendMessage(){

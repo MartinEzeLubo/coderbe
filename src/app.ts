@@ -1,3 +1,6 @@
+import "core-js";
+import "regenerator-runtime/runtime";
+
 import express from 'express';
 import apiRouter from './routes/api/api';
 import webRouter from './routes/web/web';
@@ -26,6 +29,7 @@ io.on('connection', async (socket)=>{
   updateChat();
   
   socket.on('newproduct', async (data)=>{
+    let saved = saveProduct(data.title, parseInt(data.price), data.thumbnail);
     updateProducList();  
   })
   
@@ -42,6 +46,7 @@ io.on('connection', async (socket)=>{
 
 
 export async function updateProducList(){
+  
   let list = await listProducts();
   io.sockets.emit('productlist', list);
 };
@@ -63,13 +68,3 @@ module.exports = {updateProducList};
 
 
 
-
-
-
-
-
-
-// async function getProducts() {
-//   let data = await listProducts();
-//   return data;
-// }

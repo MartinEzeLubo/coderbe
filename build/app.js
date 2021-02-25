@@ -13,6 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProducList = void 0;
+require("core-js");
+require("regenerator-runtime/runtime");
 const express_1 = __importDefault(require("express"));
 const api_1 = __importDefault(require("./routes/api/api"));
 const web_1 = __importDefault(require("./routes/web/web"));
@@ -32,6 +34,7 @@ io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
     updateProducList();
     updateChat();
     socket.on('newproduct', (data) => __awaiter(void 0, void 0, void 0, function* () {
+        let saved = productCRUD_1.saveProduct(data.title, parseInt(data.price), data.thumbnail);
         updateProducList();
     }));
     socket.on('sendmessage', (data) => {
@@ -60,8 +63,4 @@ http.listen(app.get('PORT'), () => {
     return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
 }).on('error', () => console.log('El puerto configurado se encuentra en uso'));
 module.exports = { updateProducList };
-// async function getProducts() {
-//   let data = await listProducts();
-//   return data;
-// }
 //# sourceMappingURL=app.js.map
