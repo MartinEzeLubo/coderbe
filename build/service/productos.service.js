@@ -17,12 +17,14 @@ function listarProductos(id) {
         try {
             let data = yield productos_repository_1.readProducts();
             if (id) {
-                for (let i = 0; i > data.length; i++) {
+                for (let i = 0; i < data.length; i++) {
+                    console.log(data[i]);
                     if (data[i].id === id) {
                         productos = data[i];
                         break;
                     }
                 }
+                return productos;
             }
             else {
                 return data;

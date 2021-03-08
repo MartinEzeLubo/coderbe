@@ -13,15 +13,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const carritos_repository_1 = require("./../repositories/carritos.repository");
 let router = express_1.default.Router();
 router.get('/:id?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send('get carritos');
+    try {
+        let data = yield carritos_repository_1.readCarritos();
+        console.log(data);
+        res.send(data);
+    }
+    catch (err) {
+        res.send(err);
+    }
 }));
-router.patch('/:id_producto', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send('patch carritos');
+router.post('/:idCarrito&:idProducto', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let data = yield carritos_repository_1.addProductToCarrito(parseInt(req.params.idCarrito), parseInt(req.params.idProducto));
+        res.send(data);
+    }
+    catch (err) {
+        res.send(err);
+    }
 }));
-router.delete('/:id_producto', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send('delete carrtios');
+router.delete('/:idCarrito&:idProducto', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let data = yield carritos_repository_1.deleteProductFromCarrito(parseInt(req.params.idCarrito), parseInt(req.params.idProducto));
+        res.send(data);
+    }
+    catch (err) {
+        res.send(err);
+    }
 }));
 exports.default = router;
 //# sourceMappingURL=carritos.js.map

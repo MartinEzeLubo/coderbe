@@ -1,3 +1,5 @@
+import {listarProductos} from './../service/productos.service'
+
 const fs = require('fs');
 const fileName= 'carritosDDBB';
 
@@ -11,29 +13,24 @@ async function readCarritos() {
   }
 }
 
-async function saveCarrito(nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
+async function createCarrito(){
   let info;
   try{
-      let data = await fs.promises.readFile(`${__dirname}/${fileName}.txt`, 'utf-8');
+    let data = await fs.promises.readFile(`${__dirname}/${fileName}.txt`, 'utf-8');
       
-      info = JSON.parse(data);
-      let id:Number = info.length+1;
+    info = JSON.parse(data);
+    let id:Number = info.length+1;
       
-      let product = {'id':  id,
-                 'nombre': nombre,
-                 'descripcion': descripcion,
-                 'precio': precio,
-                 'codigo': codigo,
-                 'stock': stock,
-                 'foto': foto, 
-                 'timestamp': Date.now(),
-      };
-      info.push(product);
-      
-      await fs.promises.writeFile(`${__dirname}/${fileName}.txt`, JSON.stringify(info, null, 4));
-
-      
-      return product;
+    let carrito = {'id':  id,
+                   'timestamp': Date.now(),
+                   'productos': []
+                  };
+    
+    info.push(carrito);
+    
+    await fs.promises.writeFile(`${__dirname}/${fileName}.txt`, JSON.stringify(info, null, 4));
+  
+    return carrito;
       
 
   } catch (err) {
@@ -42,63 +39,50 @@ async function saveCarrito(nombre: string, descripcion: string, precio: number, 
   }
 }
 
-async function updateProduct(id: number, nombre: string, descripcion: string, precio: number, codigo: string, stock: number,  foto: string){
-  let productos;
-  let posPrdEncontrado;
 
-  try{
-      let data = await fs.promises.readFile(`${__dirname}/${fileName}.txt`, 'utf-8');
-      
-      productos = JSON.parse(data);
+async function addProductToCarrito(idCarrito: number, idProducto: number){
+    let producto = await listarProductos(idProducto);
 
-      for(let i = 0; i < productos.length; i++){
-          if (productos[i].id === id){
-              posPrdEncontrado = i;
-              productos[i].nombre = nombre;
-              productos[i].descripcion = descripcion;
-              productos[i].precio = precio;
-              productos[i].codigo = codigo;
-              productos[i].stock = stock;
-              productos[i].foto = foto;
-              productos[i].nombre = nombre;
+    try{
+
+    let data = await readCarritos();
+    for(let i = 0; i < data.length; i++){
+        if (data[i].id === idCarrito){
+              data[i].productos.push(producto)
               break
-          }
-      }
-
-      await fs.promises.writeFile(`${__dirname}/${fileName}.txt`, JSON.stringify(productos, null, 4));
-
-      return productos[posPrdEncontrado];
-
-  } catch (err) {
+        }
+    }
+    await fs.promises.writeFile(`${__dirname}/${fileName}.txt`, JSON.stringify(data, null, 4));
+    return 'producto agregado'
+    } catch (err) {
       throw err;
-  }
-
-
-
+    }
 }
-async function deleteProduct(id: number){
-  let productos;
-
-  try{
-      let data = await fs.promises.readFile(`${__dirname}/${fileName}.txt`, 'utf-8');
-      
-      productos = JSON.parse(data);
-
-      let prdEliminado = productos.splice(id-1, 1);
-      
-      for (let i = id-1; i<productos.length; i++){
-          productos[i].id--;
-      }
-      await fs.promises.writeFile(`${__dirname}/${fileName}.txt`, JSON.stringify(productos, null, 4));
-
-      return prdEliminado;
-
-  } catch (err) {
+async function deleteProductFromCarrito(idCarrito: number, idProducto: number){
+ 
+    try{
+    let data = await readCarritos();
+    
+    for(let i = 0; i < data.length; i++){
+        
+        if (data[i].id === idCarrito){
+            for(let x = 0; x< data[i].productos.length; x++){
+                
+                
+                if(data[i].productos[x].id === idProducto)
+                console.log(JSON.stringify(data[i].productos[x]));
+                data[i].productos[x].splice(x-1, 1);
+                break
+            }  
+        }
+    }
+    await fs.promises.writeFile(`${__dirname}/${fileName}.txt`, JSON.stringify(data, null, 4));
+    return 'producto eliminado'
+    } catch (err) {
       throw err;
-  }
-
-
-
+    }
 }
 
-export {readProducts, saveProduct, updateProduct, deleteProduct};
+
+
+export {createCarrito, readCarritos, addProductToCarrito, deleteProductFromCarrito};

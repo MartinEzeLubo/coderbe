@@ -8,5 +8,25 @@
         "stock": 10,
         "foto": "https://garmin.com.ar/Image/0/450_450-010-01689-03_1.jpg",
         "timestamp": 1615156236537
+    },
+        {
+        "id": 2,
+        "nombre": "Forerunner 235",
+        "descripcion": "reloj para seguimiento de actividad",
+        "precio": 35999,
+        "codigo": "100021",
+        "stock": 5,
+        "foto": "https://garmin.com.ar/Image/0/450_450-010-01689-03_1.jpg",
+        "timestamp": 1615156236537
+    },
+        {
+        "id": 3,
+        "nombre": "Forerunner 735",
+        "descripcion": "reloj para seguimiento de actividad",
+        "precio": 65999,
+        "codigo": "1000321",
+        "stock": 16,
+        "foto": "https://garmin.com.ar/Image/0/450_450-010-01689-03_1.jpg",
+        "timestamp": 1615156236537
     }
 ]

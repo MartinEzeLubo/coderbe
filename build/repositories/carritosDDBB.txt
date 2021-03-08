@@ -1,18 +1,18 @@
 [
     {
         "id": 1,
-        "timestamp": ,
-        "producto": [
+        "timestamp": 1615156236537,
+        "productos": [
              {
+                "id": 1,
                 "nombre": "Forerunner 35",
-                "descripcion": "sarasa",
-                "precio": "$25999",
+                "descripcion": "reloj para seguimiento de actividad",
+                "precio": 25999,
                 "codigo": "100001",
-                "stock": 0,
+                "stock": 10,
                 "foto": "https://garmin.com.ar/Image/0/450_450-010-01689-03_1.jpg",
-                "timestamp": "Sun Mar 07 2021 16:00:40 GMT-0300 (Argentina Standard Time)",
-                "id": 1
+                "timestamp": 1615156236537
               }
         ]
-    },
+    }
 ]
