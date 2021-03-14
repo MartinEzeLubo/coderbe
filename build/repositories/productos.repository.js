@@ -12,6 +12,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.updateProduct = exports.saveProduct = exports.readProducts = void 0;
 const fs = require('fs');
 const fileName = 'productosDDBB';
+const { connection } = require('./../db/maria.db');
+const knex = require('knex')(connection);
+function crearTablas() {
+    return __awaiter(this, void 0, void 0, function* () {
+        knex.schema.hasTable('productos').then(exists => {
+            if (!exists) {
+                return knex.schema.createTable('productos', table => {
+                    table.increments('id').primary();
+                    table.string('nombre', 40);
+                    table.string('Descripcion', 200);
+                    table.integer('precio');
+                    table.string('codigo', 40);
+                    table.integer('stock');
+                    table.string('foto', 200);
+                    table.date('timestamp');
+                })
+                    .then(() => console.log('tabla productos creada'))
+                    .catch((err) => console.log(err));
+            }
+            else {
+                console.log('la tabla de productos ya existe');
+            }
+        }).finally(() => knex.destroy());
+    });
+}
 function readProducts() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -99,4 +124,5 @@ function deleteProduct(id) {
     });
 }
 exports.deleteProduct = deleteProduct;
+crearTablas();
 //# sourceMappingURL=productos.repository.js.map

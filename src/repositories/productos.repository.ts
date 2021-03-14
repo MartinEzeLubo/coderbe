@@ -1,6 +1,29 @@
 const fs = require('fs');
 const fileName= 'productosDDBB';
+const { connection } = require('./../db/maria.db');
+const knex = require('knex')(connection)
 
+async function crearTablas(){
+    knex.schema.hasTable('productos').then(exists => {
+        if (!exists) {
+            return knex.schema.createTable('productos', table =>{
+                table.increments('id').primary();
+                table.string('nombre', 40);
+                table.string('Descripcion', 200);
+                table.integer('precio');
+                table.string('codigo', 40);
+                table.integer('stock');
+                table.string('foto', 200);
+                table.date('timestamp');
+                })
+            .then(()=> console.log('tabla productos creada'))
+            .catch((err)=> console.log(err))
+     
+        } else {
+            console.log('la tabla de productos ya existe');
+        }
+    }).finally(()=> knex.destroy())
+}
 
 async function readProducts() {
   try{
@@ -90,15 +113,13 @@ async function deleteProduct(id: number){
           productos[i].id--;
       }
       await fs.promises.writeFile(`${__dirname}/${fileName}.txt`, JSON.stringify(productos, null, 4));
-
       return prdEliminado;
-
   } catch (err) {
       throw err;
   }
-
-
-
 }
+
+crearTablas();
+
 
 export {readProducts, saveProduct, updateProduct, deleteProduct};

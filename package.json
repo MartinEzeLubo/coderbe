@@ -17,9 +17,12 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-handlebars": "^5.2.0",
+    "knex": "^0.95.2",
+    "mysql": "^2.18.1",
     "socket.io": "^3.1.1",
     "socket.io-client": "^3.1.1",
     "socketio": "^1.0.0",
+    "sqlite3": "^5.0.2",
     "tsc": "^1.20150623.0",
     "tsc-node": "0.0.3"
   },
