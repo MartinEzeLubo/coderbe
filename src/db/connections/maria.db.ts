@@ -1,4 +1,4 @@
-const connection = 
+export const connectionMariaDB  = 
     {
     client: 'mysql',
     connection: {
@@ -8,7 +8,10 @@ const connection =
       database : 'backend'
     }
   };
+export const knex = require('knex')(connectionMariaDB);
 
-  module.exports = {
-      connection
-  }
+
+module.exports = {
+  connectionMariaDB,
+  knex
+}

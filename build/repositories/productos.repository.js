@@ -9,73 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.saveProduct = exports.readProducts = void 0;
+exports.deleteProduct = exports.updateProduct = void 0;
 const fs = require('fs');
 const fileName = 'productosDDBB';
-const { connection } = require('./../db/maria.db');
-const knex = require('knex')(connection);
-function crearTablas() {
-    return __awaiter(this, void 0, void 0, function* () {
-        knex.schema.hasTable('productos').then(exists => {
-            if (!exists) {
-                return knex.schema.createTable('productos', table => {
-                    table.increments('id').primary();
-                    table.string('nombre', 40);
-                    table.string('Descripcion', 200);
-                    table.integer('precio');
-                    table.string('codigo', 40);
-                    table.integer('stock');
-                    table.string('foto', 200);
-                    table.date('timestamp');
-                })
-                    .then(() => console.log('tabla productos creada'))
-                    .catch((err) => console.log(err));
-            }
-            else {
-                console.log('la tabla de productos ya existe');
-            }
-        }).finally(() => knex.destroy());
-    });
-}
-function readProducts() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            let contenido = yield fs.promises.readFile(`${__dirname}/${fileName}.txt`, 'utf-8');
-            return JSON.parse(contenido);
-        }
-        catch (err) {
-            console.log(err);
-        }
-    });
-}
-exports.readProducts = readProducts;
-function saveProduct(nombre, descripcion, precio, codigo, stock, foto) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let info;
-        try {
-            let data = yield fs.promises.readFile(`${__dirname}/${fileName}.txt`, 'utf-8');
-            info = JSON.parse(data);
-            let id = info.length + 1;
-            let product = { 'id': id,
-                'nombre': nombre,
-                'descripcion': descripcion,
-                'precio': precio,
-                'codigo': codigo,
-                'stock': stock,
-                'foto': foto,
-                'timestamp': Date.now(),
-            };
-            info.push(product);
-            yield fs.promises.writeFile(`${__dirname}/${fileName}.txt`, JSON.stringify(info, null, 4));
-            return product;
-        }
-        catch (err) {
-            console.log(err);
-            return err;
-        }
-    });
-}
-exports.saveProduct = saveProduct;
 function updateProduct(id, nombre, descripcion, precio, codigo, stock, foto) {
     return __awaiter(this, void 0, void 0, function* () {
         let productos;
@@ -124,5 +60,4 @@ function deleteProduct(id) {
     });
 }
 exports.deleteProduct = deleteProduct;
-crearTablas();
 //# sourceMappingURL=productos.repository.js.map

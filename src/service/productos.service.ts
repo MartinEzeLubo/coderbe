@@ -1,9 +1,9 @@
-import {readProducts, saveProduct, updateProduct, deleteProduct} from '../repositories/productos.repository'
+import * as db from '../db/db.modules'
 
 async function listarProductos(id?:number){
   let productos;
   try {
-    let data = await readProducts();
+    let data = await db.readProducts();
     if (id){
       for(let i= 0; i < data.length; i++){
         console.log(data[i]);
@@ -23,13 +23,13 @@ async function listarProductos(id?:number){
     
 async function guardarProducto(nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
   let data;
-  console.log(nombre, descripcion, precio, codigo, stock, foto);
+  
 
   if(!nombre || nombre === "" || !descripcion || descripcion === "" || precio === null || precio === undefined || !codigo || codigo === "" || stock === null || stock === undefined || !foto || foto === "") {
      return 'Los parametros enviados son incorrectos';
   } else {
     try {
-      data = await saveProduct(nombre, descripcion, precio, codigo, stock, foto);
+      data = await db.saveProduct(nombre, descripcion, precio, codigo, stock, foto);
       return data;
     } catch (err) {
       return err;
@@ -44,7 +44,7 @@ async function actualizarProducto(id: number, nombre: string, descripcion: strin
     return 'Los parametros enviados son incorrectos';
   } else {
     try {
-      data = await updateProduct(id, nombre, descripcion, precio, codigo, stock, foto);
+      data = await db.updateProduct(id, nombre, descripcion, precio, codigo, stock, foto);
   
     } catch (err) {
       return err;
@@ -54,14 +54,13 @@ async function actualizarProducto(id: number, nombre: string, descripcion: strin
 }
 async function eliminarProducto(id: number){
   try {
-    let data = await readProducts();
+    let data = await db.readProducts();
     let product = data.find(element => element.id === id);
         if (!product){
           return 'no se encontro el id indicado'
         }
         else {
-
-        return deleteProduct(id);
+          return db.deleteProduct(id);
         }
   } catch(err){
     return err;
