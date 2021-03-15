@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.crearTablas = void 0;
-const sqlite3_db_1 = require("../connections/sqlite3.db");
+const maria_db_1 = require("../connections/maria.db");
 function crearTablas() {
-    sqlite3_db_1.knexSQLite3.schema.hasTable('productos').then(exists => {
+    maria_db_1.knex.schema.hasTable('productos').then(exists => {
         if (!exists) {
-            let info = sqlite3_db_1.knexSQLite3.schema.createTable('productos', table => {
+            let info = maria_db_1.knex.schema.createTable('productos', table => {
                 table.increments('id').primary();
                 table.string('nombre', 40);
                 table.string('descripcion', 200);
@@ -17,8 +17,8 @@ function crearTablas() {
             })
                 .then(() => console.log('tabla productos creada'))
                 .catch((err) => console.log(err))
-                .finally(() => sqlite3_db_1.knexSQLite3.destroy);
-            sqlite3_db_1.knexSQLite3('productos')
+                .finally(() => maria_db_1.knex.destroy);
+            maria_db_1.knex('productos')
                 .insert([
                 {
                     "nombre": "Forerunner 35",
@@ -102,7 +102,7 @@ function crearTablas() {
                     "timestamp": 1615761918128
                 }
             ]).then(() => console.log('Productos insertados'))
-                .finally(() => sqlite3_db_1.knexSQLite3.destroy);
+                .finally(() => maria_db_1.knex.destroy);
         }
         else {
             console.log('la tabla de productos ya existe');
@@ -113,4 +113,4 @@ exports.crearTablas = crearTablas;
 module.exports = {
     crearTablas
 };
-//# sourceMappingURL=create_tables.db.js.map
+//# sourceMappingURL=product_create_tables.db.js.map

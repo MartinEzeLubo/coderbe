@@ -14,6 +14,8 @@ app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/', index_1.default);
 db_modules_1.crearTablas();
+db_modules_1.crearChat();
+db_modules_1.listChat();
 http.listen(app.get('PORT'), () => {
     return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
 }).on('error', () => console.log('El puerto configurado se encuentra en uso'));

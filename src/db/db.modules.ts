@@ -1,7 +1,10 @@
-export * from './operations/create_tables.db';
-export * from './operations/read_products.db';
-export * from './operations/save_product.db';
-export * from './operations/update_product.db';
-export * from './operations/delete_product.db';
+export * from './operations/product_create_tables.db';
+export * from './operations/product_read.db';
+export * from './operations/product_save.db';
+export * from './operations/product_update.db';
+export * from './operations/product_delete.db';
 
+export * from './operations/chat_create_tables.db';
+export * from './operations/chat_read.db';
+export * from './operations/chat_write.db';
 

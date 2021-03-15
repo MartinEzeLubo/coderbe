@@ -10,9 +10,11 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./operations/create_tables.db"), exports);
-__exportStar(require("./operations/read_products.db"), exports);
-__exportStar(require("./operations/save_product.db"), exports);
-__exportStar(require("./operations/update_product.db"), exports);
-__exportStar(require("./operations/delete_product.db"), exports);
+__exportStar(require("./operations/product_create_tables.db"), exports);
+__exportStar(require("./operations/product_read.db"), exports);
+__exportStar(require("./operations/product_save.db"), exports);
+__exportStar(require("./operations/product_update.db"), exports);
+__exportStar(require("./operations/product_delete.db"), exports);
+__exportStar(require("./operations/chat_create_tables.db"), exports);
+__exportStar(require("./operations/chat_read.db"), exports);
 //# sourceMappingURL=db.modules.js.map
