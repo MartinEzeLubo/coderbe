@@ -3,7 +3,7 @@ import "regenerator-runtime/runtime";
 
 import express from 'express';
 import router from './routes/index';
-import {crearTablas, crearChat, listChat} from './db/db.modules'
+import {crearTablas, crearChat} from './db/db.modules'
 const app = express();
 const http = require('http').Server(app);
 
