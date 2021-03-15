@@ -25,16 +25,6 @@ function crearChat() {
                     "sender": "asd@asd.com",
                     "message": "como va todo?",
                     "timestamp": "1615761918128"
-                },
-                {
-                    "sender": "asd@asd.com",
-                    "message": "jajaja",
-                    "timestamp": "1615761918128"
-                },
-                {
-                    "sender": "asd@asd.com",
-                    "message": "Otra vez sopa",
-                    "timestamp": "1615761918128"
                 }
             ]).then(() => console.log('Chat insertado'))
                 .catch((err) => console.log(err))

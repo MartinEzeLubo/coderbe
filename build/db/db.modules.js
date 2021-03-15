@@ -17,4 +17,5 @@ __exportStar(require("./operations/product_update.db"), exports);
 __exportStar(require("./operations/product_delete.db"), exports);
 __exportStar(require("./operations/chat_create_tables.db"), exports);
 __exportStar(require("./operations/chat_read.db"), exports);
+__exportStar(require("./operations/chat_write.db"), exports);
 //# sourceMappingURL=db.modules.js.map

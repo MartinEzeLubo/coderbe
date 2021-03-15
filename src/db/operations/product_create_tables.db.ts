@@ -1,6 +1,7 @@
 import {knex} from '../connections/maria.db';
 
 export function crearTablas(){
+
     knex.schema.hasTable('productos').then(exists => {
         if (!exists) {
             let info = knex.schema.createTable('productos', table =>{

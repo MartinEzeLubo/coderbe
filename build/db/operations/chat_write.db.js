@@ -10,13 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sqlite3_db_1 = require("../connections/sqlite3.db");
-function listChat() {
+function writeMessage(sender, message, date) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield sqlite3_db_1.knexSQLite3.select('*').from('chat')
-                .then(data => {
-                console.log(data);
-            });
+            sqlite3_db_1.knexSQLite3('chat')
+                .insert([
+                {
+                    "sender": sender,
+                    "message": message,
+                    "timestamp": date
+                }
+            ])
+                .then(() => console.log('Chat insertado'))
+                .catch((err) => console.log(err))
+                .finally(() => sqlite3_db_1.knexSQLite3.destroy);
         }
         catch (err) {
             return err;
@@ -24,6 +31,6 @@ function listChat() {
     });
 }
 module.exports = {
-    listChat
+    writeMessage
 };
-//# sourceMappingURL=chat_read.db.js.map
+//# sourceMappingURL=chat_write.db.js.map
