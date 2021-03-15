@@ -14,7 +14,7 @@ app.use('/', router);
 
 crearTablas();
 crearChat();
-listChat();
+
 
 http.listen(app.get('PORT'), () => {
   
