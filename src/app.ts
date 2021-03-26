@@ -3,7 +3,15 @@ import "regenerator-runtime/runtime";
 
 import express from 'express';
 import router from './routes/index';
-import {crearTablas, crearChat} from './db/db.modules'
+
+import {mongoConnection} from './db/connections/mongo.db'
+
+
+//import {crearTablas, crearChat} from './db/db.modules'
+import {crearTablasMongo} from './db/operations/product_create_tables_mongo.db'
+
+
+
 const app = express();
 const http = require('http').Server(app);
 
@@ -12,9 +20,9 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/', router);
 
-crearTablas();
-crearChat();
+let db = mongoConnection.connection;
 
+crearTablasMongo();
 
 http.listen(app.get('PORT'), () => {
   
