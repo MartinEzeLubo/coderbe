@@ -40,7 +40,7 @@ async function createCarrito(){
 }
 
 
-async function addProductToCarrito(idCarrito: number, idProducto: number){
+async function addProductToCarrito(idCarrito: number, idProducto: string){
     let producto = await listarProductos(idProducto);
 
     try{

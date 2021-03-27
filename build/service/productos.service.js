@@ -29,29 +29,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listarProductos = exports.guardarProducto = exports.actualizarProducto = exports.eliminarProducto = void 0;
-const db = __importStar(require("../db/db.modules"));
+const database = __importStar(require("../repositories/dbSelection.repository"));
 function listarProductos(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        let productos;
+        let producto;
+        console.log('productos.service ' + id);
         try {
-            let data = yield db.readProducts();
             if (id) {
-                for (let i = 0; i < data.length; i++) {
-                    console.log(data[i]);
-                    if (data[i].id === id) {
-                        productos = data[i];
-                        break;
-                    }
-                }
-                return productos;
+                producto = yield database.db.read(id);
+                return producto;
             }
             else {
-                return data;
+                producto = yield database.db.read();
+                return producto;
             }
         }
         catch (err) {
             return err;
         }
+        return [];
     });
 }
 exports.listarProductos = listarProductos;
@@ -63,7 +59,7 @@ function guardarProducto(nombre, descripcion, precio, codigo, stock, foto) {
         }
         else {
             try {
-                data = yield db.saveProduct(nombre, descripcion, precio, codigo, stock, foto);
+                data = yield database.db.create(nombre, descripcion, precio, codigo, stock, foto);
                 return data;
             }
             catch (err) {
@@ -81,7 +77,7 @@ function actualizarProducto(id, nombre, descripcion, precio, codigo, stock, foto
         }
         else {
             try {
-                data = yield db.updateProduct(id, nombre, descripcion, precio, codigo, stock, foto);
+                data = yield database.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
             }
             catch (err) {
                 return err;
@@ -94,13 +90,13 @@ exports.actualizarProducto = actualizarProducto;
 function eliminarProducto(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let data = yield db.readProducts();
+            let data = yield database.db.read();
             let product = data.find(element => element.id === id);
             if (!product) {
                 return 'no se encontro el id indicado';
             }
             else {
-                return db.deleteProduct(id);
+                return database.db.delete(id);
             }
         }
         catch (err) {

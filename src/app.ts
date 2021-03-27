@@ -4,12 +4,7 @@ import "regenerator-runtime/runtime";
 import express from 'express';
 import router from './routes/index';
 
-import {mongoConnection} from './db/connections/mongo.db'
-
-
-//import {crearTablas, crearChat} from './db/db.modules'
-import {crearTablasMongo} from './db/operations/product_create_tables_mongo.db'
-
+export const DB_SELECTION: number = 5;
 
 
 const app = express();
@@ -20,9 +15,10 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/', router);
 
-let db = mongoConnection.connection;
 
-crearTablasMongo();
+
+
+
 
 http.listen(app.get('PORT'), () => {
   

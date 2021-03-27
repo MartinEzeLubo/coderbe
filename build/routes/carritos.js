@@ -27,7 +27,7 @@ router.get('/:id?', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 }));
 router.post('/:idCarrito&:idProducto', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let data = yield carritos_repository_1.addProductToCarrito(parseInt(req.params.idCarrito), parseInt(req.params.idProducto));
+        let data = yield carritos_repository_1.addProductToCarrito(parseInt(req.params.idCarrito), req.params.idProducto);
         res.send(data);
     }
     catch (err) {

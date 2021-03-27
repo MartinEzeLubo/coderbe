@@ -21,13 +21,12 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let products = yield productos_service_1.listarProductos();
-        let product = products.find(element => element.id === parseInt(req.params.id));
+        let product = yield productos_service_1.listarProductos(req.params.id);
         if (!product) {
             res.status(404).json({ error: 'Producto no encontrado' });
         }
         else {
-            res.json({ 'item': product });
+            res.json({ product });
         }
     }
     catch (error) {

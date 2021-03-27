@@ -11,12 +11,11 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        let products = await listarProductos();
-        let product = products.find(element => element.id === parseInt(req.params.id));
+        let product = await listarProductos(req.params.id);
         if (!product){
         res.status(404).json({error: 'Producto no encontrado'})
         } else {
-        res.json({'item': product});
+        res.json({product});
         }
     } catch (error) {
         res.send('Error de la aplicacion' + error).status(500);

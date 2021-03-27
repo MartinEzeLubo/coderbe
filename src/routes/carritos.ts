@@ -21,7 +21,7 @@ router.get('/:id?', async(req, res) =>{
 router.post('/:idCarrito&:idProducto', async(req, res) =>{
     
     try{
-        let data = await addProductToCarrito(parseInt(req.params.idCarrito), parseInt(req.params.idProducto));
+        let data = await addProductToCarrito(parseInt(req.params.idCarrito), req.params.idProducto);
         res.send(data)
         
     }catch(err){

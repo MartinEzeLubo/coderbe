@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.crearTablasMongo = void 0;
-const producto_model_1 = require("../../models/producto.model");
+const producto_model_mongo_1 = require("../../models/producto.model.mongo");
 let productosACargar = [
     {
         "nombre": "Forerunner 35",
@@ -96,7 +96,7 @@ function crearTablasMongo() {
             foto: element.foto,
             timestamp: element.timestamp
         };
-        let nuevoProductoModel = new producto_model_1.producto(nuevoProducto);
+        let nuevoProductoModel = new producto_model_mongo_1.producto(nuevoProducto);
         nuevoProductoModel.save();
     });
 }

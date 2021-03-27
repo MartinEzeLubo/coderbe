@@ -1,4 +1,4 @@
-import {producto} from '../../models/producto.model'
+import {producto} from '../../models/producto.model.mongo'
 
 let productosACargar = [
     {
