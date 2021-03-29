@@ -33,7 +33,6 @@ const database = __importStar(require("../repositories/dbSelection.repository"))
 function listarProductos(id) {
     return __awaiter(this, void 0, void 0, function* () {
         let producto;
-        console.log('productos.service ' + id);
         try {
             if (id) {
                 producto = yield database.db.read(id);
@@ -47,7 +46,6 @@ function listarProductos(id) {
         catch (err) {
             return err;
         }
-        return [];
     });
 }
 exports.listarProductos = listarProductos;
@@ -77,12 +75,18 @@ function actualizarProducto(id, nombre, descripcion, precio, codigo, stock, foto
         }
         else {
             try {
-                data = yield database.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
+                let data = yield database.db.read(id);
+                if (data) {
+                    data = yield database.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
+                    return data;
+                }
+                else {
+                    return 'no se encuentra ningun producto con el id indicado';
+                }
             }
             catch (err) {
                 return err;
             }
-            return data;
         }
     });
 }
@@ -90,13 +94,14 @@ exports.actualizarProducto = actualizarProducto;
 function eliminarProducto(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let data = yield database.db.read();
-            let product = data.find(element => element.id === id);
-            if (!product) {
-                return 'no se encontro el id indicado';
+            let data = yield database.db.read(id);
+            console.log(data);
+            if (data) {
+                database.db.delete(id);
+                return 'Producto eliminado';
             }
             else {
-                return database.db.delete(id);
+                return 'no se encuentra ningun producto con el id indicado';
             }
         }
         catch (err) {

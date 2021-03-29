@@ -14,7 +14,7 @@ const producto_model_mongo_1 = require("../models/producto.model.mongo");
 class mongoDAO {
     constructor() {
         const mongoose = require('mongoose');
-        const mongoConnection = mongoose.connect('mongodb://martinlubo.ddns.net:8102/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
+        const mongoConnection = mongoose.connect('mongodb://martinlubo.ddns.net:8102/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
             .then(() => console.log('se conecto correctamente'))
             .catch(error => console.log(error));
     }
@@ -41,46 +41,59 @@ class mongoDAO {
     }
     read(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(id);
             try {
                 if (id) {
-                    let data = yield producto_model_mongo_1.producto.findOne({ _id: id });
-                    console.log(data);
-                    return data;
+                    return yield producto_model_mongo_1.producto.findById(id);
                 }
-                else {
-                    let data = yield producto_model_mongo_1.producto.find();
-                    return data;
-                }
+                return yield producto_model_mongo_1.producto.find();
             }
             catch (error) {
-                return error;
+                return ('No existe un producto con el ID indicado');
             }
         });
     }
     update(id, nombre, descripcion, precio, codigo, stock, foto) {
         return __awaiter(this, void 0, void 0, function* () {
+            let data;
             try {
-                let nuevoProducto = {
-                    nombre,
-                    descripcion,
-                    precio,
-                    codigo,
-                    stock,
-                    foto,
-                    timestamp: Date.now()
-                };
-                let nuevoProductoModel = new producto_model_mongo_1.producto(nuevoProducto);
-                nuevoProductoModel.save();
-                return nuevoProducto;
+                data = producto_model_mongo_1.producto.findOneAndUpdate({ _id: id }, { $set: {
+                        nombre: nombre,
+                        descripcion: descripcion,
+                        precio: precio,
+                        codigo: codigo,
+                        stock: stock,
+                        foto: foto,
+                        timestamp: Date.now()
+                    } }, { new: true }, (err, doc) => {
+                    if (err) {
+                        return err;
+                    }
+                    return doc;
+                });
+                return data;
             }
             catch (error) {
                 return error;
             }
         });
     }
-    delete() {
+    delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            let data;
+            try {
+                console.log(id);
+                data = producto_model_mongo_1.producto.findOneAndDelete({ _id: id }, (err, doc) => {
+                    if (err) {
+                        return err;
+                    }
+                    console.log(doc);
+                    return doc;
+                });
+                return data;
+            }
+            catch (error) {
+                return error;
+            }
         });
     }
 }

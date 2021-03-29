@@ -44,7 +44,7 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let data = yield productos_service_1.actualizarProducto(parseInt(req.body.id), req.body.nombre, req.body.descripcion, parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock), req.body.foto);
+        let data = yield productos_service_1.actualizarProducto(req.body.id, req.body.nombre, req.body.descripcion, parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock), req.body.foto);
         res.json(data);
     }
     catch (error) {
@@ -54,7 +54,7 @@ router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let data;
     try {
-        data = productos_service_1.eliminarProducto(parseInt(req.params.id));
+        data = productos_service_1.eliminarProducto(req.params.id);
         res.send(data);
     }
     catch (error) {

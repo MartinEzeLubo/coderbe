@@ -2,7 +2,6 @@ import * as database from '../repositories/dbSelection.repository';
 
 async function listarProductos(id?:string){
   let producto;
-  console.log('productos.service '+id);
   try {
     if (id){
       producto = await database.db.read(id);
@@ -15,7 +14,6 @@ async function listarProductos(id?:string){
     return err;
   }
 
-  return [];
 }
     
 async function guardarProducto(nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
@@ -41,24 +39,28 @@ async function actualizarProducto(id: number, nombre: string, descripcion: strin
     return 'Los parametros enviados son incorrectos';
   } else {
     try {
-      data = await database.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
-  
+      let data = await database.db.read(id);
+      if(data){
+        data = await database.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
+        return data;
+      } else {
+        return 'no se encuentra ningun producto con el id indicado'
+      }
     } catch (err) {
       return err;
     }
-    return data;
   }
 }
-async function eliminarProducto(id: number){
+async function eliminarProducto(id: string){
   try {
-    let data = await database.db.read();
-    let product = data.find(element => element.id === id);
-        if (!product){
-          return 'no se encontro el id indicado'
-        }
-        else {
-          return database.db.delete(id);
-        }
+    let data = await database.db.read(id);
+    console.log(data);
+    if(data){
+      database.db.delete(id);
+      return 'Producto eliminado';
+    } else {
+      return 'no se encuentra ningun producto con el id indicado'
+    }
   } catch(err){
     return err;
   }

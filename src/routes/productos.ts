@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
 
 router.put('/', async (req, res) => {
     try {
-        let data = await actualizarProducto(parseInt(req.body.id), req.body.nombre, req.body.descripcion ,parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock) ,req.body.foto);
+        let data = await actualizarProducto(req.body.id, req.body.nombre, req.body.descripcion ,parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock) ,req.body.foto);
         res.json(data)    
     } catch (error) { 
         res.send('Error de la aplicacion').status(500);
@@ -43,7 +43,7 @@ router.put('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     let data;
     try {
-        data = eliminarProducto(parseInt(req.params.id))
+        data = eliminarProducto(req.params.id)
         res.send(data)
     } catch (error) {
         res.send('Error de la aplicacion' + error).status(500);
