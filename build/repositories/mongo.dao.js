@@ -34,8 +34,9 @@ class mongoDAO {
                 nuevoProductoModel.save();
                 return nuevoProducto;
             }
-            catch (error) {
-                return error;
+            catch (err) {
+                console.log(err);
+                return err;
             }
         });
     }
@@ -43,12 +44,16 @@ class mongoDAO {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (id) {
-                    return yield producto_model_mongo_1.producto.findById(id);
+                    let data = yield producto_model_mongo_1.producto.findById(id);
+                    if (data === null) {
+                        throw Error('No se encuentra el ID');
+                    }
+                    return data;
                 }
                 return yield producto_model_mongo_1.producto.find();
             }
-            catch (error) {
-                return ('No existe un producto con el ID indicado');
+            catch (err) {
+                throw Error('No existe un producto con el ID indicado');
             }
         });
     }
@@ -56,7 +61,7 @@ class mongoDAO {
         return __awaiter(this, void 0, void 0, function* () {
             let data;
             try {
-                data = producto_model_mongo_1.producto.findOneAndUpdate({ _id: id }, { $set: {
+                return yield producto_model_mongo_1.producto.findOneAndUpdate({ _id: id }, { $set: {
                         nombre: nombre,
                         descripcion: descripcion,
                         precio: precio,
@@ -64,35 +69,24 @@ class mongoDAO {
                         stock: stock,
                         foto: foto,
                         timestamp: Date.now()
-                    } }, { new: true }, (err, doc) => {
-                    if (err) {
-                        return err;
-                    }
-                    return doc;
-                });
-                return data;
+                    } }, { new: true });
             }
-            catch (error) {
-                return error;
+            catch (err) {
+                throw Error('No existe un producto con el ID indicado');
             }
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data;
             try {
-                console.log(id);
-                data = producto_model_mongo_1.producto.findOneAndDelete({ _id: id }, (err, doc) => {
-                    if (err) {
-                        return err;
-                    }
-                    console.log(doc);
-                    return doc;
-                });
+                let data = yield producto_model_mongo_1.producto.findOneAndDelete({ _id: id });
+                if (data === null) {
+                    throw Error('No existe un producto con el ID indicado');
+                }
                 return data;
             }
-            catch (error) {
-                return error;
+            catch (err) {
+                throw Error(`No existe un producto con el ID indicado`);
             }
         });
     }

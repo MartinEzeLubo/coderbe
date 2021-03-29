@@ -27,30 +27,36 @@ export class mongoDAO {
             let nuevoProductoModel = new producto(nuevoProducto);
             nuevoProductoModel.save();
             return nuevoProducto;    
-        } catch (error) {
-            return error;
+        } catch (err) {
+            console.log(err);
+            return err;
         }
         
     }
 
-    async read(id?:number){
+    async read(id?:string){
 
         try {
             if (id){
-                return  await producto.findById(id)
+                let data = await producto.findById(id)
+                if (data === null){
+                    throw  Error('No se encuentra el ID');    
+                }
+                return data
             }    
+
             return await producto.find();
-        } catch (error) {
-            return ('No existe un producto con el ID indicado');
+        } catch (err) {
+            throw Error('No existe un producto con el ID indicado');
         }
         
     }
-    async update(id: number, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
+    async update(id: string, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
         
         let data;
-
+        
         try {
-            data = producto.findOneAndUpdate(
+            return await producto.findOneAndUpdate(
                 {_id:id},
                 {$set: {
                     nombre: nombre, 
@@ -61,41 +67,23 @@ export class mongoDAO {
                     foto: foto, 
                     timestamp: Date.now()
                 }},
-                {new: true},
-                (err, doc)=>{
-                    if(err){
-                        return err;
-                    }
-                return doc;
-                }
-            )
-            return data;
-        } catch (error) {
-            return error;
+                {new: true})
+        } catch (err) {
+            throw Error('No existe un producto con el ID indicado')
         }
         
     }
 
     async delete(id: string){
-        let data;
-
         try {
-            console.log(id);
-
-            data = producto.findOneAndDelete(
-                {_id: id},
-                (err, doc)=>{
-                    if(err){
-                        return err;
-                    }
-                console.log(doc);
-                return doc;
-
-                }
-            )
-        return data;
-        } catch (error) {
-            return error;
+            let data = await producto.findOneAndDelete({_id: id})
+            if (data === null){
+                throw Error('No existe un producto con el ID indicado')
+            }
+            return data;
+            
+        } catch (err) {
+            throw Error(`No existe un producto con el ID indicado`);
         }
       
     }

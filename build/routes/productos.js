@@ -16,27 +16,42 @@ const express_1 = __importDefault(require("express"));
 const productos_service_1 = require("./../service/productos.service");
 let router = express_1.default.Router();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let products = yield productos_service_1.listarProductos();
-    res.json(products);
-}));
-router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let product = yield productos_service_1.listarProductos(req.params.id);
-        if (!product) {
-            res.status(404).json({ error: 'Producto no encontrado' });
+        let data = yield productos_service_1.listarProductos();
+        if (data instanceof Error) {
+            res.status(404).json(data.message);
         }
         else {
-            res.json({ product });
+            res.status(200).json(data);
         }
     }
     catch (error) {
-        res.send('Error de la aplicacion' + error).status(500);
+        res.status(500).send('Error de la aplicacion' + error);
+    }
+    // try {
+    //     return await listarProductos()
+    // } catch (error) {
+    //     res.send('Error de la aplicacion' + error);
+    // }
+}));
+router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let data = yield productos_service_1.listarProductos(req.params.id);
+        if (data instanceof Error) {
+            res.status(404).json(data.message);
+        }
+        else {
+            res.status(200).json(data);
+        }
+    }
+    catch (error) {
+        res.status(500).send('Error de la aplicacion' + error);
     }
 }));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let data = yield productos_service_1.guardarProducto(req.body.nombre, req.body.descripcion, parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock), req.body.foto);
-        res.json(data);
+        res.status(201).json(data);
     }
     catch (error) {
         res.status(500).send('Error de la aplicacion' + error);
@@ -45,17 +60,26 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let data = yield productos_service_1.actualizarProducto(req.body.id, req.body.nombre, req.body.descripcion, parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock), req.body.foto);
-        res.json(data);
+        if (data instanceof Error) {
+            res.status(404).json(data.message);
+        }
+        else {
+            res.status(202).json(data);
+        }
     }
     catch (error) {
         res.send('Error de la aplicacion').status(500);
     }
 }));
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let data;
     try {
-        data = productos_service_1.eliminarProducto(req.params.id);
-        res.send(data);
+        let data = yield productos_service_1.eliminarProducto(req.params.id);
+        if (data instanceof Error) {
+            res.status(404).json(data.message);
+        }
+        else {
+            res.status(200).json(data);
+        }
     }
     catch (error) {
         res.send('Error de la aplicacion' + error).status(500);

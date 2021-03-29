@@ -32,19 +32,11 @@ exports.listarProductos = exports.guardarProducto = exports.actualizarProducto =
 const database = __importStar(require("../repositories/dbSelection.repository"));
 function listarProductos(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        let producto;
         try {
-            if (id) {
-                producto = yield database.db.read(id);
-                return producto;
-            }
-            else {
-                producto = yield database.db.read();
-                return producto;
-            }
+            return yield database.db.read(id);
         }
-        catch (err) {
-            return err;
+        catch (error) {
+            return error;
         }
     });
 }
@@ -55,14 +47,12 @@ function guardarProducto(nombre, descripcion, precio, codigo, stock, foto) {
         if (!nombre || nombre === "" || !descripcion || descripcion === "" || precio === null || precio === undefined || !codigo || codigo === "" || stock === null || stock === undefined || !foto || foto === "") {
             return 'Los parametros enviados son incorrectos';
         }
-        else {
-            try {
-                data = yield database.db.create(nombre, descripcion, precio, codigo, stock, foto);
-                return data;
-            }
-            catch (err) {
-                return err;
-            }
+        try {
+            data = yield database.db.create(nombre, descripcion, precio, codigo, stock, foto);
+            return data;
+        }
+        catch (err) {
+            throw err;
         }
     });
 }
@@ -73,20 +63,11 @@ function actualizarProducto(id, nombre, descripcion, precio, codigo, stock, foto
         if (id === null || id === undefined || !nombre || nombre === "" || !descripcion || descripcion === "" || precio === null || precio === undefined || !codigo || codigo === "" || stock === null || stock === undefined || !foto || foto === "") {
             return 'Los parametros enviados son incorrectos';
         }
-        else {
-            try {
-                let data = yield database.db.read(id);
-                if (data) {
-                    data = yield database.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
-                    return data;
-                }
-                else {
-                    return 'no se encuentra ningun producto con el id indicado';
-                }
-            }
-            catch (err) {
-                return err;
-            }
+        try {
+            return yield database.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
+        }
+        catch (err) {
+            return err;
         }
     });
 }
@@ -94,18 +75,10 @@ exports.actualizarProducto = actualizarProducto;
 function eliminarProducto(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let data = yield database.db.read(id);
-            console.log(data);
-            if (data) {
-                database.db.delete(id);
-                return 'Producto eliminado';
-            }
-            else {
-                return 'no se encuentra ningun producto con el id indicado';
-            }
+            return yield database.db.delete(id);
         }
-        catch (err) {
-            return err;
+        catch (error) {
+            return error;
         }
     });
 }

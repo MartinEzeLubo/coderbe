@@ -5,27 +5,47 @@ let router = express.Router();
 
 
 router.get('/', async (req, res) => {
-    let products = await listarProductos();
-    res.json(products);
+    
+    try {
+        let data = await listarProductos();
+        
+        if (data instanceof Error){
+            res.status(404).json(data.message)
+        }else{
+            res.status(200).json(data);
+        }
+        
+    } catch (error) {
+        res.status(500).send('Error de la aplicacion' + error);
+    }
+    
+    // try {
+    //     return await listarProductos()
+    // } catch (error) {
+    //     res.send('Error de la aplicacion' + error);
+    // }
+
 });
 
 router.get('/:id', async (req, res) => {
     try {
-        let product = await listarProductos(req.params.id);
-        if (!product){
-        res.status(404).json({error: 'Producto no encontrado'})
-        } else {
-        res.json({product});
+        let data = await listarProductos(req.params.id);
+        
+        if (data instanceof Error){
+            res.status(404).json(data.message)
+        }else{
+            res.status(200).json(data);
         }
+        
     } catch (error) {
-        res.send('Error de la aplicacion' + error).status(500);
+        res.status(500).send('Error de la aplicacion' + error);
     }
     });
 
 router.post('/', async (req, res) => {
     try {
         let data = await guardarProducto(req.body.nombre, req.body.descripcion ,parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock) ,req.body.foto);
-        res.json(data)
+        res.status(201).json(data)
     } catch (error) { 
         res.status(500).send('Error de la aplicacion' + error);
     }
@@ -34,17 +54,24 @@ router.post('/', async (req, res) => {
 router.put('/', async (req, res) => {
     try {
         let data = await actualizarProducto(req.body.id, req.body.nombre, req.body.descripcion ,parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock) ,req.body.foto);
-        res.json(data)    
+        if (data instanceof Error){
+            res.status(404).json(data.message)
+        }else{
+            res.status(202).json(data);
+        }
     } catch (error) { 
         res.send('Error de la aplicacion').status(500);
     }
 });
 
 router.delete('/:id', async (req, res) => {
-    let data;
     try {
-        data = eliminarProducto(req.params.id)
-        res.send(data)
+        let data = await eliminarProducto(req.params.id)
+        if (data instanceof Error){
+            res.status(404).json(data.message)
+        }else{
+            res.status(200).json(data);
+        }
     } catch (error) {
         res.send('Error de la aplicacion' + error).status(500);
     }
