@@ -1,4 +1,5 @@
 import {producto} from '../models/producto.model.mongo'
+import {mensaje} from '../models/mensaje.model.mongo'
 
 
 export class mongoDAO {
@@ -11,6 +12,7 @@ export class mongoDAO {
         
     }
 
+    
     async create(nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
         
         try {
@@ -40,7 +42,7 @@ export class mongoDAO {
             if (id){
                 let data = await producto.findById(id)
                 if (data === null){
-                    throw  Error('No se encuentra el ID');    
+                    throw  Error('No existe un producto con el ID indicado');    
                 }
                 return data
             }    
@@ -51,6 +53,7 @@ export class mongoDAO {
         }
         
     }
+
     async update(id: string, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
         
         let data;
@@ -87,5 +90,46 @@ export class mongoDAO {
         }
       
     }
+
+
+
+    async createMessage(sender: string, message: string){
+        
+        try {
+            let nuevoMensaje = {
+                sender,
+                message,
+                timestamp: Date.now()
+            }
+        
+            let nuevoMensajeModel = new mensaje(nuevoMensaje);
+            nuevoMensajeModel.save();
+            return nuevoMensaje;
+
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
+        
+    }
+
+    async readMessage(id?:string){
+
+        try {
+            if (id){
+                let data = await mensaje.findById(id)
+                if (data === null){
+                    throw  Error('No existe un producto con el ID indicado');    
+                }
+                return data
+            }    
+
+            return await mensaje.find();
+        } catch (err) {
+            throw Error('No existe un producto con el ID indicado');
+        }
+        
+    }
+    
 }
 

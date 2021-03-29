@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mongoDAO = void 0;
 const producto_model_mongo_1 = require("../models/producto.model.mongo");
+const mensaje_model_mongo_1 = require("../models/mensaje.model.mongo");
 class mongoDAO {
     constructor() {
         const mongoose = require('mongoose');
@@ -46,7 +47,7 @@ class mongoDAO {
                 if (id) {
                     let data = yield producto_model_mongo_1.producto.findById(id);
                     if (data === null) {
-                        throw Error('No se encuentra el ID');
+                        throw Error('No existe un producto con el ID indicado');
                     }
                     return data;
                 }
@@ -87,6 +88,41 @@ class mongoDAO {
             }
             catch (err) {
                 throw Error(`No existe un producto con el ID indicado`);
+            }
+        });
+    }
+    createMessage(sender, message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let nuevoMensaje = {
+                    sender,
+                    message,
+                    timestamp: Date.now()
+                };
+                let nuevoMensajeModel = new mensaje_model_mongo_1.mensaje(nuevoMensaje);
+                nuevoMensajeModel.save();
+                return nuevoMensaje;
+            }
+            catch (err) {
+                console.log(err);
+                return err;
+            }
+        });
+    }
+    readMessage(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (id) {
+                    let data = yield mensaje_model_mongo_1.mensaje.findById(id);
+                    if (data === null) {
+                        throw Error('No existe un producto con el ID indicado');
+                    }
+                    return data;
+                }
+                return yield mensaje_model_mongo_1.mensaje.find();
+            }
+            catch (err) {
+                throw Error('No existe un producto con el ID indicado');
             }
         });
     }
