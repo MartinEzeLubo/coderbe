@@ -3,6 +3,7 @@ import "regenerator-runtime/runtime";
 
 import express from 'express';
 import router from './routes/index';
+import {saveLogToDatabase} from './service/conectionLog.service'
 
 export const DB_SELECTION: number = 5;
 
@@ -16,7 +17,7 @@ app.use(express.urlencoded({extended: true}));
 app.use('/', router);
 
 
-
+setTimeout(saveLogToDatabase, 2000);
 
 
 

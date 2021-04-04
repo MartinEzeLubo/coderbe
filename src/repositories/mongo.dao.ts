@@ -1,7 +1,6 @@
 import {producto} from '../models/producto.model.mongo'
 import {mensaje} from '../models/mensaje.model.mongo'
 
-
 export class mongoDAO {
     
     constructor(){
