@@ -12,12 +12,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.mongoDAO = void 0;
 const producto_model_mongo_1 = require("../models/producto.model.mongo");
 const mensaje_model_mongo_1 = require("../models/mensaje.model.mongo");
+const log_model_mongo_1 = require("../models/log.model.mongo");
 class mongoDAO {
     constructor() {
         const mongoose = require('mongoose');
         const mongoConnection = mongoose.connect('mongodb://martinlubo.ddns.net:8102/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-            .then(() => console.log('se conecto correctamente'))
+            .then(() => {
+            console.log('se conecto correctamente');
+            this.saveLogToDatabase();
+        })
             .catch(error => console.log(error));
+    }
+    saveLogToDatabase() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log('asd');
+                let data = Date.now();
+                let newLog = new log_model_mongo_1.dbLog(data);
+                newLog.save();
+            }
+            catch (error) {
+                return error;
+            }
+        });
     }
     create(nombre, descripcion, precio, codigo, stock, foto) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,7 +77,6 @@ class mongoDAO {
     }
     update(id, nombre, descripcion, precio, codigo, stock, foto) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data;
             try {
                 return yield producto_model_mongo_1.producto.findOneAndUpdate({ _id: id }, { $set: {
                         nombre: nombre,

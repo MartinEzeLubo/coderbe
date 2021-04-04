@@ -1,16 +1,31 @@
 import {producto} from '../models/producto.model.mongo'
 import {mensaje} from '../models/mensaje.model.mongo'
+import {dbLog} from '../models/log.model.mongo'
 
 export class mongoDAO {
     
     constructor(){
         const mongoose = require('mongoose');
         const mongoConnection= mongoose.connect('mongodb://martinlubo.ddns.net:8102/ecommerce', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
-        .then(() => console.log('se conecto correctamente'))
+        .then(() => {
+            console.log('se conecto correctamente');
+            this.saveLogToDatabase()
+        })
         .catch(error => console.log(error));
         
     }
-
+    
+    async saveLogToDatabase(){
+        try {
+            console.log('asd');
+            let data = Date.now()
+            let newLog = new dbLog(data);
+            newLog.save()
+            
+        } catch (error) {
+            return error
+        }
+    }
     
     async create(nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
         
@@ -29,7 +44,6 @@ export class mongoDAO {
             nuevoProductoModel.save();
             return nuevoProducto;    
         } catch (err) {
-            console.log(err);
             return err;
         }
         
@@ -54,8 +68,6 @@ export class mongoDAO {
     }
 
     async update(id: string, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
-        
-        let data;
         
         try {
             return await producto.findOneAndUpdate(

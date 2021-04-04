@@ -1,8 +1,8 @@
-import * as database from '../repositories/dbSelection.repository';
+import {db} from '../app'
 
 async function listarProductos(id?:string){
   try {
-    return await database.db.read(id);
+    return await db.read(id);
   } catch (error) {
     return error;
   }
@@ -17,21 +17,21 @@ async function guardarProducto(nombre: string, descripcion: string, precio: numb
      return 'Los parametros enviados son incorrectos';
   }
   try {
-    data = await database.db.create(nombre, descripcion, precio, codigo, stock, foto);
+    data = await db.create(nombre, descripcion, precio, codigo, stock, foto);
     return data;
   } catch (err) {
     throw err;
   }
 }
 
-async function actualizarProducto(id: number, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
+async function actualizarProducto(id: string, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
   let data;
 
   if(id === null || id === undefined || !nombre || nombre === "" || !descripcion || descripcion === "" || precio === null || precio === undefined || !codigo || codigo === "" || stock === null || stock === undefined || !foto || foto === "") {
     return 'Los parametros enviados son incorrectos';
   }
   try {
-    return await database.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
+    return await db.update(id, nombre, descripcion, precio, codigo, stock, foto);
   } catch (err) {
     return err;
   }
@@ -40,7 +40,7 @@ async function actualizarProducto(id: number, nombre: string, descripcion: strin
 async function eliminarProducto(id: string){
   
   try {
-    return await database.db.delete(id);
+    return await db.delete(id);
   } catch (error) {
     return error;
   }

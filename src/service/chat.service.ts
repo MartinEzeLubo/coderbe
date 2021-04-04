@@ -1,8 +1,8 @@
-import * as database from '../repositories/dbSelection.repository';
+import {db} from '../app'
 
 async function listarMensaje(id?:string){
     try {
-      return await database.db.readMessage(id);
+      return await db.readMessage(id);
     } catch (error) {
       return error;
     }
@@ -18,7 +18,7 @@ if(!sender || sender === "" || !message || message === "") {
     return 'Los parametros enviados son incorrectos';
 }
 try {
-    data = await database.db.createMessage(sender, message);
+    data = await db.createMessage(sender, message);
     return data;
 } catch (err) {
     throw err;
