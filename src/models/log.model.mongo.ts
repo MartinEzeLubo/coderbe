@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const logSchema = new mongoose.Schema({
  
-    timestamp: {type: Number, required: true}
+    timestamp: {type: String, required: true}
     
 })
 

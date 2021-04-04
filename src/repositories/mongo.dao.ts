@@ -17,10 +17,10 @@ export class mongoDAO {
     
     async saveLogToDatabase(){
         try {
-            console.log('asd');
-            let data = Date.now()
-            let newLog = new dbLog(data);
-            newLog.save()
+            let data = {timestamp: Date.now()}
+
+            let logModel = new dbLog(data);
+            logModel.save();
             
         } catch (error) {
             return error

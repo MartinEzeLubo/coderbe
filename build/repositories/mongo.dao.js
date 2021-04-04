@@ -26,10 +26,9 @@ class mongoDAO {
     saveLogToDatabase() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('asd');
-                let data = Date.now();
-                let newLog = new log_model_mongo_1.dbLog(data);
-                newLog.save();
+                let data = { timestamp: Date.now() };
+                let logModel = new log_model_mongo_1.dbLog(data);
+                logModel.save();
             }
             catch (error) {
                 return error;
@@ -53,7 +52,6 @@ class mongoDAO {
                 return nuevoProducto;
             }
             catch (err) {
-                console.log(err);
                 return err;
             }
         });
