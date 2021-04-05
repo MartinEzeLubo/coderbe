@@ -11,10 +11,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listarProductos = exports.guardarProducto = exports.actualizarProducto = exports.eliminarProducto = void 0;
 const app_1 = require("../app");
-function listarProductos(id) {
+function listarProductos(req) {
     return __awaiter(this, void 0, void 0, function* () {
+        let id = req.id;
+        let name = req.name;
+        let rangeFrom;
+        let rangeTo;
+        if (req.rangeFrom) {
+            rangeFrom = parseInt(req.rangeFrom);
+        }
+        ;
+        if (req.rangeTo) {
+            rangeTo = parseInt(req.rangeTo);
+        }
+        console.log(id, name, rangeFrom, rangeTo);
         try {
-            return yield app_1.db.read(id);
+            return yield app_1.db.read(id, name, rangeFrom, rangeTo);
         }
         catch (error) {
             return error;

@@ -56,20 +56,35 @@ class mongoDAO {
             }
         });
     }
-    read(id) {
+    read(id, name, rangeFrom, rangeTo) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('READ: ', id, name, rangeFrom, rangeTo);
             try {
-                if (id) {
-                    let data = yield producto_model_mongo_1.producto.findById(id);
-                    if (data === null) {
-                        throw Error('No existe un producto con el ID indicado');
-                    }
-                    return data;
+                if (!id && !name && !rangeFrom && !rangeTo) {
+                    return yield producto_model_mongo_1.producto.find();
                 }
-                return yield producto_model_mongo_1.producto.find();
+                if (!id && !name && (rangeFrom || rangeTo)) {
+                    if (rangeFrom && !rangeTo) {
+                        return yield producto_model_mongo_1.producto.find({ precio: { $gt: rangeFrom, $lt: 999999999999999999999999999999 } });
+                    }
+                    else if (!rangeFrom && rangeTo) {
+                        return yield producto_model_mongo_1.producto.find({ precio: { $gt: 0, $lt: rangeTo } });
+                    }
+                    else {
+                        return yield producto_model_mongo_1.producto.find({ precio: { $gt: rangeFrom, $lt: rangeTo } });
+                    }
+                }
+                let data = yield producto_model_mongo_1.producto.findOne({ $or: [
+                        { _id: id },
+                        { nombre: name }
+                    ] });
+                if (data === null) {
+                    throw Error('No existe un producto con los valores buscados');
+                }
+                return data;
             }
             catch (err) {
-                throw Error('No existe un producto con el ID indicado');
+                throw Error('No existe un producto con los valores buscados');
             }
         });
     }

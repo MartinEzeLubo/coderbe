@@ -1,8 +1,22 @@
 import {db} from '../app'
 
-async function listarProductos(id?:string){
+async function listarProductos(req){
+  let id = req.id;
+  let name = req.name;
+  let rangeFrom;
+  let rangeTo;
+
+  if(req.rangeFrom){
+  rangeFrom = parseInt(req.rangeFrom)
+  };
+  if (req.rangeTo){
+    rangeTo = parseInt(req.rangeTo);
+  }
+
+  console.log(id, name, rangeFrom, rangeTo);
+
   try {
-    return await db.read(id);
+    return await db.read(id, name, rangeFrom, rangeTo);
   } catch (error) {
     return error;
   }

@@ -4,32 +4,29 @@ import {eliminarProducto, actualizarProducto, guardarProducto, listarProductos} 
 let router = express.Router();
 
 
-router.get('/', async (req, res) => {
+// router.get('/', async (req, res) => {
     
-    try {
-        let data = await listarProductos();
+//     try {
+//         let data = await listarProductos(req);
         
-        if (data instanceof Error){
-            res.status(404).json(data.message)
-        }else{
-            res.status(200).json(data);
-        }
+//         if (data instanceof Error){
+//             res.status(404).json(data.message)
+//         }else{
+//             res.status(200).json(data);
+//         }
         
-    } catch (error) {
-        res.status(500).send('Error de la aplicacion' + error);
-    }
-    
-    // try {
-    //     return await listarProductos()
-    // } catch (error) {
-    //     res.send('Error de la aplicacion' + error);
-    // }
+//     } catch (error) {
+//         res.status(500).send('Error de la aplicacion' + error);
+//     }
+// });
 
-});
 
-router.get('/:id', async (req, res) => {
+
+//:id?:name?:rangeFrom?:rangeTo?
+
+router.get('/:id?:name?:rangeFrom?:rangeTo?', async (req, res) => {
     try {
-        let data = await listarProductos(req.params.id);
+        let data = await listarProductos(req.query);
         
         if (data instanceof Error){
             res.status(404).json(data.message)

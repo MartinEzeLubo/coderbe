@@ -49,26 +49,37 @@ export class mongoDAO {
         
     }
 
-    async read(id?:string){
-
+    async read(id?:string, name?:string, rangeFrom?:number, rangeTo?:number){
         try {
-            if (id){
-                let data = await producto.findById(id)
-                if (data === null){
-                    throw  Error('No existe un producto con el ID indicado');    
+            if(!id && !name && !rangeFrom && !rangeTo){
+                return await producto.find();
+            }
+            if(!id && !name && (rangeFrom || rangeTo)){
+                if(rangeFrom && !rangeTo){
+                    return await producto.find({precio: {$gt: rangeFrom, $lt: 999999999999999999999999999999}})
+                } else if (!rangeFrom && rangeTo){
+                    return await producto.find({precio: {$gt: 0, $lt: rangeTo}})
+                } else{
+                    return await producto.find({precio: {$gt: rangeFrom, $lt: rangeTo}});
                 }
-                return data
-            }    
+            }
+            let data = await producto.findOne({ $or:
+                [
+                    {_id: id},
+                    {nombre: name}
+                ]})
+            
+            if (data === null){
+                throw  Error('No existe un producto con los valores buscados');
+            } 
+            return data;
 
-            return await producto.find();
         } catch (err) {
-            throw Error('No existe un producto con el ID indicado');
+            throw Error('No existe un producto con los valores buscados');
         }
-        
     }
 
     async update(id: string, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
-        
         try {
             return await producto.findOneAndUpdate(
                 {_id:id},
