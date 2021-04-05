@@ -15,19 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const productos_service_1 = require("./../service/productos.service");
 let router = express_1.default.Router();
-// router.get('/', async (req, res) => {
-//     try {
-//         let data = await listarProductos(req);
-//         if (data instanceof Error){
-//             res.status(404).json(data.message)
-//         }else{
-//             res.status(200).json(data);
-//         }
-//     } catch (error) {
-//         res.status(500).send('Error de la aplicacion' + error);
-//     }
-// });
-//:id?:name?:rangeFrom?:rangeTo?
 router.get('/:id?:name?:rangeFrom?:rangeTo?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let data = yield productos_service_1.listarProductos(req.query);

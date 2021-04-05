@@ -4,26 +4,6 @@ import {eliminarProducto, actualizarProducto, guardarProducto, listarProductos} 
 let router = express.Router();
 
 
-// router.get('/', async (req, res) => {
-    
-//     try {
-//         let data = await listarProductos(req);
-        
-//         if (data instanceof Error){
-//             res.status(404).json(data.message)
-//         }else{
-//             res.status(200).json(data);
-//         }
-        
-//     } catch (error) {
-//         res.status(500).send('Error de la aplicacion' + error);
-//     }
-// });
-
-
-
-//:id?:name?:rangeFrom?:rangeTo?
-
 router.get('/:id?:name?:rangeFrom?:rangeTo?', async (req, res) => {
     try {
         let data = await listarProductos(req.query);
