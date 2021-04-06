@@ -14,7 +14,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const productos_service_1 = require("./../service/productos.service");
+const mockProducto = require('../generator/productos.mock');
 let router = express_1.default.Router();
+router.get('/vista-test:cant?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query.cant);
+    let cantidad = req.query.cant || 0;
+    try {
+        if (cantidad === 0) {
+            res.status(200).send('No se encuentran productos');
+        }
+        else {
+            let listadoProductos = [];
+            for (let i = 0; i < cantidad; i++) {
+                let producto = mockProducto.get();
+                listadoProductos.push(producto);
+            }
+            res.status(200).json(listadoProductos);
+        }
+    }
+    catch (error) {
+        res.status(500).send('Error de la aplicacion' + error);
+    }
+}));
 router.get('/:id?:name?:rangeFrom?:rangeTo?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let data = yield productos_service_1.listarProductos(req.query);
