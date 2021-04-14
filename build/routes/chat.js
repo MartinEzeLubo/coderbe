@@ -45,7 +45,7 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let data = yield chat_service_1.guardarMensaje(req.body.sender, req.body.message);
+        let data = yield chat_service_1.guardarMensaje(req.body);
         res.status(201).json(data);
     }
     catch (error) {

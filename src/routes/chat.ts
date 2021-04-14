@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        let data = await guardarMensaje(req.body.sender, req.body.message);
+        let data = await guardarMensaje(req.body);
         res.status(201).json(data)
     } catch (error) { 
         res.status(500).send('Error de la aplicacion' + error);

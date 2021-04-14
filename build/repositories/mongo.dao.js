@@ -119,17 +119,26 @@ class mongoDAO {
             }
         });
     }
-    createMessage(sender, message) {
+    createMessage(mail, name, lastname, age, alias, avatar, text) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                let author = {
+                    mail,
+                    name,
+                    lastname,
+                    age,
+                    alias,
+                    avatar
+                };
                 let nuevoMensaje = {
-                    sender,
-                    message,
+                    text,
                     timestamp: Date.now()
                 };
-                let nuevoMensajeModel = new mensaje_model_mongo_1.mensaje(nuevoMensaje);
-                nuevoMensajeModel.save();
-                return nuevoMensaje;
+                let nuevoMensajeModel = yield new mensaje_model_mongo_1.mensaje(nuevoMensaje);
+                nuevoMensajeModel.author = author;
+                console.log(nuevoMensajeModel);
+                yield nuevoMensajeModel.save();
+                return nuevoMensajeModel;
             }
             catch (err) {
                 console.log(err);

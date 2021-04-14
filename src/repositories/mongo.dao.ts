@@ -115,18 +115,28 @@ export class mongoDAO {
 
 
 
-    async createMessage(sender: string, message: string){
+    async createMessage(mail: string, name: string, lastname: string, age: number, alias: string, avatar: string, text: string){
         
+
         try {
+            let author = {
+                mail, 
+                name,
+                lastname,
+                age,
+                alias,
+                avatar
+            }
             let nuevoMensaje = {
-                sender,
-                message,
+                text,
                 timestamp: Date.now()
             }
         
-            let nuevoMensajeModel = new mensaje(nuevoMensaje);
-            nuevoMensajeModel.save();
-            return nuevoMensaje;
+            let nuevoMensajeModel = await new mensaje(nuevoMensaje);
+            nuevoMensajeModel.author = author;
+            console.log(nuevoMensajeModel);
+            await nuevoMensajeModel.save();
+            return nuevoMensajeModel;
 
         } catch (err) {
             console.log(err);
