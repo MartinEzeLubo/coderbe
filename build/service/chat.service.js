@@ -14,18 +14,14 @@ const app_1 = require("../app");
 const normalizr_1 = require("normalizr");
 const util = require('util');
 let userSchema = new normalizr_1.schema.Entity('user', {}, { idAttribute: 'mail' });
-let mensajesSchema = new normalizr_1.schema.Entity('mensajes', {
-    author: userSchema
-}, { idAttribute: '_id' });
-let chatSchema = new normalizr_1.schema.Entity('chat', {
-    mensajes: [mensajesSchema]
-});
+let responseSchema = new normalizr_1.schema.Object({ users: new normalizr_1.schema.Array(userSchema) });
+let mensajesSchema = new normalizr_1.schema.Entity('mensajes', { author: responseSchema }, { idAttribute: '_id' });
+let chatSchema = new normalizr_1.schema.Entity('chat', { mensajes: [mensajesSchema] }, { idAttribute: 'id' });
 function listarMensaje(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let messagesData = yield app_1.db.readMessage(id);
-            let data = { id: '001', mensajes: messagesData };
-            console.log(messagesData);
+            let data = { id: 'clavesarasa', mensajes: messagesData };
             console.log(data);
             return normalizr_1.normalize(data, chatSchema);
         }
@@ -50,7 +46,7 @@ function guardarMensaje(data) {
     });
 }
 exports.guardarMensaje = guardarMensaje;
-// let cosa = {
+//let cosa = {
 //   id: 'clavesarasa',
 //   mensajes: [
 //     {
