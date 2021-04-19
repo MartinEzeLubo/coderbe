@@ -24,7 +24,6 @@ function listarProductos(req) {
         if (req.rangeTo) {
             rangeTo = parseInt(req.rangeTo);
         }
-        console.log(id, name, rangeFrom, rangeTo);
         try {
             return yield app_1.db.read(id, name, rangeFrom, rangeTo);
         }

@@ -13,8 +13,6 @@ async function listarProductos(req){
     rangeTo = parseInt(req.rangeTo);
   }
 
-  console.log(id, name, rangeFrom, rangeTo);
-
   try {
     return await db.read(id, name, rangeFrom, rangeTo);
   } catch (error) {

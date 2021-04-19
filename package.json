@@ -14,10 +14,13 @@
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "@types/express-session": "^1.17.3",
     "core-js": "^3.9.0",
+    "cors": "^2.8.5",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-handlebars": "^5.2.0",
+    "express-session": "^1.17.1",
     "knex": "^0.95.2",
     "mongoose": "^5.12.2",
     "mysql": "^2.18.1",

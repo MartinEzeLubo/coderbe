@@ -25,6 +25,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 require("core-js");
 require("regenerator-runtime/runtime");
+const cors_1 = __importDefault(require("cors"));
+const express_session_1 = __importDefault(require("express-session"));
 const express_1 = __importDefault(require("express"));
 const index_1 = __importDefault(require("./routes/index"));
 const database = __importStar(require("./repositories/mongo.dao"));
@@ -33,6 +35,13 @@ const app = express_1.default();
 const http = require('http').Server(app);
 app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use(cors_1.default());
+app.use(express_session_1.default({
+    secret: 'asd',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+}));
 app.use('/', index_1.default);
 http.listen(app.get('PORT'), () => {
     return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
