@@ -3,11 +3,12 @@ import express from 'express';
 let router = express.Router();
 
 
-router.get('/', async (req, res) => {
-    
-    if(!req.body.user || !req.body.pass){
-        res.send('Login Failed')
-    } else if (req.body.user === 'martin@garmin.com.ar' && req.body.pass === 'sarasasa'){
+router.get('/:user?:pass?', async (req, res) => {
+    console.log(req.query.user);
+    console.log(req.query.pass);
+    if(!req.query.user || !req.query.pass){
+        res.status(401).send('Login Failed')
+    } else if (req.query.user === 'martin@garmin.com.ar' && req.query.pass === 'sarasasa'){
         req.session.login = true;
         res.status(200).send(req.session.login)
     } else {

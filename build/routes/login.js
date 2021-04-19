@@ -14,11 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 let router = express_1.default.Router();
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.body.user || !req.body.pass) {
-        res.send('Login Failed');
+router.get('/:user?:pass?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query.user);
+    console.log(req.query.pass);
+    if (!req.query.user || !req.query.pass) {
+        res.status(401).send('Login Failed');
     }
-    else if (req.body.user === 'martin@garmin.com.ar' && req.body.pass === 'sarasasa') {
+    else if (req.query.user === 'martin@garmin.com.ar' && req.query.pass === 'sarasasa') {
         req.session.login = true;
         res.status(200).send(req.session.login);
     }
