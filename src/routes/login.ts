@@ -4,8 +4,6 @@ let router = express.Router();
 
 
 router.get('/:user?:pass?', async (req, res) => {
-    console.log(req.query.user);
-    console.log(req.query.pass);
     if(!req.query.user || !req.query.pass){
         res.status(401).send('Login Failed')
     } else if (req.query.user && req.query.pass){
