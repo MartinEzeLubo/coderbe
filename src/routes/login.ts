@@ -8,24 +8,20 @@ router.get('/:user?:pass?', async (req, res) => {
     console.log(req.query.pass);
     if(!req.query.user || !req.query.pass){
         res.status(401).send('Login Failed')
-    } else if (req.query.user === 'martin@garmin.com.ar' && req.query.pass === 'sarasasa'){
+    } else if (req.query.user && req.query.pass){
         req.session.login = true;
-        res.status(200).send(req.session.login)
+        res.status(200).json({mensaje: `Bienvenido ${req.query.user}`, idSession: req.sessionID}).send()
     } else {
         res.status(401).send()
     }
 });
 
-router.get('/logueado', async (req, res) => {
+router.get('/logout', async (req, res) => {
     
-    console.log(req.session.login);
-    if(req.session.login){
-        res.status(200).send('estas logueado correctamente')
-    } else {
-        res.status(401).send('No estas logueado, por favor inicia sesion')
-
-    }
-
+    req.session.destroy;
+    res.status(200).send();
+    
 });
+
 
 export default router;

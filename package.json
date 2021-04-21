@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "babel": "node_modules/.bin/babel build -d dist",
     "dockerandrun": "docker run -p 127.0.0.1:3306:3306 -e MYSQL_ROOT_PASSWORD=Maria2021! -e MYSQL_DATABASE=backend -d mariadb && sleep 3 && npm run compileandrun",
-    "compileandrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js"
+    "compileandrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js & npx serve frontend"
+
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "mongoose": "^5.12.2",
     "mysql": "^2.18.1",
     "normalizr": "^3.6.1",
+    "serve": "^11.3.2",
     "socket.io": "^3.1.1",
     "socket.io-client": "^3.1.1",
     "socketio": "^1.0.0",
