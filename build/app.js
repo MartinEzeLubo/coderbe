@@ -41,7 +41,7 @@ app.use(express_session_1.default({
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 10000 },
-    rolling: false
+    rolling: true
 }));
 app.use('/', index_1.default);
 http.listen(app.get('PORT'), () => {

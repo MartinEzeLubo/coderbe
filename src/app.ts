@@ -22,7 +22,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {maxAge: 10000},
-  rolling: false
+  rolling: true
 }))
 app.use('/', router);
 

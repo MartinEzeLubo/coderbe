@@ -17,7 +17,7 @@ router.get('/login/:user?:pass?', async (req, res) => {
         res.status(401).send('Login Failed')
     } else if (req.query.user && req.query.pass){
         req.session.login = true;
-        res.status(200).json({mensaje: `Bienvenido ${req.query.user}`, idSession: req.sessionID}).send()
+        res.status(200).json({idSession: req.sessionID}).send()
     } else {
         res.status(401).send()
     }
@@ -32,15 +32,10 @@ router.get('/logout', async (req, res) => {
 });
 
 router.get('/status', async (req, res) => {
-    console.log(req.sessionID); 
-    console.log(req.session);
-
 
     if(req.session.login){
-        console.log('logueado!');
-        res.status(200).send('status actualizado')
+        res.status(200).json({idSession: req.sessionID}).send()
     } else {
-        console.log('login vencido');
         res.status(401).send('token vencido')
     }
     
