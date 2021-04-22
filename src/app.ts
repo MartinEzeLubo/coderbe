@@ -14,15 +14,18 @@ const http = require('http').Server(app);
 
 app.set('PORT', process.env.PORT || 8080);
 app.use(express.urlencoded({extended: true}));
-app.use(cors())
-app.use(session({
-  secret: 'asd',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {maxAge: 60000}
-}))
+app.use(cors({origin: 'http://localhost:3000', credentials : true}))
 
+
+app.use(session({
+  secret: 'password',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {maxAge: 10000},
+  rolling: false
+}))
 app.use('/', router);
+
 
 
 http.listen(app.get('PORT'), () => {

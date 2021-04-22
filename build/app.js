@@ -35,12 +35,13 @@ const app = express_1.default();
 const http = require('http').Server(app);
 app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use(cors_1.default());
+app.use(cors_1.default({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express_session_1.default({
-    secret: 'asd',
+    secret: 'password',
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 60000 }
+    saveUninitialized: false,
+    cookie: { maxAge: 10000 },
+    rolling: false
 }));
 app.use('/', index_1.default);
 http.listen(app.get('PORT'), () => {

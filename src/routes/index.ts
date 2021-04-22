@@ -31,5 +31,20 @@ router.get('/logout', async (req, res) => {
     
 });
 
+router.get('/status', async (req, res) => {
+    console.log(req.sessionID); 
+    console.log(req.session);
+
+
+    if(req.session.login){
+        console.log('logueado!');
+        res.status(200).send('status actualizado')
+    } else {
+        console.log('login vencido');
+        res.status(401).send('token vencido')
+    }
+    
+});
+
 
 export default router;

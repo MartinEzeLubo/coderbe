@@ -15,16 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const productos_1 = __importDefault(require("./productos"));
 const chat_1 = __importDefault(require("./chat"));
-//import routerLogin from './login';
 let router = express_1.default.Router();
 router.use(express_1.default.json());
 router.use(express_1.default.urlencoded({ extended: true }));
 router.use('/productos', productos_1.default);
 router.use('/chat', chat_1.default);
-//router.use('/login', routerLogin);
 router.get('/login/:user?:pass?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.query.user);
-    console.log(req.query.pass);
     if (!req.query.user || !req.query.pass) {
         res.status(401).send('Login Failed');
     }
@@ -39,6 +35,18 @@ router.get('/login/:user?:pass?', (req, res) => __awaiter(void 0, void 0, void 0
 router.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.session.destroy;
     res.status(200).send();
+}));
+router.get('/status', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.sessionID);
+    console.log(req.session);
+    if (req.session.login) {
+        console.log('logueado!');
+        res.status(200).send('status actualizado');
+    }
+    else {
+        console.log('login vencido');
+        res.status(401).send('token vencido');
+    }
 }));
 exports.default = router;
 //# sourceMappingURL=index.js.map
