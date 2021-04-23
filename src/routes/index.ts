@@ -31,8 +31,8 @@ router.get('/logout', async (req, res) => {
     
 });
 
-router.get('/status', async (req, res) => {
-
+router.get('/status', async (req, res) => { 
+    
     if(req.session.login){
         res.status(200).json({idSession: req.sessionID}).send()
     } else {

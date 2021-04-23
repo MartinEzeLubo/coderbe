@@ -26,7 +26,7 @@ router.get('/login/:user?:pass?', (req, res) => __awaiter(void 0, void 0, void 0
     }
     else if (req.query.user && req.query.pass) {
         req.session.login = true;
-        res.status(200).json({ mensaje: `Bienvenido ${req.query.user}`, idSession: req.sessionID }).send();
+        res.status(200).json({ idSession: req.sessionID }).send();
     }
     else {
         res.status(401).send();
@@ -38,7 +38,7 @@ router.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* 
 }));
 router.get('/status', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.session.login) {
-        res.status(200).json({ mensaje: `Bienvenido ${req.query.user}`, idSession: req.sessionID }).send();
+        res.status(200).json({ idSession: req.sessionID }).send();
     }
     else {
         res.status(401).send('token vencido');

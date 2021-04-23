@@ -33,14 +33,20 @@ const database = __importStar(require("./repositories/mongo.dao"));
 exports.db = new database.mongoDAO;
 const app = express_1.default();
 const http = require('http').Server(app);
+const mongoDBStore = require('connect-mongodb-session')(express_session_1.default);
+const sessionStore = new mongoDBStore({
+    uri: 'mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority',
+    collection: 'sessions'
+});
 app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(cors_1.default({ origin: ['http://localhost:3000', 'http://localhost:5000'], credentials: true }));
 app.use(express_session_1.default({
+    store: sessionStore,
     secret: 'password',
-    resave: false,
+    resave: true,
     saveUninitialized: false,
-    cookie: { maxAge: 10000 },
+    cookie: { maxAge: 600000 },
     rolling: true
 }));
 app.use('/', index_1.default);

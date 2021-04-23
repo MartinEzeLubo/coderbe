@@ -10,13 +10,14 @@
     "dockerandrun": "docker run -p 127.0.0.1:3306:3306 -e MYSQL_ROOT_PASSWORD=Maria2021! -e MYSQL_DATABASE=backend -d mariadb && sleep 3 && npm run compileandrun",
     "devrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js",
     "compileandrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js & npx serve frontend"
-
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@types/express-session": "^1.17.3",
+    "connect-mongo": "^4.4.1",
+    "connect-mongodb-session": "^2.4.1",
     "core-js": "^3.9.0",
     "cors": "^2.8.5",
     "ejs": "^3.1.6",
