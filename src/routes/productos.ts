@@ -5,6 +5,7 @@ let router = express.Router();
 
 
 router.get('/:id?:name?:rangeFrom?:rangeTo?', async (req, res) => {
+    
     try {
         let data = await listarProductos(req.query);
         

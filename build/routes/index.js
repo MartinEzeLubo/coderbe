@@ -15,11 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const productos_1 = __importDefault(require("./productos"));
 const chat_1 = __importDefault(require("./chat"));
+const login_1 = __importDefault(require("./login"));
+const app_1 = require("../app");
 let router = express_1.default.Router();
 router.use(express_1.default.json());
 router.use(express_1.default.urlencoded({ extended: true }));
 router.use('/productos', productos_1.default);
 router.use('/chat', chat_1.default);
+router.use('/login', login_1.default);
 router.get('/login/:user?:pass?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.query.user || !req.query.pass) {
         res.status(401).send('Login Failed');
@@ -36,13 +39,8 @@ router.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     req.session.destroy;
     res.status(200).send();
 }));
-router.get('/status', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.session.login) {
-        res.status(200).json({ idSession: req.sessionID }).send();
-    }
-    else {
-        res.status(401).send('token vencido');
-    }
+router.get('/status', app_1.checkAuthentication, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(200).json({ idSession: req.sessionID }).send();
 }));
 exports.default = router;
 //# sourceMappingURL=index.js.map

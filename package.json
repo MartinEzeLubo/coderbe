@@ -16,6 +16,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@types/express-session": "^1.17.3",
+    "bcrypt": "^5.0.1",
     "connect-mongo": "^4.4.1",
     "connect-mongodb-session": "^2.4.1",
     "core-js": "^3.9.0",
@@ -27,6 +28,8 @@
     "mongoose": "^5.12.2",
     "mysql": "^2.18.1",
     "normalizr": "^3.6.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "serve": "^11.3.2",
     "socket.io": "^3.1.1",
     "socket.io-client": "^3.1.1",

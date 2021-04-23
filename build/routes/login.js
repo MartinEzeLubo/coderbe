@@ -14,21 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 let router = express_1.default.Router();
-router.get('/:user?:pass?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/login/:user?:pass?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.query.user || !req.query.pass) {
         res.status(401).send('Login Failed');
     }
     else if (req.query.user && req.query.pass) {
         req.session.login = true;
-        res.status(200).json({ mensaje: `Bienvenido ${req.query.user}`, idSession: req.sessionID }).send();
+        res.status(200).json({ idSession: req.sessionID }).send();
     }
     else {
         res.status(401).send();
     }
-}));
-router.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.session.destroy;
-    res.status(200).send();
 }));
 exports.default = router;
 //# sourceMappingURL=login.js.map
