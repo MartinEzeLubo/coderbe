@@ -22,6 +22,8 @@ const sessionStore = new mongoDBStore({
 })
 let LocalStrategy = passportLocal.Strategy;
 
+
+
 const createHash = function(password){
   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null)
 }
@@ -100,17 +102,6 @@ passport.deserializeUser(function(id, done){
     done(err, user);
   })
 })
-
-
-export function checkAuthentication(req,res,next){
-  if(req.isAuthenticated()){
-    
-      //req.isAuthenticated() will return true if user is logged in
-      next();
-  } else{
-      res.status(401).send()
-  }
-}
 
 
 http.listen(app.get('PORT'), () => {

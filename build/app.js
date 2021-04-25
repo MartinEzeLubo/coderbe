@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAuthentication = exports.db = void 0;
+exports.db = void 0;
 require("core-js");
 require("regenerator-runtime/runtime");
 const cors_1 = __importDefault(require("cors"));
@@ -101,16 +101,6 @@ passport_1.default.deserializeUser(function (id, done) {
         done(err, user);
     });
 });
-function checkAuthentication(req, res, next) {
-    if (req.isAuthenticated()) {
-        //req.isAuthenticated() will return true if user is logged in
-        next();
-    }
-    else {
-        res.status(401).send();
-    }
-}
-exports.checkAuthentication = checkAuthentication;
 http.listen(app.get('PORT'), () => {
     return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
 }).on('error', () => console.log('El puerto configurado se encuentra en uso'));

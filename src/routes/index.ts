@@ -1,8 +1,7 @@
-import express, { Router } from 'express';
+import express, { Router, Request } from 'express';
 import routerProductos from './productos';
 import routerChat from './chat';
 import routerLogin from './login';
-import {checkAuthentication} from '../app'
 
 
 let router:Router = express.Router();
@@ -22,24 +21,35 @@ router.get('/login/:user?:pass?', async (req, res) => {
         res.status(401).send('Login Failed')
     } else if (req.query.user && req.query.pass){
         req.session.login = true;
-        res.status(200).json({idSession: req.sessionID}).send()
+        res.status(200).send(req.sessionID)
     } else {
         res.status(401).send()
     }
 });
 
 
-router.get('/logout', async (req, res) => {
-    
-    req.session.destroy;
-    res.status(200).send();
+router.get('/logout',checkAuthentication, async (req, res) => {
+    req.session.destroy(()=>{
+        res.status(200).send();
+    });
     
 });
 
 
-router.get('/status',checkAuthentication, async (req, res) => { 
+export function checkAuthentication(req,res,next){
+    if(req.session.login){
+            next();
+    } else{
+        res.status(401).send()
+    }
+}
+
+
+
+
+router.get('/status',checkAuthentication, async (req, res, next) => { 
     
-    res.status(200).json({idSession: req.sessionID}).send()
+    res.status(200).send({"idSession": req.sessionID})
         
 });
 
