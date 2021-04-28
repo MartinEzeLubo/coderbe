@@ -31,6 +31,7 @@ router.use(passport.session());
 router.post('/login', 
     passport.authenticate('login', { failureRedirect: '/login' }),
     function(req, res) {
+        console.log(req.session.passport);
         
     res.send(req.session.passport.user);
 });
@@ -82,15 +83,14 @@ passport.use('login', new LocalStrategy({
     passReqToCallback: true
     },
     async function(req, username, password, done){
-        console.log('asd');
         try{
-            console.log('try?');  
-            let data = await db.readUser(username)
-            console.log(data.password);
-            const verified = bCrypt.compareSync(password, data.password);
-            console.log(verified);
+            let data = await db.readUser(username)    
+            if(bCrypt.compareSync(password, data.password)){
+                data.password = ''
+                done(null, data);
+            }
+            
 
-            done(null, data);
         }
         catch{
 

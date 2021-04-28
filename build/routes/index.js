@@ -53,6 +53,7 @@ router.use('/login', login_1.default);
 router.use(passport_1.default.initialize());
 router.use(passport_1.default.session());
 router.post('/login', passport_1.default.authenticate('login', { failureRedirect: '/login' }), function (req, res) {
+    console.log(req.session.passport);
     res.send(req.session.passport.user);
 });
 // router.post('/login/:user?:pass?', async (req, res) => {
@@ -87,15 +88,12 @@ passport_1.default.use('login', new LocalStrategy({
     passReqToCallback: true
 }, function (req, username, password, done) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('asd');
         try {
-            console.log('try?');
             let data = yield app_1.db.readUser(username);
-            console.log(data.password);
-            const verified = bcrypt_1.default.compareSync(password, data.password);
-            console.log(verified);
-            //console.log(check);
-            done(null, data);
+            if (bcrypt_1.default.compareSync(password, data.password)) {
+                data.password = '';
+                done(null, data);
+            }
         }
         catch (_a) {
         }
