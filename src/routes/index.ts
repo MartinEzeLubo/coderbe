@@ -7,6 +7,7 @@ import * as passportLocal from 'passport-local';
 import {user as dbuser} from '.././models/user.model.mongo';
 import bCrypt from 'bcrypt'
 import {db} from '../app'
+import { create } from 'connect-mongo';
 
 
 let router:Router = express.Router();
@@ -36,16 +37,7 @@ router.post('/login',
     res.send(req.session.passport.user);
 });
 
-// router.post('/login/:user?:pass?', async (req, res) => {
-//     if(!req.query.user || !req.query.pass){
-//         res.status(401).send('Login Failed')
-//     } else if (req.query.user && req.query.pass){
-//         req.session.login = true;
-//         res.status(200).send(req.sessionID)
-//     } else {
-//         res.status(401).send()
-//     }
-// });
+
 
 
 router.get('/logout', async (req, res) => {
@@ -98,6 +90,39 @@ passport.use('login', new LocalStrategy({
     }
 ))  
 
+
+passport.use('register', new LocalStrategy({
+    passReqToCallback: true
+    },
+    async function(req, username, password, done){
+        if (username && password){
+            try{
+                let userExist = await db.readUser(username)
+                if (userExist){
+                    return done (null, 'El usuario ya existe',)
+                }
+                let newUser = { username: username,
+                                password: createHash(password),
+                                firstName:req.body.firstName,
+                                lastName:req.body.lastName     
+                            }
+                let newUserModel = new dbuser(newUser)
+                newUserModel.save(err=>{
+                    if(err){
+                    console.log('Error al guardar usuario: '+err);  
+                    throw err; 
+                    }
+                    console.log('Usuario registrado correctamente');    
+                    return done(null, newUser);    
+                })                 
+            }
+            catch{
+    
+            }
+
+        }
+    }
+)) 
   
 passport.serializeUser(function(user, done){
     done(null, user);
@@ -130,3 +155,16 @@ export default router;
 //               newUser.password = createHash(password);
 //               newUser.email = req.body.email;
 //               newUser.firstName = req.body.firstName;findOrCreateUser
+
+
+
+// router.post('/login/:user?:pass?', async (req, res) => {
+//     if(!req.query.user || !req.query.pass){
+//         res.status(401).send('Login Failed')
+//     } else if (req.query.user && req.query.pass){
+//         req.session.login = true;
+//         res.status(200).send(req.sessionID)
+//     } else {
+//         res.status(401).send()
+//     }
+// });
