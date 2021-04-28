@@ -1,9 +1,12 @@
 import {producto} from '../models/producto.model.mongo'
 import {mensaje} from '../models/mensaje.model.mongo'
 import {dbLog} from '../models/log.model.mongo'
+import {user}  from '../models/user.model.mongo'
+
 
 export class mongoDAO {
     
+    //martinlubo.ddns.net:8102
     constructor(){
         const mongoose = require('mongoose');
         const mongoConnection= mongoose.connect('mongodb://martinlubo.ddns.net:8102/ecommerce', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
@@ -162,6 +165,38 @@ export class mongoDAO {
         }
         
     }
+
+
+
+    async createUser(username: String, password:String, email?:string, firstName?:String, lastName?:String){
+        
+        try {
+            let newUser = {
+                username,
+                password,
+                email,
+                firstName,
+                lastName
+            }
     
+            let newUserModel = new user(newUser);
+            newUserModel.save()
+            
+        } catch (error) {
+            
+        }
+        
+    }
+    
+    async readUser(username: String){
+        
+        try {
+            let data = await user.findOne({username: username})
+            return data;
+        } catch (error) {
+            
+        }
+        
+    }
 }
 

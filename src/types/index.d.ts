@@ -3,6 +3,7 @@ export {};
 declare module 'express-session' {
     interface SessionData {
         contador: number,
-        login: boolean
+        login: boolean,
+        [key: string]: any
     }
 }

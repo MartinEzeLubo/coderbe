@@ -13,7 +13,9 @@ exports.mongoDAO = void 0;
 const producto_model_mongo_1 = require("../models/producto.model.mongo");
 const mensaje_model_mongo_1 = require("../models/mensaje.model.mongo");
 const log_model_mongo_1 = require("../models/log.model.mongo");
+const user_model_mongo_1 = require("../models/user.model.mongo");
 class mongoDAO {
+    //martinlubo.ddns.net:8102
     constructor() {
         const mongoose = require('mongoose');
         const mongoConnection = mongoose.connect('mongodb://martinlubo.ddns.net:8102/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
@@ -160,6 +162,33 @@ class mongoDAO {
             }
             catch (err) {
                 throw Error('No existe un producto con el ID indicado');
+            }
+        });
+    }
+    createUser(username, password, email, firstName, lastName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let newUser = {
+                    username,
+                    password,
+                    email,
+                    firstName,
+                    lastName
+                };
+                let newUserModel = new user_model_mongo_1.user(newUser);
+                newUserModel.save();
+            }
+            catch (error) {
+            }
+        });
+    }
+    readUser(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let data = yield user_model_mongo_1.user.findOne({ username: username });
+                return data;
+            }
+            catch (error) {
             }
         });
     }

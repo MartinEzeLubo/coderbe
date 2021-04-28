@@ -16,6 +16,8 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@types/express-session": "^1.17.3",
+    "@types/passport": "^1.0.6",
+    "@types/passport-local": "^1.0.33",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.4.1",
     "connect-mongodb-session": "^2.4.1",

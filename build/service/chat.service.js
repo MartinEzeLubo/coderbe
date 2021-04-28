@@ -50,47 +50,4 @@ function guardarMensaje(data) {
     });
 }
 exports.guardarMensaje = guardarMensaje;
-// let cosa = {
-//   id: 'clavesarasa',
-//   mensajes: [
-//     {
-//       _id: '111111',
-//       author: {
-//         mail: 'asd@add.com', 
-//         name: 'Martin',
-//         lastname: 'Lubo',
-//         age: 32,
-//         alias: 'ML',
-//         avatar: 'url'
-//       },
-//     text: 'mensaje 1',
-//     timestamp: Date.now()
-//     },
-//     {
-//       _id: '222222',
-//       author: {
-//         mail: 'fsdfsfsfgfsd@add.com', 
-//         name: 'Martin',
-//         lastname: 'Lubo',
-//         age: 32,
-//         alias: 'ML',
-//         avatar: 'url'
-//       },
-//     text: 'mensaje 2',
-//     timestamp: Date.now()
-//     },
-//     {
-//       _id: '333333',
-//       author: {
-//         mail: 'asd@add.com', 
-//         name: 'Martin',
-//         lastname: 'Lubo',
-//         age: 32,
-//         alias: 'ML',
-//         avatar: 'url'
-//       },
-//     text: 'mensaje 3',
-//     timestamp: Date.now()
-//     }
-//   ] }
 //# sourceMappingURL=chat.service.js.map
