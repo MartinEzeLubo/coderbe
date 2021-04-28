@@ -37,6 +37,13 @@ router.post('/login',
     res.send(req.session.passport.user);
 });
 
+router.post('/register', 
+    passport.authenticate('register', { failureRedirect: '/login' }),
+    function(req, res) {
+        console.log(req.session.passport);
+        
+    res.send(req.session.passport.user);
+});
 
 
 
@@ -80,7 +87,11 @@ passport.use('login', new LocalStrategy({
             if(bCrypt.compareSync(password, data.password)){
                 data.password = ''
                 done(null, data);
+            } else {
+                let error = "Los datos de inicio son incorrectos"
+                done(error, false)
             }
+
             
 
         }
@@ -95,6 +106,7 @@ passport.use('register', new LocalStrategy({
     passReqToCallback: true
     },
     async function(req, username, password, done){
+        console.log(`ûsername ${username}  - password: ${password}`);
         if (username && password){
             try{
                 let userExist = await db.readUser(username)

@@ -57,6 +57,10 @@ router.post('/login', passport_1.default.authenticate('login', { failureRedirect
     console.log(req.session.passport);
     res.send(req.session.passport.user);
 });
+router.post('/register', passport_1.default.authenticate('register', { failureRedirect: '/login' }), function (req, res) {
+    console.log(req.session.passport);
+    res.send(req.session.passport.user);
+});
 router.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.session.destroy(() => {
         res.status(200).send();
@@ -85,6 +89,10 @@ passport_1.default.use('login', new LocalStrategy({
                 data.password = '';
                 done(null, data);
             }
+            else {
+                let error = "Los datos de inicio son incorrectos";
+                done(error, false);
+            }
         }
         catch (_a) {
         }
@@ -94,6 +102,7 @@ passport_1.default.use('register', new LocalStrategy({
     passReqToCallback: true
 }, function (req, username, password, done) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(`ûsername ${username}  - password: ${password}`);
         if (username && password) {
             try {
                 let userExist = yield app_1.db.readUser(username);
