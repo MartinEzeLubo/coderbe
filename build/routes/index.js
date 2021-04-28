@@ -38,6 +38,7 @@ const chat_1 = __importDefault(require("./chat"));
 const login_1 = __importDefault(require("./login"));
 const passport_1 = __importDefault(require("passport"));
 const passportLocal = __importStar(require("passport-local"));
+const user_model_mongo_1 = require(".././models/user.model.mongo");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const app_1 = require("../app");
 let router = express_1.default.Router();
@@ -56,16 +57,6 @@ router.post('/login', passport_1.default.authenticate('login', { failureRedirect
     console.log(req.session.passport);
     res.send(req.session.passport.user);
 });
-// router.post('/login/:user?:pass?', async (req, res) => {
-//     if(!req.query.user || !req.query.pass){
-//         res.status(401).send('Login Failed')
-//     } else if (req.query.user && req.query.pass){
-//         req.session.login = true;
-//         res.status(200).send(req.sessionID)
-//     } else {
-//         res.status(401).send()
-//     }
-// });
 router.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.session.destroy(() => {
         res.status(200).send();
@@ -99,6 +90,36 @@ passport_1.default.use('login', new LocalStrategy({
         }
     });
 }));
+passport_1.default.use('register', new LocalStrategy({
+    passReqToCallback: true
+}, function (req, username, password, done) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (username && password) {
+            try {
+                let userExist = yield app_1.db.readUser(username);
+                if (userExist) {
+                    return done(null, 'El usuario ya existe');
+                }
+                let newUser = { username: username,
+                    password: createHash(password),
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName
+                };
+                let newUserModel = new user_model_mongo_1.user(newUser);
+                newUserModel.save(err => {
+                    if (err) {
+                        console.log('Error al guardar usuario: ' + err);
+                        throw err;
+                    }
+                    console.log('Usuario registrado correctamente');
+                    return done(null, newUser);
+                });
+            }
+            catch (_a) {
+            }
+        }
+    });
+}));
 passport_1.default.serializeUser(function (user, done) {
     done(null, user);
 });
@@ -113,4 +134,14 @@ exports.default = router;
 //               newUser.password = createHash(password);
 //               newUser.email = req.body.email;
 //               newUser.firstName = req.body.firstName;findOrCreateUser
+// router.post('/login/:user?:pass?', async (req, res) => {
+//     if(!req.query.user || !req.query.pass){
+//         res.status(401).send('Login Failed')
+//     } else if (req.query.user && req.query.pass){
+//         req.session.login = true;
+//         res.status(200).send(req.sessionID)
+//     } else {
+//         res.status(401).send()
+//     }
+// });
 //# sourceMappingURL=index.js.map
