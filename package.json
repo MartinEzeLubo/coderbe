@@ -9,7 +9,7 @@
     "babel": "node_modules/.bin/babel build -d dist",
     "dockerandrun": "docker run -p 127.0.0.1:3306:3306 -e MYSQL_ROOT_PASSWORD=Maria2021! -e MYSQL_DATABASE=backend -d mariadb && sleep 3 && npm run compileandrun",
     "devrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js",
-    "compileandrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js & npx serve frontend"
+    "compileandrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js & npx serve -s frontend"
   },
   "author": "",
   "license": "ISC",

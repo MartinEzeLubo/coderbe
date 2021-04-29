@@ -86,7 +86,8 @@ passport.use('login', new LocalStrategy({
         try{
             let data = await db.readUser(username)
             if(!data){
-                done(new Error("Los datos de inicio son incorrectos"), false)
+                let error = "Los datos de inicio son incorrectos"
+                done(error, false)
             }
             if(bCrypt.compareSync(password, data.password)){
                 data.password = ''
@@ -112,7 +113,8 @@ passport.use('register', new LocalStrategy({
             try{
                 let userExist = await db.readUser(username)
                 if (userExist){
-                    return done (new Error("El usuario ya existe"), false)
+                    let error = "El usuario ya existe"
+                    return done (error, false)
                 }
                 let newUser = { username: username,
                                 password: createHash(password),

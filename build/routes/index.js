@@ -84,7 +84,8 @@ passport_1.default.use('login', new LocalStrategy({
         try {
             let data = yield app_1.db.readUser(username);
             if (!data) {
-                done(new Error("Los datos de inicio son incorrectos"), false);
+                let error = "Los datos de inicio son incorrectos";
+                done(error, false);
             }
             if (bcrypt_1.default.compareSync(password, data.password)) {
                 data.password = '';
@@ -107,7 +108,8 @@ passport_1.default.use('register', new LocalStrategy({
             try {
                 let userExist = yield app_1.db.readUser(username);
                 if (userExist) {
-                    return done(new Error("El usuario ya existe"), false);
+                    let error = "El usuario ya existe";
+                    return done(error, false);
                 }
                 let newUser = { username: username,
                     password: createHash(password),
