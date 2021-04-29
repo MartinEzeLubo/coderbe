@@ -54,21 +54,19 @@ router.use('/login', login_1.default);
 router.use(passport_1.default.initialize());
 router.use(passport_1.default.session());
 router.post('/login', passport_1.default.authenticate('login', { failureRedirect: '/login' }), function (req, res) {
-    console.log(req.session.passport);
-    res.send(req.session.passport.user);
+    res.status(200).send(req.user);
 });
-router.post('/register', passport_1.default.authenticate('register', { failureRedirect: '/login' }), function (req, res) {
-    console.log(req.session.passport);
-    res.send(req.session.passport.user);
+router.post('/register', passport_1.default.authenticate('register', {}), function (req, res) {
+    res.status(200).send(req.user);
 });
 router.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    req.logout();
     req.session.destroy(() => {
         res.status(200).send();
     });
 }));
 function checkAuthentication(req, res, next) {
-    if (req.session.login) {
-        console.log('auth ok');
+    if (req.isAuthenticated()) {
         next();
     }
     else {
@@ -85,9 +83,12 @@ passport_1.default.use('login', new LocalStrategy({
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let data = yield app_1.db.readUser(username);
+            if (!data) {
+                done(new Error("Los datos de inicio son incorrectos"), false);
+            }
             if (bcrypt_1.default.compareSync(password, data.password)) {
                 data.password = '';
-                done(null, data);
+                done(null, data.username);
             }
             else {
                 let error = "Los datos de inicio son incorrectos";
@@ -102,12 +103,11 @@ passport_1.default.use('register', new LocalStrategy({
     passReqToCallback: true
 }, function (req, username, password, done) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(`ûsername ${username}  - password: ${password}`);
         if (username && password) {
             try {
                 let userExist = yield app_1.db.readUser(username);
                 if (userExist) {
-                    return done(null, 'El usuario ya existe');
+                    return done(new Error("El usuario ya existe"), false);
                 }
                 let newUser = { username: username,
                     password: createHash(password),
@@ -117,11 +117,9 @@ passport_1.default.use('register', new LocalStrategy({
                 let newUserModel = new user_model_mongo_1.user(newUser);
                 newUserModel.save(err => {
                     if (err) {
-                        console.log('Error al guardar usuario: ' + err);
                         throw err;
                     }
-                    console.log('Usuario registrado correctamente');
-                    return done(null, newUser);
+                    return done(null, newUser.username);
                 });
             }
             catch (_a) {
@@ -129,13 +127,13 @@ passport_1.default.use('register', new LocalStrategy({
         }
     });
 }));
-passport_1.default.serializeUser(function (user, done) {
-    done(null, user);
+passport_1.default.serializeUser(function (username, done) {
+    done(null, username);
 });
 passport_1.default.deserializeUser(function (id, done) {
-    // user.findById(id, function(err, user){
-    done(null, { username: 'martin', id: 'asdasdasd' });
-    // })
+    let data = user_model_mongo_1.user.findById(id, function (err, user) {
+        done(null, data);
+    });
 });
 exports.default = router;
 // let newUser = new user();

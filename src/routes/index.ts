@@ -29,25 +29,26 @@ router.use('/login', routerLogin)
 router.use(passport.initialize());
 router.use(passport.session());
 
+
+
 router.post('/login', 
-    passport.authenticate('login', { failureRedirect: '/login' }),
+    passport.authenticate('login', {failureRedirect: '/login' }),
     function(req, res) {
-        console.log(req.session.passport);
-        
-    res.send(req.session.passport.user);
-});
+        res.status(200).send(req.user);
+    }
+);
 
 router.post('/register', 
-    passport.authenticate('register', { failureRedirect: '/login' }),
+    passport.authenticate('register', {}),
     function(req, res) {
-        console.log(req.session.passport);
-        
-    res.send(req.session.passport.user);
-});
+        res.status(200).send(req.user);
+    }
+);
 
 
 
 router.get('/logout', async (req, res) => {
+    req.logout();
     req.session.destroy(()=>{
         res.status(200).send();
     });
@@ -59,8 +60,7 @@ router.get('/logout', async (req, res) => {
 
 
 export function checkAuthentication(req,res,next){
-    if(req.session.login){
-        console.log('auth ok');
+    if(req.isAuthenticated()){
             next();
     } else{
         res.status(401).send()
@@ -82,18 +82,19 @@ passport.use('login', new LocalStrategy({
     passReqToCallback: true
     },
     async function(req, username, password, done){
+        
         try{
-            let data = await db.readUser(username)    
+            let data = await db.readUser(username)
+            if(!data){
+                done(new Error("Los datos de inicio son incorrectos"), false)
+            }
             if(bCrypt.compareSync(password, data.password)){
                 data.password = ''
-                done(null, data);
+                done(null, data.username);
             } else {
                 let error = "Los datos de inicio son incorrectos"
                 done(error, false)
             }
-
-            
-
         }
         catch{
 
@@ -106,12 +107,12 @@ passport.use('register', new LocalStrategy({
     passReqToCallback: true
     },
     async function(req, username, password, done){
-        console.log(`ûsername ${username}  - password: ${password}`);
+        
         if (username && password){
             try{
                 let userExist = await db.readUser(username)
                 if (userExist){
-                    return done (null, 'El usuario ya existe',)
+                    return done (new Error("El usuario ya existe"), false)
                 }
                 let newUser = { username: username,
                                 password: createHash(password),
@@ -121,11 +122,9 @@ passport.use('register', new LocalStrategy({
                 let newUserModel = new dbuser(newUser)
                 newUserModel.save(err=>{
                     if(err){
-                    console.log('Error al guardar usuario: '+err);  
                     throw err; 
                     }
-                    console.log('Usuario registrado correctamente');    
-                    return done(null, newUser);    
+                    return done(null, newUser.username);    
                 })                 
             }
             catch{
@@ -136,14 +135,14 @@ passport.use('register', new LocalStrategy({
     }
 )) 
   
-passport.serializeUser(function(user, done){
-    done(null, user);
+passport.serializeUser(function(username, done){
+    done(null, username);
 });
   
 passport.deserializeUser(function(id, done){
-    // user.findById(id, function(err, user){
-    done(null, {username: 'martin', id: 'asdasdasd'});
-    // })
+    let data = dbuser.findById(id, function(err, user){
+        done(null, data);
+    })
 })
   
 

@@ -40,7 +40,7 @@ const sessionStore = new mongoDBStore({
 });
 app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use(cors_1.default({ origin: ['http://localhost:3000', 'http://localhost:5000'], credentials: true }));
+app.use(cors_1.default({ origin: ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:8080'], credentials: true }));
 app.use(express_session_1.default({
     store: sessionStore,
     secret: 'password',
