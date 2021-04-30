@@ -2,9 +2,10 @@ import express, { Router, Request } from 'express';
 import routerProductos from './productos';
 import routerChat from './chat';
 import routerLogin from './login';
-import passport from 'passport'
+import passport from 'passport';
+import passportFacebook from 'passport-facebook';
 import * as passportLocal from 'passport-local';
-import {user as dbuser} from '.././models/user.model.mongo';
+import {user as dbuser, user} from '.././models/user.model.mongo';
 import bCrypt from 'bcrypt'
 import {db} from '../app'
 
@@ -13,6 +14,8 @@ import {db} from '../app'
 let router:Router = express.Router();
 
 let LocalStrategy = passportLocal.Strategy;
+let FacebookStrategy = passportFacebook.Strategy;
+
 
 const createHash = function(password){
     return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null)
@@ -78,30 +81,29 @@ router.get('/status', checkAuthentication, async (req, res, next) => {
 
 
 
-passport.use('login', new LocalStrategy({
-    passReqToCallback: true
+passport.use(new FacebookStrategy({
+    clientID: "178865330778385",
+    clientSecret: 'd8ea15cb8e904fef12b5bd6d8c87d4e1',
+    callbackURL: "http://localhost:8080/auth/facebook/callback",
+    profileFields: ['id', 'displayName', 'photos', 'emails'],
+    scope: ['email']
     },
-    async function(req, username, password, done){
-        
-        try{
-            let data = await db.readUser(username)
-            if(!data){
-                let error = "Los datos de inicio son incorrectos"
-                done(error, false)
-            }
-            if(bCrypt.compareSync(password, data.password)){
-                data.password = ''
-                done(null, data.username);
-            } else {
-                let error = "Los datos de inicio son incorrectos"
-                done(error, false)
-            }
-        }
-        catch{
-
-        }
+    function(accessToken, refreshToken, profile, done){
+    
+        done(null, profile.displayName);
     }
+    
 ))  
+
+
+router.get('/auth/facebook', passport.authenticate('facebook'));
+
+router.get('/auth/facebook/callback', passport.authenticate('facebook', {failureRedirect: `/login`}),
+ (req, res) => {
+    req.query.login = "true";
+    res.redirect("http://localhost:3000/")
+  }) ;
+
 
 
 passport.use('register', new LocalStrategy({
@@ -156,28 +158,3 @@ export default router;
 
 
 
-
-
-
-
-
-
-
-// let newUser = new user();
-//               newUser.username = username;
-//               newUser.password = createHash(password);
-//               newUser.email = req.body.email;
-//               newUser.firstName = req.body.firstName;findOrCreateUser
-
-
-
-// router.post('/login/:user?:pass?', async (req, res) => {
-//     if(!req.query.user || !req.query.pass){
-//         res.status(401).send('Login Failed')
-//     } else if (req.query.user && req.query.pass){
-//         req.session.login = true;
-//         res.status(200).send(req.sessionID)
-//     } else {
-//         res.status(401).send()
-//     }
-// });
