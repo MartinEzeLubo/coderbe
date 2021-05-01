@@ -25,7 +25,6 @@ const createHash = function(password){
 router.use(express.json());
 router.use(express.urlencoded({extended: true}));
 
-
 router.use('/productos', routerProductos);
 router.use('/chat', routerChat);
 router.use('/login', routerLogin)
@@ -82,14 +81,13 @@ router.get('/status', checkAuthentication, async (req, res, next) => {
 
 
 passport.use(new FacebookStrategy({
-    clientID: "178865330778385",
-    clientSecret: 'd8ea15cb8e904fef12b5bd6d8c87d4e1',
+    clientID: '731600997521444',
+    clientSecret: '8c3ef7d0c85aa25009300ae162bff178',
     callbackURL: "http://localhost:8080/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'photos', 'emails'],
     scope: ['email']
     },
     function(accessToken, refreshToken, profile, done){
-    
         done(null, profile.displayName);
     }
     
@@ -98,10 +96,10 @@ passport.use(new FacebookStrategy({
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
 
-router.get('/auth/facebook/callback', passport.authenticate('facebook', {failureRedirect: `/login`}),
+router.get('/auth/facebook/callback', passport.authenticate('facebook', {successRedirect: 'http://localhost:3000/', failureRedirect: `/login`}),
  (req, res) => {
-    req.query.login = "true";
-    res.redirect("http://localhost:3000/")
+     console.log('asdasd');
+    
   }) ;
 
 

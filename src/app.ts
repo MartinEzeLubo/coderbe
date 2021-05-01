@@ -18,17 +18,19 @@ const sessionStore = new mongoDBStore({
   collection: 'sessions'
 })
 
+
 app.set('PORT', process.env.PORT || 8080);
 app.use(express.urlencoded({extended: true}));
-app.use(cors({origin: ['http://localhost:3000','http://localhost:5000','http://localhost:8080'], credentials : true}))
-
+app.use(cors());
+//{origin: ['http://localhost:3000','http://localhost:5000','http://localhost:8080'], credentials : true}
 app.use(session({
   store: sessionStore,
   secret: 'password',
   resave: true,
   saveUninitialized: false,
-  cookie: {maxAge: 600000},
+  cookie: {maxAge: 600000, sameSite: 'none'},
   rolling: true
+  
 }))
 
 app.use('/', router);
@@ -37,3 +39,6 @@ http.listen(app.get('PORT'), () => {
   
   return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
 }).on('error', ()=>console.log('El puerto configurado se encuentra en uso'));
+
+
+

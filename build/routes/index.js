@@ -80,8 +80,8 @@ router.get('/status', checkAuthentication, (req, res, next) => __awaiter(void 0,
     res.status(200).send({ "idSession": req.sessionID });
 }));
 passport_1.default.use(new FacebookStrategy({
-    clientID: "178865330778385",
-    clientSecret: 'd8ea15cb8e904fef12b5bd6d8c87d4e1',
+    clientID: '731600997521444',
+    clientSecret: '8c3ef7d0c85aa25009300ae162bff178',
     callbackURL: "http://localhost:8080/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'photos', 'emails'],
     scope: ['email']
@@ -89,9 +89,8 @@ passport_1.default.use(new FacebookStrategy({
     done(null, profile.displayName);
 }));
 router.get('/auth/facebook', passport_1.default.authenticate('facebook'));
-router.get('/auth/facebook/callback', passport_1.default.authenticate('facebook', { failureRedirect: `/login` }), (req, res) => {
-    req.query.login = "true";
-    res.redirect("http://localhost:3000/");
+router.get('/auth/facebook/callback', passport_1.default.authenticate('facebook', { successRedirect: 'http://localhost:3000/', failureRedirect: `/login` }), (req, res) => {
+    console.log('asdasd');
 });
 passport_1.default.use('register', new LocalStrategy({
     passReqToCallback: true
