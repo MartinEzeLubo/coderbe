@@ -1,7 +1,6 @@
 
-const createRandoms = () => {
-
-    let numbers = process.argv[2] || 500000000;
+const createRandoms = (msg) => {
+    let numbers = msg;
     let data = new Map([]);
 
     for (let i = 0; i < numbers ; i++) {
@@ -20,6 +19,6 @@ const createRandoms = () => {
 }
 
 process.on('message', msg => {
-    let result = createRandoms();
+    let result = createRandoms(msg);
     process.send(result);
 })

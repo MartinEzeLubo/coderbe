@@ -89,11 +89,15 @@ router.get('/info', (req, res) => {
     };
     res.send(data);
 });
-router.get('/randoms/', (req, res) => {
-    let randomProcess = child_process_1.fork(`./dist/utils/randomNumbers.js`);
-    randomProcess.send('start');
+router.get('/randoms/:cant?', (req, res) => {
+    let randomProcess = child_process_1.fork('./dist/utils/randomNumbers.js');
+    if (req.params.cant) {
+        randomProcess.send(req.params.cant);
+    }
+    else {
+        randomProcess.send(100000000);
+    }
     randomProcess.on('message', data => {
-        console.log(data);
         res.send(data);
     });
 });

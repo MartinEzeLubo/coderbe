@@ -33,8 +33,6 @@ app.use(session({
 
 app.use('/', router);
 
-http.listen(app.get('PORT'), () => {
-  console.log(process.argv);
-  
+http.listen(app.get('PORT'), () => {  
   return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
 }).on('error', ()=>console.log('El puerto configurado se encuentra en uso'));

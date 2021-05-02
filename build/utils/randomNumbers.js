@@ -1,5 +1,5 @@
-const createRandoms = () => {
-    let numbers = process.argv[2] || 500000000;
+const createRandoms = (msg) => {
+    let numbers = msg;
     let data = new Map([]);
     for (let i = 0; i < numbers; i++) {
         let n = Math.floor(Math.random() * (1000 - 1)) + 1;
@@ -16,7 +16,7 @@ const createRandoms = () => {
     return JSON.stringify([...data]);
 };
 process.on('message', msg => {
-    let result = createRandoms();
+    let result = createRandoms(msg);
     process.send(result);
 });
 //# sourceMappingURL=randomNumbers.js.map
