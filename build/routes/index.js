@@ -42,6 +42,7 @@ const passportLocal = __importStar(require("passport-local"));
 const user_model_mongo_1 = require(".././models/user.model.mongo");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const app_1 = require("../app");
+const child_process_1 = require("child_process");
 let router = express_1.default.Router();
 let LocalStrategy = passportLocal.Strategy;
 let FacebookStrategy = passport_facebook_1.default.Strategy;
@@ -76,16 +77,37 @@ function checkAuthentication(req, res, next) {
     }
 }
 exports.checkAuthentication = checkAuthentication;
+router.get('/info', (req, res) => {
+    let data = {
+        args: process.argv,
+        plataform: process.platform,
+        nodeversion: process.version,
+        memory: process.memoryUsage(),
+        path: process.argv[0],
+        process: process.pid,
+        execPath: process.argv[1]
+    };
+    res.send(data);
+});
+router.get('/randoms/', (req, res) => {
+    let randomProcess = child_process_1.fork(`./dist/utils/randomNumbers.js`);
+    randomProcess.send('start');
+    randomProcess.on('message', data => {
+        console.log(data);
+        res.send(data);
+    });
+});
 router.get('/status', checkAuthentication, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).send({ "idSession": req.sessionID });
 }));
 passport_1.default.use(new FacebookStrategy({
-    clientID: "178865330778385",
-    clientSecret: 'd8ea15cb8e904fef12b5bd6d8c87d4e1',
+    clientID: process.argv[2] || "178865330778385",
+    clientSecret: process.argv[3] || 'd8ea15cb8e904fef12b5bd6d8c87d4e1',
     callbackURL: "http://localhost:8080/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'photos', 'emails'],
     scope: ['email']
 }, function (accessToken, refreshToken, profile, done) {
+    console.log(profile.displayName);
     done(null, profile.displayName);
 }));
 router.get('/auth/facebook', passport_1.default.authenticate('facebook'));

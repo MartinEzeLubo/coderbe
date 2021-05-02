@@ -8,8 +8,7 @@ import * as passportLocal from 'passport-local';
 import {user as dbuser, user} from '.././models/user.model.mongo';
 import bCrypt from 'bcrypt'
 import {db} from '../app'
-
-
+import {fork} from 'child_process'
 
 let router:Router = express.Router();
 
@@ -71,6 +70,30 @@ export function checkAuthentication(req,res,next){
 }
 
 
+router.get('/info', (req, res)=>{
+    let data = {
+        args: process.argv,
+        plataform: process.platform,
+        nodeversion: process.version,
+        memory: process.memoryUsage(),
+        path: process.argv[0],
+        process: process.pid,
+        execPath: process.argv[1]
+    }
+    res.send(data)
+
+})
+
+router.get('/randoms/', (req, res)=>{
+
+    let randomProcess = fork(`./dist/utils/randomNumbers.js`);
+    randomProcess.send('start')
+    randomProcess.on('message', data => {
+        console.log(data);
+        res.send(data)
+    })
+    
+})
 
 
 router.get('/status', checkAuthentication, async (req, res, next) => { 
@@ -82,14 +105,14 @@ router.get('/status', checkAuthentication, async (req, res, next) => {
 
 
 passport.use(new FacebookStrategy({
-    clientID: "178865330778385",
-    clientSecret: 'd8ea15cb8e904fef12b5bd6d8c87d4e1',
+    clientID: process.argv[2] || "178865330778385",
+    clientSecret: process.argv[3] || 'd8ea15cb8e904fef12b5bd6d8c87d4e1',
     callbackURL: "http://localhost:8080/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'photos', 'emails'],
     scope: ['email']
     },
     function(accessToken, refreshToken, profile, done){
-    
+        console.log(profile.displayName);
         done(null, profile.displayName);
     }
     

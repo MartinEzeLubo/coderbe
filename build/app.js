@@ -51,6 +51,7 @@ app.use(express_session_1.default({
 }));
 app.use('/', index_1.default);
 http.listen(app.get('PORT'), () => {
+    console.log(process.argv);
     return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
 }).on('error', () => console.log('El puerto configurado se encuentra en uso'));
 //# sourceMappingURL=app.js.map
