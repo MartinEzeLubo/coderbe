@@ -43,6 +43,8 @@ const user_model_mongo_1 = require(".././models/user.model.mongo");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const app_1 = require("../app");
 const child_process_1 = require("child_process");
+const os_1 = __importDefault(require("os"));
+const cpus = os_1.default.cpus().length;
 let router = express_1.default.Router();
 let LocalStrategy = passportLocal.Strategy;
 let FacebookStrategy = passport_facebook_1.default.Strategy;
@@ -85,7 +87,8 @@ router.get('/info', (req, res) => {
         memory: process.memoryUsage(),
         path: process.argv[0],
         process: process.pid,
-        execPath: process.argv[1]
+        execPath: process.argv[1],
+        nroCores: cpus
     };
     res.send(data);
 });

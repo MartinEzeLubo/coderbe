@@ -1,3 +1,5 @@
+import cluster from 'cluster'
+import numCPUs from 'os'
 import "core-js";
 import "regenerator-runtime/runtime";
 
@@ -9,6 +11,8 @@ import * as database from './repositories/mongo.dao';
 
 
 export const db = new database.mongoDAO;
+
+const cpus = numCPUs.cpus().length;
 
 const app = express();
 const http = require('http').Server(app);
@@ -33,6 +37,35 @@ app.use(session({
 
 app.use('/', router);
 
-http.listen(app.get('PORT'), () => {  
-  return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
-}).on('error', ()=>console.log('El puerto configurado se encuentra en uso'));
+
+if (process.argv[4] === "cluster"){
+  if( cluster.isMaster){
+    console.log('Trabajando modo Cluster');
+    console.log(`Master ${process.pid} is running`);
+
+    for (let i = 0; i < cpus; i++){
+      cluster.fork();
+    }
+
+    cluster.on('exit', (worker, code, signal)=>{
+      console.log(`Worker ${worker.process.pid} died`);
+    })
+
+  } else {
+    http.listen(app.get('PORT'), () => { 
+      return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
+    }).on('error', ()=>console.log('El puerto configurado se encuentra en uso'));
+    console.log(`Worker ${process.pid} started`);
+  
+  }
+  
+} else {
+  http.listen(app.get('PORT'), () => { 
+    console.log('Trabajando modo Fork');
+    return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
+  }).on('error', ()=>console.log('El puerto configurado se encuentra en uso'));
+}
+
+
+
+

@@ -23,6 +23,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
+const cluster_1 = __importDefault(require("cluster"));
+const os_1 = __importDefault(require("os"));
 require("core-js");
 require("regenerator-runtime/runtime");
 const cors_1 = __importDefault(require("cors"));
@@ -31,6 +33,7 @@ const express_1 = __importDefault(require("express"));
 const index_1 = __importDefault(require("./routes/index"));
 const database = __importStar(require("./repositories/mongo.dao"));
 exports.db = new database.mongoDAO;
+const cpus = os_1.default.cpus().length;
 const app = express_1.default();
 const http = require('http').Server(app);
 const mongoDBStore = require('connect-mongodb-session')(express_session_1.default);
@@ -50,7 +53,28 @@ app.use(express_session_1.default({
     rolling: true
 }));
 app.use('/', index_1.default);
-http.listen(app.get('PORT'), () => {
-    return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
-}).on('error', () => console.log('El puerto configurado se encuentra en uso'));
+if (process.argv[4] === "cluster") {
+    if (cluster_1.default.isMaster) {
+        console.log('Trabajando modo Cluster');
+        console.log(`Master ${process.pid} is running`);
+        for (let i = 0; i < cpus; i++) {
+            cluster_1.default.fork();
+        }
+        cluster_1.default.on('exit', (worker, code, signal) => {
+            console.log(`Worker ${worker.process.pid} died`);
+        });
+    }
+    else {
+        http.listen(app.get('PORT'), () => {
+            return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
+        }).on('error', () => console.log('El puerto configurado se encuentra en uso'));
+        console.log(`Worker ${process.pid} started`);
+    }
+}
+else {
+    http.listen(app.get('PORT'), () => {
+        console.log('Trabajando modo Fork');
+        return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
+    }).on('error', () => console.log('El puerto configurado se encuentra en uso'));
+}
 //# sourceMappingURL=app.js.map

@@ -9,7 +9,9 @@ import {user as dbuser, user} from '.././models/user.model.mongo';
 import bCrypt from 'bcrypt'
 import {db} from '../app'
 import {fork} from 'child_process'
+import numCPUs from 'os'
 
+const cpus = numCPUs.cpus().length;
 let router:Router = express.Router();
 
 let LocalStrategy = passportLocal.Strategy;
@@ -78,7 +80,8 @@ router.get('/info', (req, res)=>{
         memory: process.memoryUsage(),
         path: process.argv[0],
         process: process.pid,
-        execPath: process.argv[1]
+        execPath: process.argv[1],
+        nroCores: cpus
     }
     res.send(data)
 
