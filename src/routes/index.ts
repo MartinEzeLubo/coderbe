@@ -10,7 +10,7 @@ import bCrypt from 'bcrypt'
 import {db} from '../app'
 import {fork} from 'child_process'
 import numCPUs from 'os'
-
+import { isPrime } from '../is-prime'
 
 const cpus = numCPUs.cpus().length;
 let router:Router = express.Router();
@@ -61,6 +61,14 @@ router.get('/logout', async (req, res) => {
 });
 
 
+router.get('/primos', (req,res) => {
+    const primes = []
+    const max = Number(req.query.max) || 1000
+    for (let i = 1; i <= max; i++) {
+        if (isPrime(i)) primes.push(i)
+    }
+    res.json(primes)
+})
 
 
 

@@ -44,6 +44,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const app_1 = require("../app");
 const child_process_1 = require("child_process");
 const os_1 = __importDefault(require("os"));
+const is_prime_1 = require("../is-prime");
 const cpus = os_1.default.cpus().length;
 let router = express_1.default.Router();
 let LocalStrategy = passportLocal.Strategy;
@@ -70,6 +71,15 @@ router.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(200).send();
     });
 }));
+router.get('/primos', (req, res) => {
+    const primes = [];
+    const max = Number(req.query.max) || 1000;
+    for (let i = 1; i <= max; i++) {
+        if (is_prime_1.isPrime(i))
+            primes.push(i);
+    }
+    res.json(primes);
+});
 function checkAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
         next();
