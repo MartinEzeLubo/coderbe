@@ -11,6 +11,7 @@ import {db} from '../app'
 import {fork} from 'child_process'
 import numCPUs from 'os'
 
+
 const cpus = numCPUs.cpus().length;
 let router:Router = express.Router();
 
@@ -105,7 +106,7 @@ router.get('/randoms/:cant?', (req, res)=>{
 router.get('/status', checkAuthentication, async (req, res, next) => { 
     
     res.status(200).send({"idSession": req.sessionID})
-        
+
 });
 
 

@@ -8,7 +8,8 @@ import session, { Store } from 'express-session'
 import express from 'express';
 import router from './routes/index';
 import * as database from './repositories/mongo.dao';
-
+import compression from 'compression'
+import winston from 'winston'
 
 export const db = new database.mongoDAO;
 
@@ -25,6 +26,7 @@ const sessionStore = new mongoDBStore({
 app.set('PORT', process.env.PORT || 8080);
 app.use(express.urlencoded({extended: true}));
 app.use(cors({origin: ['http://localhost:3000','http://localhost:5000','http://localhost:8080'], credentials : true}))
+app.use(compression())
 
 app.use(session({
   store: sessionStore,
@@ -36,6 +38,27 @@ app.use(session({
 }))
 
 app.use('/', router);
+
+
+
+export const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'user-service' },
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'warn.log', level: 'warn' }),
+    new winston.transports.File({ filename: 'error.log', level: 'error' })
+  ],
+});
+
+
+
+
+
+
+
+
 
 
 if (process.argv[4] === "cluster"){

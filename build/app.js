@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = void 0;
+exports.logger = exports.db = void 0;
 const cluster_1 = __importDefault(require("cluster"));
 const os_1 = __importDefault(require("os"));
 require("core-js");
@@ -32,6 +32,8 @@ const express_session_1 = __importDefault(require("express-session"));
 const express_1 = __importDefault(require("express"));
 const index_1 = __importDefault(require("./routes/index"));
 const database = __importStar(require("./repositories/mongo.dao"));
+const compression_1 = __importDefault(require("compression"));
+const winston_1 = __importDefault(require("winston"));
 exports.db = new database.mongoDAO;
 const cpus = os_1.default.cpus().length;
 const app = express_1.default();
@@ -41,9 +43,10 @@ const sessionStore = new mongoDBStore({
     uri: 'mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority',
     collection: 'sessions'
 });
-app.set('PORT', process.env.PORT || 8082);
+app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(cors_1.default({ origin: ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:8080'], credentials: true }));
+app.use(compression_1.default());
 app.use(express_session_1.default({
     store: sessionStore,
     secret: 'password',
@@ -53,6 +56,16 @@ app.use(express_session_1.default({
     rolling: true
 }));
 app.use('/', index_1.default);
+exports.logger = winston_1.default.createLogger({
+    level: 'info',
+    format: winston_1.default.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+        new winston_1.default.transports.Console(),
+        new winston_1.default.transports.File({ filename: 'warn.log', level: 'warn' }),
+        new winston_1.default.transports.File({ filename: 'error.log', level: 'error' })
+    ],
+});
 if (process.argv[4] === "cluster") {
     if (cluster_1.default.isMaster) {
         console.log('Trabajando modo Cluster');
