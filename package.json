@@ -4,7 +4,7 @@
   "description": "",
   "main": "./build/app.js",
   "scripts": {
-    "start": "tsc && node ./build/app.js",
+    "start": "node ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "babel": "node_modules/.bin/babel build -d dist",
     "dockerandrun": "docker run -p 127.0.0.1:3306:3306 -e MYSQL_ROOT_PASSWORD=Maria2021! -e MYSQL_DATABASE=backend -d mariadb && sleep 3 && npm run compileandrun",
