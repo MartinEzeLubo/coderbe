@@ -7,9 +7,10 @@ import {user}  from '../models/user.model.mongo'
 export class mongoDAO {
     
     //martinlubo.ddns.net:8102
+    //mongodb://martinlubo.ddns.net:8102/ecommerce
     constructor(){
         const mongoose = require('mongoose');
-        const mongoConnection= mongoose.connect('mongodb://martinlubo.ddns.net:8102/ecommerce', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
+        const mongoConnection= mongoose.connect('mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
         .then(() => {
             console.log('se conecto correctamente');
             this.saveLogToDatabase()

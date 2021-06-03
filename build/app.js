@@ -36,6 +36,7 @@ const compression_1 = __importDefault(require("compression"));
 const winston_1 = __importDefault(require("winston"));
 exports.db = new database.mongoDAO;
 const cpus = os_1.default.cpus().length;
+const handlebars = require('express-handlebars');
 const app = express_1.default();
 const http = require('http').Server(app);
 const mongoDBStore = require('connect-mongodb-session')(express_session_1.default);
@@ -47,6 +48,12 @@ app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(cors_1.default({ origin: ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:8080'], credentials: true }));
 app.use(compression_1.default());
+app.engine("hbs", handlebars({
+    extname: ".hbs",
+    defaultLayout: 'index.hbs',
+}));
+app.set("view engine", "hbs");
+app.set("views", "./views");
 app.use(express_session_1.default({
     store: sessionStore,
     secret: 'password',

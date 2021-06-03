@@ -16,6 +16,7 @@ export const db = new database.mongoDAO;
 
 const cpus = numCPUs.cpus().length;
 
+const handlebars = require('express-handlebars');
 const app = express();
 const http = require('http').Server(app);
 const mongoDBStore = require('connect-mongodb-session')(session)
@@ -28,6 +29,18 @@ app.set('PORT', process.env.PORT || 8080);
 app.use(express.urlencoded({extended: true}));
 app.use(cors({origin: ['http://localhost:3000','http://localhost:5000','http://localhost:8080'], credentials : true}))
 app.use(compression())
+
+app.engine(
+  "hbs",
+  handlebars({
+    extname: ".hbs",
+    defaultLayout: 'index.hbs',
+  })
+);
+app.set("view engine", "hbs");
+app.set("views", "./views");
+
+
 
 app.use(session({
   store: sessionStore,
