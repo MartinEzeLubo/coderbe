@@ -1,7 +1,7 @@
 import {producto} from '../models/producto.model.mongo'
 import {mensaje} from '../models/mensaje.model.mongo'
 import {dbLog} from '../models/log.model.mongo'
-import {user}  from '../models/user.model.mongo'
+import {userLogin}  from '../models/user.model.mongo'
 
 
 export class mongoDAO {
@@ -170,7 +170,6 @@ export class mongoDAO {
 
 
     async createUser(username: String, password:String, email?:string, firstName?:String, lastName?:String){
-        
         try {
             let newUser = {
                 username,
@@ -180,7 +179,7 @@ export class mongoDAO {
                 lastName
             }
     
-            let newUserModel = new user(newUser);
+            let newUserModel = new userLogin(newUser);
             newUserModel.save()
             
         } catch (error) {
@@ -190,9 +189,8 @@ export class mongoDAO {
     }
     
     async readUser(username: String){
-        
         try {
-            let data = await user.findOne({username: username})
+            let data = await userLogin.findOne({username: username})
             return data;
         } catch (error) {
             

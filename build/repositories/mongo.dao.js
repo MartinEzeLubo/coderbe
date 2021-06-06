@@ -176,7 +176,7 @@ class mongoDAO {
                     firstName,
                     lastName
                 };
-                let newUserModel = new user_model_mongo_1.user(newUser);
+                let newUserModel = new user_model_mongo_1.userLogin(newUser);
                 newUserModel.save();
             }
             catch (error) {
@@ -186,7 +186,7 @@ class mongoDAO {
     readUser(username) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let data = yield user_model_mongo_1.user.findOne({ username: username });
+                let data = yield user_model_mongo_1.userLogin.findOne({ username: username });
                 return data;
             }
             catch (error) {

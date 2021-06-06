@@ -9,4 +9,4 @@ const userSchema = new mongoose.Schema({
     lastName: String
 })
 
-export const user = mongoose.model('user', userSchema);
+export const userLogin = mongoose.model('userLogin', userSchema);
