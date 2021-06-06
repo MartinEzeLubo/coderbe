@@ -36,7 +36,6 @@ const compression_1 = __importDefault(require("compression"));
 const winston_1 = __importDefault(require("winston"));
 exports.db = new database.mongoDAO;
 const cpus = os_1.default.cpus().length;
-const path = require('path');
 const handlebars = require('express-handlebars');
 const app = express_1.default();
 const http = require('http').Server(app);
@@ -45,8 +44,6 @@ const sessionStore = new mongoDBStore({
     uri: 'mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority',
     collection: 'sessions'
 });
-// app.use(express.static('public'));
-// app.use("public",express.static(__dirname + "/public"));
 app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(cors_1.default({ origin: ['http://localhost:8080'], credentials: true }));

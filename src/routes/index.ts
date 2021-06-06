@@ -1,4 +1,6 @@
 // @ts-nocheck
+// Twilio - CoderbeNodeJS2021!
+// sendSMS('Te logueaste con facebook', '+541150354113')
 
 import express, { Router, Request } from 'express';
 import routerProductos from './productos';
@@ -13,7 +15,6 @@ import { fork } from 'child_process'
 import numCPUs from 'os'
 import { isPrime } from '../is-prime'
 import { sendMail, sendMailGmail } from '../service/send.email.service'
-
 
 const request = require('request');
 const https = require('https');
@@ -43,18 +44,15 @@ router.use(passport.session());
 
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
-        console.log(req.user.displayName, req.user.photos[0].value,
-            req.user.emails[0].value,
-        );
         res.render("home", {
             nombre: req.user.displayName,
             foto: req.user.photos[0].value,
-            email: req.user.emails[0].value,
-
+            email: req.user.emails[0].value
         })
     }
     else {
-        res.sendFile(process.cwd() + '/public/login.html')
+        console.log(process.cwd());
+        res.sendFile(process.cwd() +'/public/login.html')
     }
 })
 
@@ -64,35 +62,6 @@ router.post('/register',
         res.status(200).send(req.user);
     }
 );
-
-
-
-// router.get('/logout', async (req, res) => {
-//     req.logout();
-//     req.session.destroy(() => {
-//         res.status(200).send();
-//     });
-
-// });
-
-
-
-
-
-
-export function checkAuthentication(req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        res.status(401).send()
-    }
-}
-
-
-
-
-
-
 
 
 passport.use(new FacebookStrategy({
@@ -138,9 +107,6 @@ router.get('/faillogin', (req, res) => {
 
 router.get('/logout', (req, res) => {
     let nombre = req.user.displayName
-    console.log('////////////////////');
-    console.log(req.user);
-    console.log('////////////////////');
     let fecha = Date.now();
     let emailSubject = `Logout de ${req.user.displayName} a las ${new Date(fecha).toString()}`
     sendMail(req.user.emails[0].value, emailSubject)
@@ -253,3 +219,23 @@ export default router;
 //         }
 //     }
 // ))
+
+
+
+// router.get('/logout', async (req, res) => {
+//     req.logout();
+//     req.session.destroy(() => {
+//         res.status(200).send();
+//     });
+
+// });
+
+// export function checkAuthentication(req, res, next) {
+//     if (req.isAuthenticated()) {
+//         next();
+//     } else {
+//         res.status(401).send()
+//     }
+// }
+
+

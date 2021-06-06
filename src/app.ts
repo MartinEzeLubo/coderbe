@@ -15,7 +15,7 @@ import winston from 'winston'
 export const db = new database.mongoDAO;
 
 const cpus = numCPUs.cpus().length;
-
+const path = require('path');
 const handlebars = require('express-handlebars');
 const app = express();
 const http = require('http').Server(app);
@@ -25,9 +25,14 @@ const sessionStore = new mongoDBStore({
   collection: 'sessions'
 })
 
+// app.use(express.static('public'));
+// app.use("public",express.static(__dirname + "/public"));
+
+
+
 app.set('PORT', process.env.PORT || 8080);
-app.use(express.urlencoded({extended: true}));
-app.use(cors({origin: ['http://localhost:8080'], credentials : true}))
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: ['http://localhost:8080'], credentials: true }))
 app.use(compression())
 
 app.engine(
@@ -41,13 +46,12 @@ app.set("view engine", "hbs");
 app.set("views", "./views");
 
 
-
 app.use(session({
   store: sessionStore,
   secret: 'password',
   resave: true,
   saveUninitialized: false,
-  cookie: {maxAge: 600000},
+  cookie: { maxAge: 600000 },
   rolling: true
 }))
 
@@ -69,32 +73,32 @@ export const logger = winston.createLogger({
 
 
 
-if (process.argv[4] === "cluster"){
-  if( cluster.isMaster){
+if (process.argv[4] === "cluster") {
+  if (cluster.isMaster) {
     console.log('Trabajando modo Cluster');
     console.log(`Master ${process.pid} is running`);
 
-    for (let i = 0; i < cpus; i++){
+    for (let i = 0; i < cpus; i++) {
       cluster.fork();
     }
 
-    cluster.on('exit', (worker, code, signal)=>{
+    cluster.on('exit', (worker, code, signal) => {
       console.log(`Worker ${worker.process.pid} died`);
     })
 
   } else {
-    http.listen(app.get('PORT'), () => { 
+    http.listen(app.get('PORT'), () => {
       return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
-    }).on('error', ()=>console.log('El puerto configurado se encuentra en uso'));
+    }).on('error', () => console.log('El puerto configurado se encuentra en uso'));
     console.log(`Worker ${process.pid} started`);
-  
+
   }
-  
+
 } else {
-  http.listen(app.get('PORT'), () => { 
+  http.listen(app.get('PORT'), () => {
     console.log('Trabajando modo Fork');
     return console.log(`Servidor listo en puerto ${app.get('PORT')}`);
-  }).on('error', ()=>console.log('El puerto configurado se encuentra en uso'));
+  }).on('error', () => console.log('El puerto configurado se encuentra en uso'));
 }
 
 

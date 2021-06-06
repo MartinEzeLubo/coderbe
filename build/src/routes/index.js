@@ -39,13 +39,11 @@ router.get('/', (req, res) => {
         res.render("home", {
             nombre: req.user.displayName,
             foto: req.user.photos[0].value,
-            email: req.user.emails[0].value
+            email: req.user.emails[0].value,
         });
     }
     else {
-        console.log(process.cwd());
         res.sendFile(process.cwd() + '/public/login.html');
-        //process.cwd() + 
     }
 });
 router.post('/register', passport_1.default.authenticate('register', {}), function (req, res) {
