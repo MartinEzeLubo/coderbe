@@ -27,3 +27,41 @@ export function sendMail(receptor, asunto){
     })
 }
 
+
+
+// coderbemailer@gmail.com
+// Hola1234!
+
+
+const transporterGmail = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'coderbemailer@gmail.com',
+        pass: 'Hola1234!'
+    }
+})
+
+export function sendMailGmail(receptor, asunto, name, fileToSend){
+
+    let gmailOptions = {
+        from: 'Servidor Node.js',
+        to: receptor,
+        subject: asunto,
+        html: '<h1 style="color: blue;">Contenido de prueba con archivo adjunto desde <span style="color: green;">Node.js con Nodemailer mediante GMail</span></h1>',
+        attachments: [
+            {
+                path: fileToSend
+            }
+        ]
+    }
+    transporterGmail.sendMail(gmailOptions, (err, info) => {
+        console.log('send gmail');
+
+        if(err) {
+            console.log(err)
+            return err
+        }
+        console.log(info)
+    })
+
+}

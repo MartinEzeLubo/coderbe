@@ -16,6 +16,9 @@ const child_process_1 = require("child_process");
 const os_1 = __importDefault(require("os"));
 const is_prime_1 = require("../is-prime");
 const send_email_service_1 = require("../service/send.email.service");
+const request = require('request');
+const https = require('https');
+const fs = require('fs');
 const cpus = os_1.default.cpus().length;
 let router = express_1.default.Router();
 // let LocalStrategy = passportLocal.Strategy;
@@ -67,9 +70,17 @@ passport_1.default.use(new FacebookStrategy({
     callbackURL: "http://localhost:8080/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'photos', 'emails']
 }, function (accessToken, refreshToken, profile, done) {
-    let fecha = Date.now();
-    let emailSubject = `Login de ${profile.displayName} a las ${new Date(fecha).toString()}`;
-    send_email_service_1.sendMail(profile.emails[0].value, emailSubject);
+    let download = function (uri, filename, callback) {
+        request.head(uri, function (err, res, body) {
+            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+        });
+    };
+    download(profile.photos[0].value, `${profile.displayName}.jpg`, function () {
+        let fecha = Date.now();
+        let emailSubject = `Login de ${profile.displayName} a las ${new Date(fecha).toString()}`;
+        send_email_service_1.sendMailGmail(profile.emails[0].value, emailSubject, profile.displayName, `${profile.displayName}.jpg`);
+        send_email_service_1.sendMail(profile.emails[0].value, emailSubject);
+    });
     done(null, profile);
 }));
 router.get('/auth/facebook', passport_1.default.authenticate('facebook'));
@@ -86,11 +97,12 @@ router.get('/faillogin', (req, res) => {
 router.get('/logout', (req, res) => {
     let nombre = req.user.displayName;
     console.log('////////////////////');
-    console.log(req.user.emails[0]);
+    console.log(req.user);
     console.log('////////////////////');
     let fecha = Date.now();
     let emailSubject = `Logout de ${req.user.displayName} a las ${new Date(fecha).toString()}`;
     send_email_service_1.sendMail(req.user.emails[0].value, emailSubject);
+    send_email_service_1.sendMailGmail(req.user.emails[0].value, emailSubject, req.user.displayName, '');
     req.logout();
     res.render("logout", { nombre });
 });

@@ -12,10 +12,12 @@ import bCrypt from 'bcrypt'
 import { fork } from 'child_process'
 import numCPUs from 'os'
 import { isPrime } from '../is-prime'
+import { sendMail, sendMailGmail } from '../service/send.email.service'
 
-import {sendMail} from '../service/send.email.service'
 
-
+const request = require('request');
+const https = require('https');
+const fs = require('fs');
 const cpus = numCPUs.cpus().length;
 let router = express.Router();
 
@@ -43,12 +45,12 @@ router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
         console.log(req.user.displayName, req.user.photos[0].value,
             req.user.emails[0].value,
-            );
+        );
         res.render("home", {
             nombre: req.user.displayName,
             foto: req.user.photos[0].value,
             email: req.user.emails[0].value,
-            
+
         })
     }
     else {
@@ -100,12 +102,19 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'displayName', 'photos', 'emails']
 },
     function (accessToken, refreshToken, profile, done) {
-        let fecha = Date.now();
-        let emailSubject = `Login de ${profile.displayName} a las ${new Date(fecha).toString()}`
-        sendMail(profile.emails[0].value, emailSubject)
+        let download = function (uri, filename, callback) {
+            request.head(uri, function (err, res, body) {
+                request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+            });
+        };
+        download(profile.photos[0].value, `${profile.displayName}.jpg`, function () {
+            let fecha = Date.now();
+            let emailSubject = `Login de ${profile.displayName} a las ${new Date(fecha).toString()}`
+            sendMailGmail(profile.emails[0].value, emailSubject, profile.displayName, `${profile.displayName}.jpg`)
+            sendMail(profile.emails[0].value, emailSubject)
+        });
         done(null, profile);
     }
-
 ))
 
 
@@ -130,12 +139,12 @@ router.get('/faillogin', (req, res) => {
 router.get('/logout', (req, res) => {
     let nombre = req.user.displayName
     console.log('////////////////////');
-    console.log(req.user.emails[0]);
+    console.log(req.user);
     console.log('////////////////////');
     let fecha = Date.now();
     let emailSubject = `Logout de ${req.user.displayName} a las ${new Date(fecha).toString()}`
     sendMail(req.user.emails[0].value, emailSubject)
-
+    sendMailGmail(req.user.emails[0].value, emailSubject, req.user.displayName, '')
     req.logout()
     res.render("logout", { nombre })
 })
@@ -147,7 +156,7 @@ passport.serializeUser(function (username, done) {
 
 passport.deserializeUser(function (data, done) {
     // let data = dbuser.findById(id, function (err, user) {
-        done(null, data);
+    done(null, data);
     // })
 })
 
