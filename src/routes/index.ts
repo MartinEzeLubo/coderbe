@@ -55,7 +55,9 @@ router.get('/', (req, res) => {
         res.sendFile(process.cwd() +'/public/login.html')
     }
 })
-
+router.get('/register', (req, res) => {
+    res.sendFile(process.cwd() +'/public/register.html')
+})
 router.post('/register',
     passport.authenticate('register', {}),
     function (req, res) {

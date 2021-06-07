@@ -50,7 +50,7 @@ const textoCentroMensajes = document.getElementById('texto')
 const botonCentroMensajes = document.getElementById('enviar')
 
 function addMessage(e) { 
-  console.log('mensaje del cliente');
+
   e.preventDefault()
 
   var mensaje = { 
@@ -65,10 +65,8 @@ function addMessage(e) {
     text: textoCentroMensajes.value
   }
 
-  socket.emit('sendmessage', mensaje); 
+  socket.emit('new-message', mensaje); 
 
-  console.log(mensaje);
-  
   textoCentroMensajes.value = ''
   textoCentroMensajes.focus()
 

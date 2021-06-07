@@ -18,6 +18,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -36,16 +45,16 @@ const compression_1 = __importDefault(require("compression"));
 const winston_1 = __importDefault(require("winston"));
 exports.db = new database.mongoDAO;
 const cpus = os_1.default.cpus().length;
-const path = require('path');
 const handlebars = require('express-handlebars');
 const app = express_1.default();
 const http = require('http').Server(app);
+const io = require('socket.io')(http);
 const mongoDBStore = require('connect-mongodb-session')(express_session_1.default);
 const sessionStore = new mongoDBStore({
     uri: 'mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority',
     collection: 'sessions'
 });
-// app.use(express.static('public'));
+app.use(express_1.default.static('scripts'));
 // app.use("public",express.static(__dirname + "/public"));
 app.set('PORT', process.env.PORT || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -76,6 +85,11 @@ exports.logger = winston_1.default.createLogger({
         new winston_1.default.transports.File({ filename: 'error.log', level: 'error' })
     ],
 });
+io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
+    socket.on('sendmessage', (data) => {
+        console.log(data);
+    });
+}));
 if (process.argv[4] === "cluster") {
     if (cluster_1.default.isMaster) {
         console.log('Trabajando modo Cluster');

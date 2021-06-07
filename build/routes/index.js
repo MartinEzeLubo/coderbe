@@ -45,8 +45,10 @@ router.get('/', (req, res) => {
     else {
         console.log(process.cwd());
         res.sendFile(process.cwd() + '/public/login.html');
-        //process.cwd() + 
     }
+});
+router.get('/register', (req, res) => {
+    res.sendFile(process.cwd() + '/public/register.html');
 });
 router.post('/register', passport_1.default.authenticate('register', {}), function (req, res) {
     res.status(200).send(req.user);

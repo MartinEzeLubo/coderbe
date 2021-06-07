@@ -14,18 +14,23 @@ import winston from 'winston'
 
 export const db = new database.mongoDAO;
 
+
+
+
 const cpus = numCPUs.cpus().length;
-const path = require('path');
 const handlebars = require('express-handlebars');
 const app = express();
 const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
 const mongoDBStore = require('connect-mongodb-session')(session)
 const sessionStore = new mongoDBStore({
   uri: 'mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority',
   collection: 'sessions'
 })
 
-// app.use(express.static('public'));
+
+app.use(express.static('scripts'));
 // app.use("public",express.static(__dirname + "/public"));
 
 
@@ -68,6 +73,17 @@ export const logger = winston.createLogger({
     new winston.transports.File({ filename: 'warn.log', level: 'warn' }),
     new winston.transports.File({ filename: 'error.log', level: 'error' })
   ],
+});
+
+
+io.on('connection', async (socket)=>{
+
+  
+  socket.on('sendmessage', (data)=>{
+    console.log(data);
+    
+  })
+
 });
 
 
