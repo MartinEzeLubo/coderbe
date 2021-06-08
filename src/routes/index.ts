@@ -22,7 +22,7 @@ const fs = require('fs');
 const cpus = numCPUs.cpus().length;
 let router = express.Router();
 
-// let LocalStrategy = passportLocal.Strategy;
+let LocalStrategy = passportLocal.Strategy;
 let FacebookStrategy = passportFacebook.Strategy;
 
 
@@ -58,12 +58,47 @@ router.get('/', (req, res) => {
 router.get('/register', (req, res) => {
     res.sendFile(process.cwd() +'/public/register.html')
 })
+
 router.post('/register',
     passport.authenticate('register', {}),
     function (req, res) {
         res.status(200).send(req.user);
     }
 );
+
+passport.use('register', new LocalStrategy({
+    passReqToCallback: true
+},
+    async function (req, username, password, done) {
+
+        if (username && password) {
+            try {
+                let userExist = await db.readUser(username)
+                if (userExist) {
+                    let error = "El usuario ya existe"
+                    return done(error, false)
+                }
+                let newUser = {
+                    username: username,
+                    password: createHash(password),
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName
+                }
+                let newUserModel = new dbuser(newUser)
+                newUserModel.save(err => {
+                    if (err) {
+                        throw err;
+                    }
+                    return done(null, newUser.username);
+                })
+            }
+            catch {
+
+            }
+
+        }
+    }
+))
 
 
 passport.use(new FacebookStrategy({
@@ -188,49 +223,13 @@ export default router;
 // });
 
 
-// passport.use('register', new LocalStrategy({
-//     passReqToCallback: true
-// },
-//     async function (req, username, password, done) {
-
-//         if (username && password) {
-//             try {
-//                 let userExist = await db.readUser(username)
-//                 if (userExist) {
-//                     let error = "El usuario ya existe"
-//                     return done(error, false)
-//                 }
-//                 let newUser = {
-//                     username: username,
-//                     password: createHash(password),
-//                     firstName: req.body.firstName,
-//                     lastName: req.body.lastName
-//                 }
-//                 let newUserModel = new dbuser(newUser)
-//                 newUserModel.save(err => {
-//                     if (err) {
-//                         throw err;
-//                     }
-//                     return done(null, newUser.username);
-//                 })
-//             }
-//             catch {
-
-//             }
-
-//         }
-//     }
-// ))
-
-
-
 // router.get('/logout', async (req, res) => {
 //     req.logout();
 //     req.session.destroy(() => {
 //         res.status(200).send();
 //     });
-
 // });
+
 
 // export function checkAuthentication(req, res, next) {
 //     if (req.isAuthenticated()) {
