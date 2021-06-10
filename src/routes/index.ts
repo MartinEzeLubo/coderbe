@@ -34,7 +34,6 @@ router.use('/auth', routerAuth)
 
 
 router.get('/', (req, res) => {
-    console.log(req);
     if (req.isAuthenticated()) {
         res.render("home", {
             nombre: req.user.displayName,
