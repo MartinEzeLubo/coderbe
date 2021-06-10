@@ -16,7 +16,6 @@ export const db = new database.mongoDAO;
 
 
 
-
 const cpus = numCPUs.cpus().length;
 const handlebars = require('express-handlebars');
 const app = express();

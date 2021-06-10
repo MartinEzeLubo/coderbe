@@ -10,31 +10,26 @@ const express_1 = __importDefault(require("express"));
 const productos_1 = __importDefault(require("./productos"));
 const chat_1 = __importDefault(require("./chat"));
 const login_1 = __importDefault(require("./login"));
-const passport_1 = __importDefault(require("passport"));
-const passport_facebook_1 = __importDefault(require("passport-facebook"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const register_1 = __importDefault(require("./register"));
+const auth_1 = __importDefault(require("./auth"));
 const child_process_1 = require("child_process");
 const os_1 = __importDefault(require("os"));
 const is_prime_1 = require("../is-prime");
+const passport_1 = __importDefault(require("passport"));
 const send_email_service_1 = require("../service/send.email.service");
-const request = require('request');
-const https = require('https');
-const fs = require('fs');
 const cpus = os_1.default.cpus().length;
 let router = express_1.default.Router();
-// let LocalStrategy = passportLocal.Strategy;
-let FacebookStrategy = passport_facebook_1.default.Strategy;
-const createHash = function (password) {
-    return bcrypt_1.default.hashSync(password, bcrypt_1.default.genSaltSync(10), null);
-};
 router.use(express_1.default.json());
 router.use(express_1.default.urlencoded({ extended: true }));
+router.use(passport_1.default.initialize());
+router.use(passport_1.default.session());
 router.use('/productos', productos_1.default);
 router.use('/chat', chat_1.default);
 router.use('/login', login_1.default);
-router.use(passport_1.default.initialize());
-router.use(passport_1.default.session());
+router.use('/register', register_1.default);
+router.use('/auth', auth_1.default);
 router.get('/', (req, res) => {
+    console.log(req);
     if (req.isAuthenticated()) {
         res.render("home", {
             nombre: req.user.displayName,
@@ -47,36 +42,6 @@ router.get('/', (req, res) => {
         res.sendFile(process.cwd() + '/public/login.html');
     }
 });
-router.get('/register', (req, res) => {
-    res.sendFile(process.cwd() + '/public/register.html');
-});
-router.post('/register', passport_1.default.authenticate('register', {}), function (req, res) {
-    res.status(200).send(req.user);
-});
-passport_1.default.use(new FacebookStrategy({
-    clientID: process.argv[2] || "4353989081287409",
-    clientSecret: process.argv[3] || '668dcf194b9cb32b2e02c1926a81efc8',
-    callbackURL: "http://localhost:8080/auth/facebook/callback",
-    profileFields: ['id', 'displayName', 'photos', 'emails']
-}, function (accessToken, refreshToken, profile, done) {
-    let download = function (uri, filename, callback) {
-        request.head(uri, function (err, res, body) {
-            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-        });
-    };
-    download(profile.photos[0].value, `${profile.displayName}.jpg`, function () {
-        let fecha = Date.now();
-        let emailSubject = `Login de ${profile.displayName} a las ${new Date(fecha).toString()}`;
-        send_email_service_1.sendMailGmail(profile.emails[0].value, emailSubject, profile.displayName, `${profile.displayName}.jpg`);
-        send_email_service_1.sendMail(profile.emails[0].value, emailSubject);
-    });
-    done(null, profile);
-}));
-router.get('/auth/facebook', passport_1.default.authenticate('facebook'));
-router.get('/auth/facebook/callback', passport_1.default.authenticate('facebook', {
-    successRedirect: '/home',
-    failureRedirect: '/faillogin'
-}));
 router.get('/home', (req, res) => {
     res.redirect('/');
 });
@@ -91,14 +56,6 @@ router.get('/logout', (req, res) => {
     send_email_service_1.sendMailGmail(req.user.emails[0].value, emailSubject, req.user.displayName, '');
     req.logout();
     res.render("logout", { nombre });
-});
-passport_1.default.serializeUser(function (username, done) {
-    done(null, username);
-});
-passport_1.default.deserializeUser(function (data, done) {
-    // let data = dbuser.findById(id, function (err, user) {
-    done(null, data);
-    // })
 });
 ///////////////////////////////////////////////////////////////////////////////
 router.get('/info', (req, res) => {
@@ -140,36 +97,6 @@ exports.default = router;
 // router.get('/status', checkAuthentication, async (req, res, next) => {
 //     res.status(200).send({ "idSession": req.sessionID })
 // });
-// passport.use('register', new LocalStrategy({
-//     passReqToCallback: true
-// },
-//     async function (req, username, password, done) {
-//         if (username && password) {
-//             try {
-//                 let userExist = await db.readUser(username)
-//                 if (userExist) {
-//                     let error = "El usuario ya existe"
-//                     return done(error, false)
-//                 }
-//                 let newUser = {
-//                     username: username,
-//                     password: createHash(password),
-//                     firstName: req.body.firstName,
-//                     lastName: req.body.lastName
-//                 }
-//                 let newUserModel = new dbuser(newUser)
-//                 newUserModel.save(err => {
-//                     if (err) {
-//                         throw err;
-//                     }
-//                     return done(null, newUser.username);
-//                 })
-//             }
-//             catch {
-//             }
-//         }
-//     }
-// ))
 // router.get('/logout', async (req, res) => {
 //     req.logout();
 //     req.session.destroy(() => {
