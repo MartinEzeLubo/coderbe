@@ -48,7 +48,6 @@ function sendMailGmail(receptor, asunto, name, fileToSend) {
         ]
     };
     transporterGmail.sendMail(gmailOptions, (err, info) => {
-        console.log('send gmail');
         if (err) {
             console.log(err);
             return err;

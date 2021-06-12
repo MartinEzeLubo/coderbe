@@ -89,7 +89,7 @@ passport_1.default.use('register', new LocalStrategy({
 passport_1.default.use(new FacebookStrategy({
     clientID: process.argv[2] || "4353989081287409",
     clientSecret: process.argv[3] || '668dcf194b9cb32b2e02c1926a81efc8',
-    callbackURL: "http://localhost:8080/auth/facebook/callback",
+    callbackURL: process.env.URL_CALLBACK || "http://localhost:8080/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'photos', 'emails']
 }, function (accessToken, refreshToken, profile, done) {
     let download = function (uri, filename, callback) {
