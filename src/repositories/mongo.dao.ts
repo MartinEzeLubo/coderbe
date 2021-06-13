@@ -54,6 +54,9 @@ export class mongoDAO {
     }
 
     async read(id?:string, name?:string, rangeFrom?:number, rangeTo?:number){
+        
+        console.log("read: "+id);
+
         try {
             if(!id && !name && !rangeFrom && !rangeTo){
                 return await producto.find();

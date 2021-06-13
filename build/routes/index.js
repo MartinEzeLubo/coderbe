@@ -2,6 +2,15 @@
 // @ts-nocheck
 // Twilio - CoderbeNodeJS2021!
 // sendSMS('Te logueaste con facebook', '+541150354113')
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -19,6 +28,7 @@ const passport_1 = __importDefault(require("passport"));
 const send_email_service_1 = require("../service/send.email.service");
 const express_graphql_1 = require("express-graphql");
 const graphql_1 = require("graphql");
+const productos_service_1 = require("../service/productos.service");
 const cpus = os_1.default.cpus().length;
 let router = express_1.default.Router();
 router.use(express_1.default.json());
@@ -61,19 +71,37 @@ router.get('/logout', (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 const schema = graphql_1.buildSchema(`
     type Query {
-        mensaje: String,
-        numero: Int
+        product(id: String): Product,
+        products: [Product]
+    }
+    type Mutation {
+        updateProduct(codigo: String!, nombre: String, descripcion: String, precio: Int, stock: Int, foto: String): Product
+    }
+    type Product {
+        id: String
+        nombre: String
+        descripcion: String
+        precio: Int
+        codigo: String
+        stock: Int
+        foto: String
     }
 `);
 const root = {
-    mensaje: getMensaje,
-    numero: getNumero
+    product: getProduct,
+    products: getProducts
 };
-function getMensaje() {
-    return 'Buen dia';
+function getProduct(args) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let data = yield productos_service_1.listarProductos(args);
+        return data;
+    });
 }
-function getNumero() {
-    return 123;
+function getProducts() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let data = yield productos_service_1.listarProductosGraphQL();
+        return data;
+    });
 }
 router.use('/graphql', express_graphql_1.graphqlHTTP({
     schema: schema,

@@ -15,23 +15,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const productos_service_1 = require("./../service/productos.service");
 const app_1 = require("../app");
+const axios = require('axios');
 let router = express_1.default.Router();
 router.get('/:id?:name?:rangeFrom?:rangeTo?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let data = yield productos_service_1.listarProductos(req.query);
-        if (data instanceof Error) {
-            app_1.logger.log('warn', 'Advertencia: No se pudo guardar el producto');
-            res.status(404).json(data.message);
-        }
-        else {
-            app_1.logger.log('info', `Informacion: Producto consultado: ${req.query}`);
-            res.status(200).json(data);
-        }
+        axios.get('http://localhost:8080/graphql?query={products{id%2C%20precio}}')
+            .then(response => {
+            console.log(response);
+            if (response instanceof Error) {
+                res.status(404).send(response.message);
+            }
+            else {
+                res.status(200);
+            }
+        });
     }
     catch (error) {
-        app_1.logger.log('error', 'Error: ', error);
-        res.status(500).send('Error de la aplicacion' + error);
+        console.log(error);
     }
+    // try {
+    //     let data = await listarProductos(req.query);
+    //     if (data instanceof Error){
+    //         logger.log('warn', 'Advertencia: No se pudo guardar el producto' );
+    //         res.status(404).json(data.message)
+    //     }else{
+    //         logger.log('info', `Informacion: Producto consultado: ${req.query}`);
+    //         res.status(200).json(data);
+    //     }
+    // } catch (error) {
+    //     logger.log('error', 'Error: ', error);
+    //     res.status(500).send('Error de la aplicacion' + error);
+    // }
 }));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);

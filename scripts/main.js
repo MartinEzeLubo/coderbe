@@ -1,7 +1,6 @@
 let socket = io.connect(); 
 
 socket.on('productos', function(productos) { 
-    console.log(productos);
     document.getElementById('datos').innerHTML = data2TableJS(productos)
     /* data2TableHBS(productos, html => {
         document.getElementById('datos').innerHTML = html

@@ -9,14 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listarProductos = exports.guardarProducto = exports.actualizarProducto = exports.eliminarProducto = void 0;
+exports.listarProductosGraphQL = exports.listarProductos = exports.guardarProducto = exports.actualizarProducto = exports.eliminarProducto = void 0;
 const app_1 = require("../app");
 function listarProductos(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        let id = req.id;
-        let name = req.name;
+        let id = req.id || req.toString();
+        let name = req.name || null;
         let rangeFrom;
         let rangeTo;
+        console.log("id: " + id);
         if (req.rangeFrom) {
             rangeFrom = parseInt(req.rangeFrom);
         }
@@ -33,6 +34,17 @@ function listarProductos(req) {
     });
 }
 exports.listarProductos = listarProductos;
+function listarProductosGraphQL() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            return yield app_1.db.read();
+        }
+        catch (error) {
+            return error;
+        }
+    });
+}
+exports.listarProductosGraphQL = listarProductosGraphQL;
 function guardarProducto(nombre, descripcion, precio, codigo, stock, foto) {
     return __awaiter(this, void 0, void 0, function* () {
         let data;

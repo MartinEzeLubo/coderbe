@@ -61,6 +61,7 @@ class mongoDAO {
     }
     read(id, name, rangeFrom, rangeTo) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("read: " + id);
             try {
                 if (!id && !name && !rangeFrom && !rangeTo) {
                     return yield producto_model_mongo_1.producto.find();

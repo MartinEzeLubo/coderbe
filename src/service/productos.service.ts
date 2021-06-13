@@ -1,11 +1,13 @@
 import {db} from '../app'
 
 async function listarProductos(req){
-  let id = req.id;
-  let name = req.name;
+
+  let id = req.id || req.toString();
+  let name = req.name || null;
   let rangeFrom;
   let rangeTo;
 
+  console.log("id: "+id);
   if(req.rangeFrom){
   rangeFrom = parseInt(req.rangeFrom)
   };
@@ -15,6 +17,14 @@ async function listarProductos(req){
 
   try {
     return await db.read(id, name, rangeFrom, rangeTo);
+  } catch (error) {
+    return error;
+  }
+  
+}
+async function listarProductosGraphQL(){
+  try {
+    return await db.read();
   } catch (error) {
     return error;
   }
@@ -60,4 +70,4 @@ async function eliminarProducto(id: string){
       
 }  
 
-export {eliminarProducto, actualizarProducto, guardarProducto, listarProductos};
+export {eliminarProducto, actualizarProducto, guardarProducto, listarProductos, listarProductosGraphQL};
