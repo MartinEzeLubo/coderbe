@@ -11,6 +11,7 @@ import router from './routes/index';
 import * as database from './repositories/mongo.dao';
 import compression from 'compression'
 import winston from 'winston'
+import { listarProductos } from './service/productos.service';
 
 export const db = new database.mongoDAO;
 
@@ -77,12 +78,25 @@ export const logger = winston.createLogger({
 io.on('connection', async (socket)=>{
 
   
-  socket.on('sendmessage', (data)=>{
-    console.log(data);
+  socket.on('update', ()=>{
+    socket.emit()
     
   })
 
 });
+
+io.on('connection', async (socket)=>{
+  updateProducList();
+
+  socket.on('update', async (data)=>{
+    updateProducList();  
+  })
+})
+
+export async function updateProducList(){
+  let list = await listarProductos('');
+  io.sockets.emit('productos', list);
+};
 
 
 

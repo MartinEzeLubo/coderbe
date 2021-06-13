@@ -2,62 +2,66 @@
 <script src="/socket.io/socket.io.js"></script>
 
 
-<div class="alert alert-success p-4">
-    <div class="w-50 float-left">
-        <h2>Bienvenido</h2>
-        <h2>{{nombre}}</h2>
+<div class="row mb-3 p-4 border border-primary">
+    <div class="col">
+        <div class="float-left">
+            <h2>Bienvenido {{nombre}}</h2>
+            <b><a href="#">{{email}}</a></b>
+        </div>
+        <div class="float-right">
+            <button class="btn btn-warning" onclick="location.href='/logout'">
+                <b>Desloguear</b><br><img src="{{foto}}" alt="">
+            </button>
+        </div>
     </div>
-    <div class="float-right">
-        <button class="btn btn-warning" onclick="location.href='/logout'">
-            <b>Desloguear</b><br><img src="{{foto}}" width="75" alt="">
-        </button>
-    </div>
-    <b><a href="#">{{email}}</a></b>
+
 </div>
+
 
 <div class="jumbotron">
     <h1>Ingrese Producto</h1>
     <br>
 
     <form action="/productos" method="POST" autocomplete="off">
-    {{!-- <form autocomplete="off"> --}}
-        <!-- Campo nombre del producto -->
-        <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input id="nombre" class="form-control" type="text" name="nombre" required>
-        </div>
+        {{!-- <form autocomplete="off"> --}}
+            <!-- Campo nombre del producto -->
+            <div class="form-group">
+                <label for="nombre">Nombre *</label>
+                <input id="nombre" class="form-control" type="text" name="nombre" required>
+            </div>
 
-        <div class="form-group">
-            <label for="descripcion">Descripcion</label>
-            <input id="descripcion" class="form-control" type="text" name="descripcion" required>
-        </div>
-        
-        <!-- Campo precio del producto -->
-        <div class="form-group">
-            <label for="precio">Precio</label>
-            <input id="precio" class="form-control" type="number" step="0.01" name="precio" required>
-        </div>
+            <div class="form-group">
+                <label for="descripcion">Descripcion *</label>
+                <input id="descripcion" class="form-control" type="text" name="descripcion" required>
+            </div>
 
-        <div class="form-group">
-            <label for="codigo">Codigo</label>
-            <input id="codigo" class="form-control" type="text" name="codigo" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="stock">Stock</label>
-            <input id="stock" class="form-control" type="text" name="stock" required>
-        </div>
-        <!-- Campo url de la foto del producto -->
-        <div class="form-group">
-            <label for="foto">Foto URL</label>
-            <input id="foto" class="form-control" type="url" name="thumbnail">
-        </div>
+            <!-- Campo precio del producto -->
+            <div class="form-group">
+                <label for="precio">Precio *</label>
+                <input id="precio" class="form-control" type="number" step="0.01" name="precio" required>
+            </div>
 
-        <!-- Botón de envío -->
-        <button class="btn btn-success mt-3">Enviar</button>
-    </form>
+            <div class="form-group">
+                <label for="codigo">Codigo *</label>
+                <input id="codigo" class="form-control" type="text" name="codigo" required>
+            </div>
 
-    <div class="mt-5" id="datos"></div>
+            <div class="form-group">
+                <label for="stock">Stock *</label>
+                <input id="stock" class="form-control" type="text" name="stock" required>
+            </div>
+            <!-- Campo url de la foto del producto -->
+            <div class="form-group">
+                <label for="foto">Foto URL *</label>
+                <input id="foto" class="form-control" type="url" name="thumbnail">
+            </div>
+            <p>* Campos requeridos</p>
+
+            <!-- Botón de envío -->
+            <button class="btn btn-success mt-3">Enviar</button>
+        </form>
+
+        <div class="mt-5" id="datos"></div>
 </div>
 
 <div class="jumbotron" id="centro-mensajes">

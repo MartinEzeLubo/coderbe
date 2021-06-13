@@ -1,7 +1,7 @@
 let socket = io.connect(); 
 
 socket.on('productos', function(productos) { 
-    //console.log(productos);
+    console.log(productos);
     document.getElementById('datos').innerHTML = data2TableJS(productos)
     /* data2TableHBS(productos, html => {
         document.getElementById('datos').innerHTML = html
@@ -13,7 +13,7 @@ form.addEventListener('submit', e => {
     e.preventDefault()
 
     const data = {nombre: form[0].value, descripcion: form[1].value, precio: form[2].value, codigo: form[3].value, stock: form[4].value, foto: form[5].value}
-    console.log(data)
+    
 
     fetch('/productos', {
         headers: {
@@ -49,9 +49,9 @@ function data2TableJS(productos) {
         `
         res += productos.map(producto => `
                 <tr>
-                    <td>${producto.title}</td>
-                    <td>$${producto.price}</td>
-                    <td><img width="50" src="${producto.thumbnail}" alt="not found"></td>
+                    <td>${producto.nombre}</td>
+                    <td>$${producto.precio}</td>
+                    <td><img width="50" src="${producto.foto}" alt="not found"></td>
                 </tr>
         `).join(' ')
         res += `

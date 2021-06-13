@@ -31,7 +31,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logger = exports.db = void 0;
+exports.updateProducList = exports.logger = exports.db = void 0;
 const cluster_1 = __importDefault(require("cluster"));
 const os_1 = __importDefault(require("os"));
 require("core-js");
@@ -43,6 +43,7 @@ const index_1 = __importDefault(require("./routes/index"));
 const database = __importStar(require("./repositories/mongo.dao"));
 const compression_1 = __importDefault(require("compression"));
 const winston_1 = __importDefault(require("winston"));
+const productos_service_1 = require("./service/productos.service");
 exports.db = new database.mongoDAO;
 const cpus = os_1.default.cpus().length;
 const handlebars = require('express-handlebars');
@@ -86,10 +87,24 @@ exports.logger = winston_1.default.createLogger({
     ],
 });
 io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
-    socket.on('sendmessage', (data) => {
-        console.log(data);
+    socket.on('update', () => {
+        socket.emit();
     });
 }));
+io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
+    updateProducList();
+    socket.on('update', (data) => __awaiter(void 0, void 0, void 0, function* () {
+        updateProducList();
+    }));
+}));
+function updateProducList() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let list = yield productos_service_1.listarProductos('');
+        io.sockets.emit('productos', list);
+    });
+}
+exports.updateProducList = updateProducList;
+;
 if (process.argv[4] === "cluster") {
     if (cluster_1.default.isMaster) {
         console.log('Trabajando modo Cluster');
