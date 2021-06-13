@@ -37,7 +37,8 @@ function guardarProducto(nombre, descripcion, precio, codigo, stock, foto) {
     return __awaiter(this, void 0, void 0, function* () {
         let data;
         if (!nombre || nombre === "" || !descripcion || descripcion === "" || precio === null || precio === undefined || !codigo || codigo === "" || stock === null || stock === undefined || !foto || foto === "") {
-            return 'Los parametros enviados son incorrectos';
+            let err = 'Los parametros enviados son incorrectos';
+            throw err;
         }
         try {
             data = yield app_1.db.create(nombre, descripcion, precio, codigo, stock, foto);

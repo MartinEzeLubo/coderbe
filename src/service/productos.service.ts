@@ -26,7 +26,8 @@ async function guardarProducto(nombre: string, descripcion: string, precio: numb
   
 
   if(!nombre || nombre === "" || !descripcion || descripcion === "" || precio === null || precio === undefined || !codigo || codigo === "" || stock === null || stock === undefined || !foto || foto === "") {
-     return 'Los parametros enviados son incorrectos';
+     let err = 'Los parametros enviados son incorrectos';
+     throw err;
   }
   try {
     data = await db.create(nombre, descripcion, precio, codigo, stock, foto);

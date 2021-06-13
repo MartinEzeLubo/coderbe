@@ -13,7 +13,8 @@ import numCPUs from 'os'
 import { isPrime } from '../is-prime'
 import passport from 'passport';
 import { sendMail, sendMailGmail } from '../service/send.email.service'
-
+import { graphqlHTTP } from 'express-graphql';
+import { buildSchema } from 'graphql';
 
 
 const cpus = numCPUs.cpus().length;
@@ -68,6 +69,35 @@ router.get('/logout', (req, res) => {
     req.logout()
     res.render("logout", { nombre })
 })
+///////////////////////////////////////////////////////////////////////////////
+
+
+const schema = buildSchema(`
+    type Query {
+        mensaje: String,
+        numero: Int
+    }
+`)
+
+const root = {
+    mensaje: getMensaje,
+    numero: getNumero
+}
+
+function getMensaje(){
+    return 'Buen dia'
+}
+
+
+function getNumero(){
+    return 123
+}
+
+router.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true
+}))
 
 
 
@@ -146,5 +176,3 @@ export default router;
 //         res.status(401).send()
 //     }
 // }
-
-

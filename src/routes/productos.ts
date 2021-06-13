@@ -25,13 +25,14 @@ router.get('/:id?:name?:rangeFrom?:rangeTo?', async (req, res) => {
     });
 
 router.post('/', async (req, res) => {
+    console.log(req.body);
     try {
         let data = await guardarProducto(req.body.nombre, req.body.descripcion ,parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock) ,req.body.foto);
-        logger.log('info', `Informacion: Producto guardado: ${req.body.nombre}`);
+        logger.log('info', `Informacion: Producto guardado: ${data}`);
         res.status(201).json(data)
     } catch (error) { 
         logger.log('error', 'Error: ', error);
-        res.status(500).send('Error de la aplicacion: ' + error);
+        res.status(400).send('Error: ' + error);
     }
 });
 

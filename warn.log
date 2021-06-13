@@ -3,3 +3,6 @@
 {"level":"warn","message":"Advertencia: No se pudo eliminar el producto"}
 {"level":"warn","message":"Advertencia: No se pudo eliminar el producto"}
 {"level":"warn","message":"Advertencia: No se pudo eliminar el producto"}
+{"service":"user-service","level":"error","message":"Error: "}
+{"service":"user-service","level":"error","message":"Error: "}
+{"service":"user-service","level":"error","message":"Error: "}

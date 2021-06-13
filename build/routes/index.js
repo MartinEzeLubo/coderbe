@@ -17,6 +17,8 @@ const os_1 = __importDefault(require("os"));
 const is_prime_1 = require("../is-prime");
 const passport_1 = __importDefault(require("passport"));
 const send_email_service_1 = require("../service/send.email.service");
+const express_graphql_1 = require("express-graphql");
+const graphql_1 = require("graphql");
 const cpus = os_1.default.cpus().length;
 let router = express_1.default.Router();
 router.use(express_1.default.json());
@@ -56,6 +58,28 @@ router.get('/logout', (req, res) => {
     req.logout();
     res.render("logout", { nombre });
 });
+///////////////////////////////////////////////////////////////////////////////
+const schema = graphql_1.buildSchema(`
+    type Query {
+        mensaje: String,
+        numero: Int
+    }
+`);
+const root = {
+    mensaje: getMensaje,
+    numero: getNumero
+};
+function getMensaje() {
+    return 'Buen dia';
+}
+function getNumero() {
+    return 123;
+}
+router.use('/graphql', express_graphql_1.graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true
+}));
 ///////////////////////////////////////////////////////////////////////////////
 router.get('/info', (req, res) => {
     let data = {

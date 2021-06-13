@@ -34,14 +34,15 @@ router.get('/:id?:name?:rangeFrom?:rangeTo?', (req, res) => __awaiter(void 0, vo
     }
 }));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
     try {
         let data = yield productos_service_1.guardarProducto(req.body.nombre, req.body.descripcion, parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock), req.body.foto);
-        app_1.logger.log('info', `Informacion: Producto guardado: ${req.body.nombre}`);
+        app_1.logger.log('info', `Informacion: Producto guardado: ${data}`);
         res.status(201).json(data);
     }
     catch (error) {
         app_1.logger.log('error', 'Error: ', error);
-        res.status(500).send('Error de la aplicacion: ' + error);
+        res.status(400).send('Error: ' + error);
     }
 }));
 router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

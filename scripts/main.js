@@ -12,10 +12,10 @@ const form = document.querySelector('form')
 form.addEventListener('submit', e => {
     e.preventDefault()
 
-    const data = {title: form[0].value, price: form[1].value, thumbnail: form[2].value}
-    //console.log(data)
+    const data = {nombre: form[0].value, descripcion: form[1].value, precio: form[2].value, codigo: form[3].value, stock: form[4].value, foto: form[5].value}
+    console.log(data)
 
-    fetch('/api/productos/guardar', {
+    fetch('/productos', {
         headers: {
             'Content-Type': 'application/json'
         },
