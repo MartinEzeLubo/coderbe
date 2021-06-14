@@ -15,7 +15,7 @@ import passport from 'passport';
 import { sendMail, sendMailGmail } from '../service/send.email.service'
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
-import {listarProductos, listarProductosGraphQL} from '../service/productos.service'
+import {listarProductos, listarProductosGraphQL, guardarProducto} from '../service/productos.service'
 
 const cpus = numCPUs.cpus().length;
 let router = express.Router();
@@ -71,6 +71,7 @@ router.get('/logout', (req, res) => {
 })
 ///////////////////////////////////////////////////////////////////////////////
 
+//
 
 const schema = buildSchema(`
     type Query {
@@ -78,7 +79,7 @@ const schema = buildSchema(`
         products: [Product]
     }
     type Mutation {
-        updateProduct(codigo: String!, nombre: String, descripcion: String, precio: Int, stock: Int, foto: String): Product
+        createProduct(nombre: String!, descripcion: String!, precio: Int!, codigo: String!, stock: Int!, foto: String!): Product
     }
     type Product {
         id: String
@@ -93,7 +94,8 @@ const schema = buildSchema(`
 
 const root = {
     product: getProduct,
-    products: getProducts
+    products: getProducts,
+    createProduct: createProduct
 }
 
 async function getProduct(args){
@@ -103,6 +105,10 @@ async function getProduct(args){
 
 async function getProducts(){
     let data = await listarProductosGraphQL()
+    return data
+}
+async function createProduct(args){
+    let data = await guardarProducto(args.nombre, args.descripcion, args.precio, args.codigo, args. stock, args.foto)
     return data
 }
 

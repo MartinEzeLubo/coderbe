@@ -47,6 +47,7 @@ async function guardarProducto(nombre: string, descripcion: string, precio: numb
   }
 }
 
+
 async function actualizarProducto(id: string, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
   let data;
 

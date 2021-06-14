@@ -19,14 +19,15 @@ const axios = require('axios');
 let router = express_1.default.Router();
 router.get('/:id?:name?:rangeFrom?:rangeTo?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        axios.get('http://localhost:8080/graphql?query={products{id%2C%20precio}}')
+        axios.get('http://localhost:8080/graphql?query=%7Bproducts%7B%0A%20%20id%0A%20%20nombre%0A%20%20descripcion%0A%20%20precio%0A%20%20codigo%0A%20%20stock%0A%20%20foto%0A%09%7D%0A%7D')
             .then(response => {
-            console.log(response);
+            console.log(response.data);
             if (response instanceof Error) {
                 res.status(404).send(response.message);
             }
             else {
-                res.status(200);
+                console.log('res ok');
+                res.status(200).json(response.data);
             }
         });
     }
@@ -48,16 +49,43 @@ router.get('/:id?:name?:rangeFrom?:rangeTo?', (req, res) => __awaiter(void 0, vo
     // }
 }));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     try {
-        let data = yield productos_service_1.guardarProducto(req.body.nombre, req.body.descripcion, parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock), req.body.foto);
-        app_1.logger.log('info', `Informacion: Producto guardado: ${data}`);
-        res.status(201).json(data);
+        axios.post('http://localhost:8080/graphql', { query: `mutation {
+            createProduct(
+                nombre:"${req.body.nombre}",
+                descripcion:"${req.body.descripcion}",
+                precio: ${req.body.precio},
+                codigo:"${req.body.codigo}",
+                stock: ${req.body.stock},
+                foto:"${req.body.thumbnail}",
+                ){
+                   nombre
+                   descripcion
+                   precio 
+                }
+        }` })
+            .then(response => {
+            console.log(response.data);
+            if (response instanceof Error) {
+                res.status(404).send(response.message);
+            }
+            else {
+                console.log('res ok');
+                res.status(200).json(response.data);
+            }
+        });
     }
     catch (error) {
-        app_1.logger.log('error', 'Error: ', error);
-        res.status(400).send('Error: ' + error);
+        console.log(error);
     }
+    // try {
+    //     let data = await guardarProducto(req.body.nombre, req.body.descripcion, parseInt(req.body.precio), req.body.codigo, parseInt(req.body.stock), req.body.foto);
+    //     logger.log('info', `Informacion: Producto guardado: ${data}`);
+    //     res.status(201).json(data)
+    // } catch (error) {
+    //     logger.log('error', 'Error: ', error);
+    //     res.status(400).send('Error: ' + error);
+    // }
 }));
 router.put('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

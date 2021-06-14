@@ -69,13 +69,14 @@ router.get('/logout', (req, res) => {
     res.render("logout", { nombre });
 });
 ///////////////////////////////////////////////////////////////////////////////
+//
 const schema = graphql_1.buildSchema(`
     type Query {
         product(id: String): Product,
         products: [Product]
     }
     type Mutation {
-        updateProduct(codigo: String!, nombre: String, descripcion: String, precio: Int, stock: Int, foto: String): Product
+        createProduct(nombre: String!, descripcion: String!, precio: Int!, codigo: String!, stock: Int!, foto: String!): Product
     }
     type Product {
         id: String
@@ -89,7 +90,8 @@ const schema = graphql_1.buildSchema(`
 `);
 const root = {
     product: getProduct,
-    products: getProducts
+    products: getProducts,
+    createProduct: createProduct
 };
 function getProduct(args) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -100,6 +102,12 @@ function getProduct(args) {
 function getProducts() {
     return __awaiter(this, void 0, void 0, function* () {
         let data = yield productos_service_1.listarProductosGraphQL();
+        return data;
+    });
+}
+function createProduct(args) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let data = yield productos_service_1.guardarProducto(args.nombre, args.descripcion, args.precio, args.codigo, args.stock, args.foto);
         return data;
     });
 }
