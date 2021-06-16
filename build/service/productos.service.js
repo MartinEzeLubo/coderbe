@@ -53,8 +53,12 @@ function guardarProducto(nombre, descripcion, precio, codigo, stock, foto) {
             throw err;
         }
         try {
-            data = yield app_1.db.create(nombre, descripcion, precio, codigo, stock, foto);
-            return data;
+            let info;
+            app_1.db.create(nombre, descripcion, precio, codigo, stock, foto)
+                .then(res => {
+                info = res;
+            });
+            setTimeout(() => console.log(info), 5000);
         }
         catch (err) {
             throw err;

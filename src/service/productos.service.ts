@@ -40,8 +40,7 @@ async function guardarProducto(nombre: string, descripcion: string, precio: numb
      throw err;
   }
   try {
-    data = await db.create(nombre, descripcion, precio, codigo, stock, foto);
-    return data;
+    db.create(nombre, descripcion, precio, codigo, stock, foto)
   } catch (err) {
     throw err;
   }

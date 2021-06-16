@@ -45,8 +45,12 @@ export class mongoDAO {
             }
         
             let nuevoProductoModel = new producto(nuevoProducto);
-            nuevoProductoModel.save();
-            return nuevoProducto;    
+            nuevoProductoModel.save()
+            .then((result) => {
+                return result;                    
+            }).catch((err) => {
+                console.log(err);
+            });
         } catch (err) {
             return err;
         }
@@ -55,8 +59,6 @@ export class mongoDAO {
 
     async read(id?:string, name?:string, rangeFrom?:number, rangeTo?:number){
         
-        console.log("read: "+id);
-
         try {
             if(!id && !name && !rangeFrom && !rangeTo){
                 return await producto.find();

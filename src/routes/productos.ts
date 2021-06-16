@@ -11,11 +11,9 @@ router.get('/:id?:name?:rangeFrom?:rangeTo?', async (req, res) => {
     try {
         axios.get('http://localhost:8080/graphql?query=%7Bproducts%7B%0A%20%20id%0A%20%20nombre%0A%20%20descripcion%0A%20%20precio%0A%20%20codigo%0A%20%20stock%0A%20%20foto%0A%09%7D%0A%7D')
             .then(response => {
-                console.log(response.data);
                 if (response instanceof Error) {
                     res.status(404).send(response.message)
                 } else {
-                    console.log('res ok');
                     res.status(200).json(response.data);
                 }
             })
@@ -44,8 +42,9 @@ router.get('/:id?:name?:rangeFrom?:rangeTo?', async (req, res) => {
 router.post('/', async (req, res) => {
 
     try {
-        axios.post('http://localhost:8080/graphql', 
-        {query: `mutation {
+        axios.post('http://localhost:8080/graphql',
+            {
+                query: `mutation {
             createProduct(
                 nombre:"${req.body.nombre}",
                 descripcion:"${req.body.descripcion}",
@@ -60,7 +59,6 @@ router.post('/', async (req, res) => {
                 }
         }`})
             .then(response => {
-                console.log(response.data);
                 if (response instanceof Error) {
                     res.status(404).send(response.message)
                 } else {
