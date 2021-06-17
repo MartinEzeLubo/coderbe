@@ -37,7 +37,6 @@ const passport_facebook_1 = __importDefault(require("passport-facebook"));
 const passportLocal = __importStar(require("passport-local"));
 const user_model_mongo_1 = require("../models/user.model.mongo");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const send_email_service_1 = require("../service/send.email.service");
 const app_1 = require("../app");
 let LocalStrategy = passportLocal.Strategy;
 let FacebookStrategy = passport_facebook_1.default.Strategy;
@@ -100,8 +99,9 @@ passport_1.default.use(new FacebookStrategy({
     download(profile.photos[0].value, `${profile.displayName}.jpg`, function () {
         let fecha = Date.now();
         let emailSubject = `Login de ${profile.displayName} a las ${new Date(fecha).toString()}`;
-        send_email_service_1.sendMailGmail(profile.emails[0].value, emailSubject, profile.displayName, `${profile.displayName}.jpg`);
-        send_email_service_1.sendMail(profile.emails[0].value, emailSubject);
+        // sendMailGmail(profile.emails[0].value, emailSubject, profile.displayName, `${profile.displayName}.jpg`)
+        // sendSMS('Te logueaste con facebook', '+541150354113')
+        // sendMail(profile.emails[0].value, emailSubject)
     });
     done(null, profile);
 }));

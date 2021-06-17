@@ -47,18 +47,12 @@ function listarProductosGraphQL() {
 exports.listarProductosGraphQL = listarProductosGraphQL;
 function guardarProducto(nombre, descripcion, precio, codigo, stock, foto) {
     return __awaiter(this, void 0, void 0, function* () {
-        let data;
         if (!nombre || nombre === "" || !descripcion || descripcion === "" || precio === null || precio === undefined || !codigo || codigo === "" || stock === null || stock === undefined || !foto || foto === "") {
             let err = 'Los parametros enviados son incorrectos';
             throw err;
         }
         try {
-            let info;
-            app_1.db.create(nombre, descripcion, precio, codigo, stock, foto)
-                .then(res => {
-                info = res;
-            });
-            setTimeout(() => console.log(info), 5000);
+            return app_1.db.create(nombre, descripcion, precio, codigo, stock, foto);
         }
         catch (err) {
             throw err;

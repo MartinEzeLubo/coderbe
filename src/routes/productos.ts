@@ -53,6 +53,7 @@ router.post('/', async (req, res) => {
                 stock: ${req.body.stock},
                 foto:"${req.body.thumbnail}",
                 ){
+                    id
                    nombre
                    descripcion
                    precio 

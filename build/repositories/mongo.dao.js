@@ -51,12 +51,8 @@ class mongoDAO {
                     timestamp: Date.now()
                 };
                 let nuevoProductoModel = new producto_model_mongo_1.producto(nuevoProducto);
-                nuevoProductoModel.save()
-                    .then((result) => {
-                    return result;
-                }).catch((err) => {
-                    console.log(err);
-                });
+                nuevoProductoModel.save();
+                return nuevoProductoModel;
             }
             catch (err) {
                 return err;
@@ -80,10 +76,12 @@ class mongoDAO {
                         return yield producto_model_mongo_1.producto.find({ precio: { $gt: rangeFrom, $lt: rangeTo } });
                     }
                 }
-                let data = yield producto_model_mongo_1.producto.findOne({ $or: [
+                let data = yield producto_model_mongo_1.producto.findOne({
+                    $or: [
                         { _id: id },
                         { nombre: name }
-                    ] });
+                    ]
+                });
                 if (data === null) {
                     throw Error('No existe un producto con los valores buscados');
                 }
@@ -97,7 +95,8 @@ class mongoDAO {
     update(id, nombre, descripcion, precio, codigo, stock, foto) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield producto_model_mongo_1.producto.findOneAndUpdate({ _id: id }, { $set: {
+                return yield producto_model_mongo_1.producto.findOneAndUpdate({ _id: id }, {
+                    $set: {
                         nombre: nombre,
                         descripcion: descripcion,
                         precio: precio,
@@ -105,7 +104,8 @@ class mongoDAO {
                         stock: stock,
                         foto: foto,
                         timestamp: Date.now()
-                    } }, { new: true });
+                    }
+                }, { new: true });
             }
             catch (err) {
                 throw Error('No existe un producto con el ID indicado');

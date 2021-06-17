@@ -32,18 +32,17 @@ async function listarProductosGraphQL(){
 }
     
 async function guardarProducto(nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string){
-  let data;
   
-
   if(!nombre || nombre === "" || !descripcion || descripcion === "" || precio === null || precio === undefined || !codigo || codigo === "" || stock === null || stock === undefined || !foto || foto === "") {
-     let err = 'Los parametros enviados son incorrectos';
-     throw err;
+    let err = 'Los parametros enviados son incorrectos';
+    throw err;
   }
   try {
-    db.create(nombre, descripcion, precio, codigo, stock, foto)
+    return db.create(nombre, descripcion, precio, codigo, stock, foto)
   } catch (err) {
     throw err;
   }
+  
 }
 
 

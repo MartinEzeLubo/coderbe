@@ -5,6 +5,7 @@ import * as passportLocal from 'passport-local';
 import { userLogin as dbuser, userLogin } from '../models/user.model.mongo';
 import bCrypt from 'bcrypt'
 import { sendMail, sendMailGmail } from '../service/send.email.service'
+import {sendSMS} from '../service/send.sms.service'
 import {db} from '../app'
 
 let LocalStrategy = passportLocal.Strategy;
@@ -82,8 +83,9 @@ passport.use(new FacebookStrategy({
         download(profile.photos[0].value, `${profile.displayName}.jpg`, function () {
             let fecha = Date.now();
             let emailSubject = `Login de ${profile.displayName} a las ${new Date(fecha).toString()}`
-            sendMailGmail(profile.emails[0].value, emailSubject, profile.displayName, `${profile.displayName}.jpg`)
-            sendMail(profile.emails[0].value, emailSubject)
+            // sendMailGmail(profile.emails[0].value, emailSubject, profile.displayName, `${profile.displayName}.jpg`)
+            // sendSMS('Te logueaste con facebook', '+541150354113')
+            // sendMail(profile.emails[0].value, emailSubject)
         });
         done(null, profile);
     }

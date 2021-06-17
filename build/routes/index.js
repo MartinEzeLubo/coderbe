@@ -25,7 +25,6 @@ const child_process_1 = require("child_process");
 const os_1 = __importDefault(require("os"));
 const is_prime_1 = require("../is-prime");
 const passport_1 = __importDefault(require("passport"));
-const send_email_service_1 = require("../service/send.email.service");
 const express_graphql_1 = require("express-graphql");
 const graphql_1 = require("graphql");
 const productos_service_1 = require("../service/productos.service");
@@ -63,8 +62,8 @@ router.get('/logout', (req, res) => {
     let nombre = req.user.displayName;
     let fecha = Date.now();
     let emailSubject = `Logout de ${req.user.displayName} a las ${new Date(fecha).toString()}`;
-    send_email_service_1.sendMail(req.user.emails[0].value, emailSubject);
-    send_email_service_1.sendMailGmail(req.user.emails[0].value, emailSubject, req.user.displayName, '');
+    // sendMail(req.user.emails[0].value, emailSubject)
+    // sendMailGmail(req.user.emails[0].value, emailSubject, req.user.displayName, '')
     req.logout();
     res.render("logout", { nombre });
 });
@@ -107,8 +106,13 @@ function getProducts() {
 }
 function createProduct(args) {
     return __awaiter(this, void 0, void 0, function* () {
-        let data = yield productos_service_1.guardarProducto(args.nombre, args.descripcion, args.precio, args.codigo, args.stock, args.foto);
-        return data;
+        try {
+            let info = yield productos_service_1.guardarProducto(args.nombre, args.descripcion, args.precio, args.codigo, args.stock, args.foto);
+            return info;
+        }
+        catch (error) {
+            console.log(error);
+        }
     });
 }
 router.use('/graphql', express_graphql_1.graphqlHTTP({

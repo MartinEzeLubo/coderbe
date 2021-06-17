@@ -58,6 +58,7 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 stock: ${req.body.stock},
                 foto:"${req.body.thumbnail}",
                 ){
+                    id
                    nombre
                    descripcion
                    precio 
