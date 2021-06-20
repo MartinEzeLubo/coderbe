@@ -16,21 +16,43 @@ const express_1 = __importDefault(require("express"));
 const productos_service_1 = require("./../service/productos.service");
 const app_1 = require("../app");
 const axios = require('axios');
+const url = require('url');
 let router = express_1.default.Router();
 router.get('/:id?:name?:rangeFrom?:rangeTo?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        axios.get('http://localhost:8080/graphql?query=%7Bproducts%7B%0A%20%20id%0A%20%20nombre%0A%20%20descripcion%0A%20%20precio%0A%20%20codigo%0A%20%20stock%0A%20%20foto%0A%09%7D%0A%7D')
-            .then(response => {
-            if (response instanceof Error) {
-                res.status(404).send(response.message);
-            }
-            else {
-                res.status(200).json(response.data);
-            }
-        });
+    console.log(req.query.id);
+    if (req.query.id) {
+        try {
+            let query = `?query={product(id: "${req.query.id}"){id,nombre,descripcion,precio,codigo,stock,foto}}`;
+            axios.get(`http://localhost:8080/graphql/${query}`)
+                .then(response => {
+                if (response instanceof Error) {
+                    res.status(404).send(response.message);
+                }
+                else {
+                    res.status(200).json(response.data);
+                }
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
-    catch (error) {
-        console.log(error);
+    else {
+        let query = `?query={products{id,nombre,descripcion,precio,codigo,stock,foto}}`;
+        try {
+            axios.get(`http://localhost:8080/graphql/${query}`)
+                .then(response => {
+                if (response instanceof Error) {
+                    res.status(404).send(response.message);
+                }
+                else {
+                    res.status(200).json(response.data);
+                }
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     // try {
     //     let data = await listarProductos(req.query);

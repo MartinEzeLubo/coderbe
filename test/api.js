@@ -9,11 +9,21 @@ async function testReadProducts(){
         info.forEach(element => {   
             console.log(`ID: ${element.id} - Producto: ${element.nombre}`);
         });
+
         console.log("-----------------------------------------------------");
     })
 
 }
+async function testSearchProduct(id){
+    await axios.get(`${url}/?id:${id}`)
+    .then(res=>{
+        console.log(res.data.data.products)
+        
 
+        console.log("-----------------------------------------------------");
+    })
+
+}
 
 async function testCreateProduct(){
 
@@ -55,17 +65,20 @@ async function testDeleteProducts(id){
 
 
 
+
+
 async function runTests(){
-    await testReadProducts();
+    // await testReadProducts();
     let id = await testCreateProduct();
-    await testReadProducts();
-    await testUpdateProducts(id)
-    await testReadProducts();
-    await testDeleteProducts(id)
-    await testReadProducts();
+    console.log('--------------------');
+    await testSearchProduct(id)
+    // console.log('--------------------');
+    // await testReadProducts();
+    // await testUpdateProducts(id)
+    // await testReadProducts();
+    // await testDeleteProducts(id)
+    // await testReadProducts();
 
 }
 
-
 runTests();
-

@@ -1,24 +1,47 @@
 import express from 'express';
 import { eliminarProducto, actualizarProducto, guardarProducto, listarProductos } from './../service/productos.service'
 import { logger } from '../app'
+
 const axios = require('axios');
+const url = require('url');
 
 let router = express.Router();
 
 
 router.get('/:id?:name?:rangeFrom?:rangeTo?', async (req, res) => {
+    console.log(req.query.id);
 
-    try {
-        axios.get('http://localhost:8080/graphql?query=%7Bproducts%7B%0A%20%20id%0A%20%20nombre%0A%20%20descripcion%0A%20%20precio%0A%20%20codigo%0A%20%20stock%0A%20%20foto%0A%09%7D%0A%7D')
-            .then(response => {
-                if (response instanceof Error) {
-                    res.status(404).send(response.message)
-                } else {
-                    res.status(200).json(response.data);
-                }
-            })
-    } catch (error) {
-        console.log(error);
+
+
+    if (req.query.id) {
+        try {
+            let query = `?query={product(id: "${req.query.id}"){id,nombre,descripcion,precio,codigo,stock,foto}}`
+            axios.get(`http://localhost:8080/graphql/${query}`)
+                .then(response => {
+                    if (response instanceof Error) {
+                        res.status(404).send(response.message)
+                    } else {
+                        res.status(200).json(response.data);
+                    }
+                })
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        let query = `?query={products{id,nombre,descripcion,precio,codigo,stock,foto}}`
+        try {
+            axios.get(`http://localhost:8080/graphql/${query}`)
+                .then(response => {
+                    if (response instanceof Error) {
+                        res.status(404).send(response.message)
+                    } else {
+                        res.status(200).json(response.data);
+                    }
+                })
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
     // try {
