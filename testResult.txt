@@ -1,0 +1,23 @@
+
+> coder-be@1.0.0 test /home/martin/Workspace/coderbe
+> mocha ./test/index.test.js
+
+
+
+  testeo de la api
+    ✔ deberia existir productos
+    ✔ crear nuevo producto
+    ✔ Actualizar descripcion del producto (174ms)
+    ✔ Encontrar el producto creado en el test anterior (183ms)
+    ✔ Eliminar el producto creado (176ms)
+
+  SUPERTEST - testeo de la api con supertest
+    ✔ SUPERTEST - Status 200 (217ms)
+    ✔ SUPERTEST - crear nuevo producto
+    ✔ SUPERTEST - Actualizar descripcion del producto (178ms)
+    ✔ SUPERTEST - Encontrar el producto creado en el test anterior (193ms)
+    ✔ Eliminar el producto creado (174ms)
+
+
+  10 passing (1s)
+
