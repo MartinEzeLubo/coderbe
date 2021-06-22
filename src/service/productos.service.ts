@@ -1,4 +1,4 @@
-import {db} from '../app'
+import {db} from '../db/dbSelection'
 
 async function listarProductos(req){
 
@@ -7,7 +7,6 @@ async function listarProductos(req){
   let rangeFrom;
   let rangeTo;
 
-  console.log("id: "+id);
   if(req.rangeFrom){
   rangeFrom = parseInt(req.rangeFrom)
   };

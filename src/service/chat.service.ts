@@ -1,4 +1,4 @@
-import {db} from '../app'
+import {db} from '../db/dbSelection'
 import {normalize, schema} from 'normalizr'
 
 const util = require('util')

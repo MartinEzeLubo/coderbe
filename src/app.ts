@@ -8,13 +8,16 @@ import cors from 'cors'
 import session, { Store } from 'express-session'
 import express from 'express';
 import router from './routes/index';
-import * as database from './repositories/mongo.dao';
 import compression from 'compression'
 import winston from 'winston'
 import { listarProductos } from './service/productos.service';
 
-export const db = new database.mongoDAO;
+export const DB_SELECTION = "mongo";
 
+
+// import * as database from './repositories/mongo.dao';
+// export const db = dbSelected
+// export const db = new database.mongoDAO;
 
 
 const cpus = numCPUs.cpus().length;

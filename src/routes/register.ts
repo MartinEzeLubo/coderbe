@@ -6,7 +6,7 @@ import { userLogin as dbuser, userLogin } from '../models/user.model.mongo';
 import bCrypt from 'bcrypt'
 import { sendMail, sendMailGmail } from '../service/send.email.service'
 import {sendSMS} from '../service/send.sms.service'
-import {db} from '../app'
+import {db} from '../db/dbSelection'
 
 let LocalStrategy = passportLocal.Strategy;
 let FacebookStrategy = passportFacebook.Strategy;

@@ -37,7 +37,7 @@ const passport_facebook_1 = __importDefault(require("passport-facebook"));
 const passportLocal = __importStar(require("passport-local"));
 const user_model_mongo_1 = require("../models/user.model.mongo");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const app_1 = require("../app");
+const dbSelection_1 = require("../db/dbSelection");
 let LocalStrategy = passportLocal.Strategy;
 let FacebookStrategy = passport_facebook_1.default.Strategy;
 let router = express_1.default.Router();
@@ -61,7 +61,7 @@ passport_1.default.use('register', new LocalStrategy({
     return __awaiter(this, void 0, void 0, function* () {
         if (username && password) {
             try {
-                let userExist = yield app_1.db.readUser(username);
+                let userExist = yield dbSelection_1.db.readUser(username);
                 if (userExist) {
                     let error = "El usuario ya existe";
                     return done(error, false);

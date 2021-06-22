@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.guardarMensaje = exports.listarMensaje = void 0;
-const app_1 = require("../app");
+const dbSelection_1 = require("../db/dbSelection");
 const normalizr_1 = require("normalizr");
 const util = require('util');
 let userSchema = new normalizr_1.schema.Entity('user', {}, { idAttribute: 'mail' });
@@ -23,7 +23,7 @@ let chatSchema = new normalizr_1.schema.Entity('chat', {
 function listarMensaje(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let messagesData = yield app_1.db.readMessage(id);
+            let messagesData = yield dbSelection_1.db.readMessage(id);
             let data = { id: '001', mensajes: messagesData };
             console.log(messagesData);
             console.log(data);
@@ -41,7 +41,7 @@ function guardarMensaje(data) {
             return 'Los parametros enviados son incorrectos';
         }
         try {
-            data = yield app_1.db.createMessage(data.mail, data.name, data.lastname, data.age, data.alias, data.avatar, data.text);
+            data = yield dbSelection_1.db.createMessage(data.mail, data.name, data.lastname, data.age, data.alias, data.avatar, data.text);
             return data;
         }
         catch (err) {

@@ -4,19 +4,28 @@ import { dbLog } from '../models/log.model.mongo'
 import { userLogin } from '../models/user.model.mongo'
 
 
-export class mongoDAO {
+const mongoose = require('mongoose');
 
-    //martinlubo.ddns.net:8102
-    //mongodb://martinlubo.ddns.net:8102/ecommerce
+let instance = null;
+
+
+class mongoDAO {
+    
     constructor() {
-        const mongoose = require('mongoose');
-        const mongoConnection = mongoose.connect('mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-            .then(() => {
-                console.log('se conecto correctamente');
-                this.saveLogToDatabase()
-            })
-            .catch(error => console.log(error));
+        mongoose.connect('mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+        .then(() => {
+            console.log('se conecto correctamente');
+            this.saveLogToDatabase()
+        })
+        .catch(error => console.log(error));
 
+    }
+    
+    static getInstance(){
+        if(!instance){
+            instance = new mongoDAO()
+        }
+        return instance
     }
 
     async saveLogToDatabase() {
@@ -205,4 +214,6 @@ export class mongoDAO {
 
     }
 }
+
+module.exports = mongoDAO
 

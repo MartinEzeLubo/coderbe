@@ -10,14 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listarProductosGraphQL = exports.listarProductos = exports.guardarProducto = exports.actualizarProducto = exports.eliminarProducto = void 0;
-const app_1 = require("../app");
+const dbSelection_1 = require("../db/dbSelection");
 function listarProductos(req) {
     return __awaiter(this, void 0, void 0, function* () {
         let id = req.id || req.toString();
         let name = req.name || null;
         let rangeFrom;
         let rangeTo;
-        console.log("id: " + id);
         if (req.rangeFrom) {
             rangeFrom = parseInt(req.rangeFrom);
         }
@@ -26,7 +25,7 @@ function listarProductos(req) {
             rangeTo = parseInt(req.rangeTo);
         }
         try {
-            return yield app_1.db.read(id, name, rangeFrom, rangeTo);
+            return yield dbSelection_1.db.read(id, name, rangeFrom, rangeTo);
         }
         catch (error) {
             return error;
@@ -37,7 +36,7 @@ exports.listarProductos = listarProductos;
 function listarProductosGraphQL() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield app_1.db.read();
+            return yield dbSelection_1.db.read();
         }
         catch (error) {
             return error;
@@ -52,7 +51,7 @@ function guardarProducto(nombre, descripcion, precio, codigo, stock, foto) {
             throw err;
         }
         try {
-            return app_1.db.create(nombre, descripcion, precio, codigo, stock, foto);
+            return dbSelection_1.db.create(nombre, descripcion, precio, codigo, stock, foto);
         }
         catch (err) {
             throw err;
@@ -67,7 +66,7 @@ function actualizarProducto(id, nombre, descripcion, precio, codigo, stock, foto
             return 'Los parametros enviados son incorrectos';
         }
         try {
-            return yield app_1.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
+            return yield dbSelection_1.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
         }
         catch (err) {
             return err;
@@ -78,7 +77,7 @@ exports.actualizarProducto = actualizarProducto;
 function eliminarProducto(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield app_1.db.delete(id);
+            return yield dbSelection_1.db.delete(id);
         }
         catch (error) {
             return error;

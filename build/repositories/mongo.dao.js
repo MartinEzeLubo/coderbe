@@ -9,22 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mongoDAO = void 0;
 const producto_model_mongo_1 = require("../models/producto.model.mongo");
 const mensaje_model_mongo_1 = require("../models/mensaje.model.mongo");
 const log_model_mongo_1 = require("../models/log.model.mongo");
 const user_model_mongo_1 = require("../models/user.model.mongo");
+const mongoose = require('mongoose');
+let instance = null;
 class mongoDAO {
-    //martinlubo.ddns.net:8102
-    //mongodb://martinlubo.ddns.net:8102/ecommerce
     constructor() {
-        const mongoose = require('mongoose');
-        const mongoConnection = mongoose.connect('mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+        mongoose.connect('mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
             .then(() => {
             console.log('se conecto correctamente');
             this.saveLogToDatabase();
         })
             .catch(error => console.log(error));
+    }
+    static getInstance() {
+        if (!instance) {
+            instance = new mongoDAO();
+        }
+        return instance;
     }
     saveLogToDatabase() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -198,5 +202,5 @@ class mongoDAO {
         });
     }
 }
-exports.mongoDAO = mongoDAO;
+module.exports = mongoDAO;
 //# sourceMappingURL=mongo.dao.js.map
