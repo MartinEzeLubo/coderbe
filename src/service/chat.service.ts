@@ -1,4 +1,4 @@
-import {db} from '../db/dbSelection'
+import {chatdb} from '../db/dbSelection'
 import {normalize, schema} from 'normalizr'
 
 const util = require('util')
@@ -14,16 +14,11 @@ let chatSchema = new schema.Entity('chat',{
 
 
 
-async function listarMensaje(id?:string){
+async function listarMensajes(id?:string){
   try {
-    let messagesData = await db.readMessage(id);
+    let messagesData = await chatdb.readMessage(id);
     
     let data = {id: '001', mensajes: messagesData};
-    
-    console.log(messagesData);
-
-    
-    console.log(data);
     
     return normalize(data, chatSchema);
 
@@ -39,14 +34,14 @@ async function guardarMensaje(data){
       return 'Los parametros enviados son incorrectos';
   }
   try {
-      data = await db.createMessage(data.mail, data.name, data.lastname, data.age, data.alias, data.avatar, data.text);
+      data = await chatdb.createMessage(data.mail, data.name, data.lastname, data.age, data.alias, data.avatar, data.text);
       return data;
   } catch (err) {
       throw err;
   }
 }
 
-export {listarMensaje, guardarMensaje}; 
+export {listarMensajes, guardarMensaje}; 
 
 
 

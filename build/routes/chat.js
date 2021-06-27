@@ -17,7 +17,7 @@ const chat_service_1 = require("./../service/chat.service");
 let router = express_1.default.Router();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let data = yield chat_service_1.listarMensaje();
+        let data = yield chat_service_1.listarMensajes();
         if (data instanceof Error) {
             res.status(404).json(data.message);
         }
@@ -31,7 +31,7 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let data = yield chat_service_1.listarMensaje(req.params.id);
+        let data = yield chat_service_1.listarMensajes(req.params.id);
         if (data instanceof Error) {
             res.status(404).json(data.message);
         }

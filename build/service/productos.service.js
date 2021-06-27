@@ -25,7 +25,7 @@ function listarProductos(req) {
             rangeTo = parseInt(req.rangeTo);
         }
         try {
-            return yield dbSelection_1.db.read(id, name, rangeFrom, rangeTo);
+            return yield dbSelection_1.db.readProduct(id, name, rangeFrom, rangeTo);
         }
         catch (error) {
             return error;
@@ -36,7 +36,7 @@ exports.listarProductos = listarProductos;
 function listarProductosGraphQL() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield dbSelection_1.db.read();
+            return yield dbSelection_1.db.readProduct();
         }
         catch (error) {
             return error;
@@ -51,7 +51,7 @@ function guardarProducto(nombre, descripcion, precio, codigo, stock, foto) {
             throw err;
         }
         try {
-            return dbSelection_1.db.create(nombre, descripcion, precio, codigo, stock, foto);
+            return dbSelection_1.db.createProduct(nombre, descripcion, precio, codigo, stock, foto);
         }
         catch (err) {
             throw err;
@@ -66,7 +66,7 @@ function actualizarProducto(id, nombre, descripcion, precio, codigo, stock, foto
             return 'Los parametros enviados son incorrectos';
         }
         try {
-            return yield dbSelection_1.db.update(id, nombre, descripcion, precio, codigo, stock, foto);
+            return yield dbSelection_1.db.updateProduct(id, nombre, descripcion, precio, codigo, stock, foto);
         }
         catch (err) {
             return err;
@@ -77,7 +77,7 @@ exports.actualizarProducto = actualizarProducto;
 function eliminarProducto(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield dbSelection_1.db.delete(id);
+            return yield dbSelection_1.db.deleteProduct(id);
         }
         catch (error) {
             return error;

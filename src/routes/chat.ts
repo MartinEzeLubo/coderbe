@@ -1,5 +1,5 @@
 import express from 'express';
-import {listarMensaje, guardarMensaje} from './../service/chat.service'
+import {listarMensajes, guardarMensaje} from './../service/chat.service'
 
 let router = express.Router();
 
@@ -7,7 +7,7 @@ let router = express.Router();
 router.get('/', async (req, res) => {
     
     try {
-        let data = await listarMensaje();
+        let data = await listarMensajes();
         
         if (data instanceof Error){
             res.status(404).json(data.message)
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        let data = await listarMensaje(req.params.id);
+        let data = await listarMensajes(req.params.id);
         
         if (data instanceof Error){
             res.status(404).json(data.message)

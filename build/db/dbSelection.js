@@ -18,23 +18,51 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = void 0;
+exports.chatdb = exports.db = void 0;
 const CONFIG = __importStar(require("../app"));
-const sqliteDAO = require('../repositories/sqlite.dao');
+const sqlite = __importStar(require("../repositories/sqlite.dao"));
 const mongoDAO = require('../repositories/mongo.dao');
 setTimeout(() => dbConfig(), 2000);
 function dbConfig() {
-    let dbOption = CONFIG.DB_SELECTION;
-    switch (dbOption) {
-        case "sqlite":
-            exports.db = sqliteDAO.getInstance();
-            break;
-        case "mongo":
-            exports.db = mongoDAO.getInstance();
-            break;
-        default:
-            return 'Error en la configuracion de DDBB';
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        let dbOption = CONFIG.DB_SELECTION;
+        switch (dbOption) {
+            case "sqlite":
+                {
+                    exports.db = sqlite;
+                    exports.db.crearTablaProductos();
+                }
+                break;
+            case "mongo":
+                exports.db = mongoDAO.getInstance();
+                break;
+            default:
+                return 'Error en la configuracion de DDBB';
+        }
+        let ChatdbOption = CONFIG.DB_SELECTION_CHAT;
+        switch (ChatdbOption) {
+            case "sqlite":
+                {
+                    exports.chatdb = sqlite;
+                    exports.chatdb.crearTablaChat();
+                }
+                break;
+            case "mongo":
+                exports.chatdb = mongoDAO.getInstance();
+                break;
+            default:
+                return 'Error en la configuracion de DDBB';
+        }
+    });
 }
 //# sourceMappingURL=dbSelection.js.map

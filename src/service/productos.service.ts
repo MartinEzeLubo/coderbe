@@ -15,7 +15,7 @@ async function listarProductos(req){
   }
 
   try {
-    return await db.read(id, name, rangeFrom, rangeTo);
+    return await db.readProduct(id, name, rangeFrom, rangeTo);
   } catch (error) {
     return error;
   }
@@ -23,7 +23,7 @@ async function listarProductos(req){
 }
 async function listarProductosGraphQL(){
   try {
-    return await db.read();
+    return await db.readProduct();
   } catch (error) {
     return error;
   }
@@ -37,7 +37,7 @@ async function guardarProducto(nombre: string, descripcion: string, precio: numb
     throw err;
   }
   try {
-    return db.create(nombre, descripcion, precio, codigo, stock, foto)
+    return db.createProduct(nombre, descripcion, precio, codigo, stock, foto)
   } catch (err) {
     throw err;
   }
@@ -52,7 +52,7 @@ async function actualizarProducto(id: string, nombre: string, descripcion: strin
     return 'Los parametros enviados son incorrectos';
   }
   try {
-    return await db.update(id, nombre, descripcion, precio, codigo, stock, foto);
+    return await db.updateProduct(id, nombre, descripcion, precio, codigo, stock, foto);
   } catch (err) {
     return err;
   }
@@ -61,7 +61,7 @@ async function actualizarProducto(id: string, nombre: string, descripcion: strin
 async function eliminarProducto(id: string){
   
   try {
-    return await db.delete(id);
+    return await db.deleteProduct(id);
   } catch (error) {
     return error;
   }

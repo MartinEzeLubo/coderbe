@@ -11,9 +11,10 @@ import router from './routes/index';
 import compression from 'compression'
 import winston from 'winston'
 import { listarProductos } from './service/productos.service';
+import {guardarMensaje, listarMensajes} from './service/chat.service';
 
-export const DB_SELECTION = "mongo";
-
+export const DB_SELECTION = "sqlite";
+export const DB_SELECTION_CHAT = "sqlite"
 
 // import * as database from './repositories/mongo.dao';
 // export const db = dbSelected
@@ -78,22 +79,29 @@ export const logger = winston.createLogger({
 });
 
 
-io.on('connection', async (socket)=>{
 
-  
+io.on('connection', async (socket)=>{
+  updateProducList();
+  updateChat();
+
   socket.on('update', ()=>{
     socket.emit()
     
   })
 
-});
-
-io.on('connection', async (socket)=>{
-  updateProducList();
-
   socket.on('update', async (data)=>{
     updateProducList();  
   })
+  socket.on('sendmessage', (data)=>{
+    guardarMensaje(data);
+    socket.broadcast.emit('newmessage', data);
+    
+  })
+  socket.on('writing', (data)=>{
+    socket.broadcast.emit('whoiswriting', data);
+    
+  })
+
 })
 
 export async function updateProducList(){
@@ -101,7 +109,10 @@ export async function updateProducList(){
   io.sockets.emit('productos', list);
 };
 
-
+async function updateChat(){
+  let chat = await listarMensajes();
+  io.sockets.emit('chat', chat);
+}
 
 
 if (process.argv[4] === "cluster") {

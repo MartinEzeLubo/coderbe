@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProducList = exports.logger = exports.DB_SELECTION = void 0;
+exports.updateProducList = exports.logger = exports.DB_SELECTION_CHAT = exports.DB_SELECTION = void 0;
 const cluster_1 = __importDefault(require("cluster"));
 const os_1 = __importDefault(require("os"));
 require("core-js");
@@ -24,7 +24,9 @@ const index_1 = __importDefault(require("./routes/index"));
 const compression_1 = __importDefault(require("compression"));
 const winston_1 = __importDefault(require("winston"));
 const productos_service_1 = require("./service/productos.service");
-exports.DB_SELECTION = "mongo";
+const chat_service_1 = require("./service/chat.service");
+exports.DB_SELECTION = "sqlite";
+exports.DB_SELECTION_CHAT = "sqlite";
 // import * as database from './repositories/mongo.dao';
 // export const db = dbSelected
 // export const db = new database.mongoDAO;
@@ -70,15 +72,21 @@ exports.logger = winston_1.default.createLogger({
     ],
 });
 io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
+    updateProducList();
+    updateChat();
     socket.on('update', () => {
         socket.emit();
     });
-}));
-io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
-    updateProducList();
     socket.on('update', (data) => __awaiter(void 0, void 0, void 0, function* () {
         updateProducList();
     }));
+    socket.on('sendmessage', (data) => {
+        chat_service_1.guardarMensaje(data);
+        socket.broadcast.emit('newmessage', data);
+    });
+    socket.on('writing', (data) => {
+        socket.broadcast.emit('whoiswriting', data);
+    });
 }));
 function updateProducList() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -88,6 +96,12 @@ function updateProducList() {
 }
 exports.updateProducList = updateProducList;
 ;
+function updateChat() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let chat = yield chat_service_1.listarMensajes();
+        io.sockets.emit('chat', chat);
+    });
+}
 if (process.argv[4] === "cluster") {
     if (cluster_1.default.isMaster) {
         console.log('Trabajando modo Cluster');

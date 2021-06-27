@@ -40,7 +40,7 @@ class mongoDAO {
         }
     }
 
-    async create(nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string) {
+    async createProduct(nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string) {
 
         try {
             let nuevoProducto = {
@@ -64,7 +64,7 @@ class mongoDAO {
 
     }
 
-    async read(id?: string, name?: string, rangeFrom?: number, rangeTo?: number) {
+    async readProduct(id?: string, name?: string, rangeFrom?: number, rangeTo?: number) {
 
         try {
             if (!id && !name && !rangeFrom && !rangeTo) {
@@ -97,7 +97,7 @@ class mongoDAO {
         }
     }
 
-    async update(id: string, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string) {
+    async updateProduct(id: string, nombre: string, descripcion: string, precio: number, codigo: string, stock: number, foto: string) {
         try {
             return await producto.findOneAndUpdate(
                 { _id: id },
@@ -119,7 +119,7 @@ class mongoDAO {
 
     }
 
-    async delete(id: string) {
+    async deleteProduct(id: string) {
         try {
             let data = await producto.findOneAndDelete({ _id: id })
             if (data === null) {

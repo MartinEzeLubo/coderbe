@@ -42,7 +42,7 @@ class mongoDAO {
             }
         });
     }
-    create(nombre, descripcion, precio, codigo, stock, foto) {
+    createProduct(nombre, descripcion, precio, codigo, stock, foto) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let nuevoProducto = {
@@ -63,7 +63,7 @@ class mongoDAO {
             }
         });
     }
-    read(id, name, rangeFrom, rangeTo) {
+    readProduct(id, name, rangeFrom, rangeTo) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!id && !name && !rangeFrom && !rangeTo) {
@@ -96,7 +96,7 @@ class mongoDAO {
             }
         });
     }
-    update(id, nombre, descripcion, precio, codigo, stock, foto) {
+    updateProduct(id, nombre, descripcion, precio, codigo, stock, foto) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 return yield producto_model_mongo_1.producto.findOneAndUpdate({ _id: id }, {
@@ -116,7 +116,7 @@ class mongoDAO {
             }
         });
     }
-    delete(id) {
+    deleteProduct(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let data = yield producto_model_mongo_1.producto.findOneAndDelete({ _id: id });
