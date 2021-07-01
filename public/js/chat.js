@@ -14,8 +14,8 @@ const schemaMensajes = new normalizr.schema.Entity('posts', {
 /* ----------------------------------------------------------------------------- */
 
 /* ----------------------------------------------------------------- */
-socket.on('messages', function(mensajesN) { 
-
+socket.on('chat', function(mensajesN) { 
+  console.log('chaaattt');
   let mensajesNsize = JSON.stringify(mensajesN).length
   console.log(mensajesN, mensajesNsize);
 

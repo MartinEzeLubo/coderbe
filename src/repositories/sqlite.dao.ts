@@ -85,53 +85,50 @@ export async function deleteProduct(id: string) {
 
 
 
-// async function createMessage(mail: string, name: string, lastname: string, age: number, alias: string, avatar: string, text: string) {
+export async function createMessage(mail: string, name: string, lastname: string, age: number, alias: string, avatar: string, text: string) {
 
 
-//     try {
-//         let author = {
-//             mail,
-//             name,
-//             lastname,
-//             age,
-//             alias,
-//             avatar
-//         }
-//         let nuevoMensaje = {
-//             text,
-//             timestamp: Date.now()
-//         }
+    try {
+        let db = await SqliteConnector.Get();
 
-//         let nuevoMensajeModel = await new mensaje(nuevoMensaje);
-//         nuevoMensajeModel.author = author;
-//         console.log(nuevoMensajeModel);
-//         await nuevoMensajeModel.save();
-//         return nuevoMensajeModel;
+        db('chat')
+        .insert([
+            {
+                "mail": mail,
+                "name": name,
+                "lastname": lastname,
+                "age": age,
+                "alias": alias,
+                "avatar": avatar,
+                "text": text,
+            }])
+        .then(()=> console.log('Chat insertado'))
+        .catch((err)=> console.log(err))
+        .finally(()=>db.destroy);
+        
+      } catch (err) {
+        return err;
+      }
 
-//     } catch (err) {
-//         console.log(err);
-//         return err;
-//     }
+}
 
-// }
+export async function readMessage(id?: string) {
+    let mensajes = [];
+    try {
+        let db = await SqliteConnector.Get();
+        console.log('readMessage');
+        await db.select('*').from('chat')
+            .then(data => {
+                data.forEach(element => {
+                    mensajes.push(element)
+                });
+                console.log(data);
+            })
+    } catch (err) {
+        return err;
+    }
 
-// async function readMessage(id?: string) {
-
-//     try {
-//         if (id) {
-//             let data = await mensaje.findById(id)
-//             if (data === null) {
-//                 throw Error('No existe un producto con el ID indicado');
-//             }
-//             return data
-//         }
-
-//         return await mensaje.find();
-//     } catch (err) {
-//         throw Error('No existe un producto con el ID indicado');
-//     }
-
-// }
+}
 
 
 
@@ -189,10 +186,17 @@ export async function crearTablaChat() {
                 console.log('existe');
                 let info = db.schema.createTable('chat', table => {
                     table.increments('id').primary();
-                    table.string('sender', 80);
-                    table.string('message', 200);
+                    table.string('mail', 80);
+                    table.string('name', 200);
+                    table.string('lastname', 200);
+                    table.integer('age');
+                    table.string('alias', 200);
+                    table.string('avatar', 200);
                     table.string('timestamp');
                 })
+
+
+                
                     .then(() => console.log('tabla chat creada'))
                     .catch((err) => console.log(err))
                     .finally(() => db.destroy);
@@ -200,13 +204,23 @@ export async function crearTablaChat() {
                 SqliteConnector('chat')
                     .insert([
                         {
-                            "sender": "asd@asd.com",
-                            "message": "Buenas noches",
+                            "mail": "martinlubo588@gmail.com",
+                            "name": "Martin",
+                            "lastname": "Lubo",
+                            "age": 32,
+                            "alias": "MelDev",
+                            "avatar": "www.sarasa.com/img.jpg",
+                            "text": "Bienvenido al chat",
                             "timestamp": "1615761918128"
                         },
                         {
-                            "sender": "asd@asd.com",
-                            "message": "como va todo?",
+                            "mail": "martinlubo588@gmail.com",
+                            "name": "Martin",
+                            "lastname": "Lubo",
+                            "age": 32,
+                            "alias": "MelDev",
+                            "avatar": "www.sarasa.com/img.jpg",
+                            "text": "Sed eget libero mauris. Pellentesque rutrum tellus id dictum pretium. Nunc pellentesque lobortis ex, sit amet laoreet mauris consectetur eu. Nullam dui justo, facilisis eu gravida et, bibendum facilisis odio. Pellentesque vel aliquam magna. Proin facilisis diam nisi, nec tincidunt odio accumsan vel. Nullam sollicitudin eros nibh, a finibus leo accumsan vitae. Sed sit amet odio cursus, facilisis justo vitae, faucibus libero. Quisque non nibh ut leo lacinia varius. Praesent venenatis maximus ex vel consectetur. Suspendisse potenti. Sed volutpat eleifend quam ut congue. Proin placerat risus id metus maximus, eu euismod nunc molestie. Curabitur ut consequat metus. Suspendisse potenti. In tincidunt ullamcorper nunc. ",
                             "timestamp": "1615761918128"
                         }
                     ]).then(() => console.log('Chat insertado'))

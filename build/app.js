@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProducList = exports.logger = exports.DB_SELECTION_CHAT = exports.DB_SELECTION = void 0;
+exports.updateChat = exports.updateProducList = exports.logger = void 0;
+const config = require('./config');
 const cluster_1 = __importDefault(require("cluster"));
 const os_1 = __importDefault(require("os"));
 require("core-js");
@@ -25,11 +26,7 @@ const compression_1 = __importDefault(require("compression"));
 const winston_1 = __importDefault(require("winston"));
 const productos_service_1 = require("./service/productos.service");
 const chat_service_1 = require("./service/chat.service");
-exports.DB_SELECTION = "sqlite";
-exports.DB_SELECTION_CHAT = "sqlite";
-// import * as database from './repositories/mongo.dao';
-// export const db = dbSelected
-// export const db = new database.mongoDAO;
+const yargs = require('yargs').argv;
 const cpus = os_1.default.cpus().length;
 const handlebars = require('express-handlebars');
 const app = express_1.default();
@@ -37,14 +34,17 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const mongoDBStore = require('connect-mongodb-session')(express_session_1.default);
 const sessionStore = new mongoDBStore({
-    uri: 'mongodb://mongoadmin:mongoadmin@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority',
+    uri: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority`,
     collection: 'sessions'
 });
+///////////////////////
+console.log(config);
+///////////////////////
 app.use(express_1.default.static('scripts'));
 // app.use("public",express.static(__dirname + "/public"));
-app.set('PORT', process.env.PORT || 8080);
+app.set('PORT', yargs.port || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use(cors_1.default({ origin: ['http://localhost:8080'], credentials: true }));
+app.use(cors_1.default({ origin: [`http://localhost:${yargs.port || 8080}`], credentials: true }));
 app.use(compression_1.default());
 app.engine("hbs", handlebars({
     extname: ".hbs",
@@ -99,10 +99,12 @@ exports.updateProducList = updateProducList;
 function updateChat() {
     return __awaiter(this, void 0, void 0, function* () {
         let chat = yield chat_service_1.listarMensajes();
+        console.log('updateChat');
         io.sockets.emit('chat', chat);
     });
 }
-if (process.argv[4] === "cluster") {
+exports.updateChat = updateChat;
+if (config.MODE === "cluster") {
     if (cluster_1.default.isMaster) {
         console.log('Trabajando modo Cluster');
         console.log(`Master ${process.pid} is running`);

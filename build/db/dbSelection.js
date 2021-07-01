@@ -29,13 +29,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.chatdb = exports.db = void 0;
-const CONFIG = __importStar(require("../app"));
+const config = require('../config');
 const sqlite = __importStar(require("../repositories/sqlite.dao"));
 const mongoDAO = require('../repositories/mongo.dao');
 setTimeout(() => dbConfig(), 2000);
 function dbConfig() {
     return __awaiter(this, void 0, void 0, function* () {
-        let dbOption = CONFIG.DB_SELECTION;
+        let dbOption = config.DB_SELECTION;
         switch (dbOption) {
             case "sqlite":
                 {
@@ -49,7 +49,7 @@ function dbConfig() {
             default:
                 return 'Error en la configuracion de DDBB';
         }
-        let ChatdbOption = CONFIG.DB_SELECTION_CHAT;
+        let ChatdbOption = config.DB_SELECTION_CHAT;
         switch (ChatdbOption) {
             case "sqlite":
                 {

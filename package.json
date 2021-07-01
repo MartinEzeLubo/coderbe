@@ -10,7 +10,8 @@
     "test": "mocha ./test/index.test.js",
     "babel": "node_modules/.bin/babel build -d dist",
     "dockerandrun": "docker run -p 127.0.0.1:3306:3306 -e MYSQL_ROOT_PASSWORD=Maria2021! -e MYSQL_DATABASE=backend -d mariadb && sleep 3 && npm run compileandrun",
-    "devrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js",
+    "devrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && export NODE_ENV=development && node ./dist/app.js --port=4000",
+    "prodrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && export NODE_ENV=production && node ./dist/app.js --port=9000",
     "compileandrun": "tsc && node_modules/.bin/babel build -d dist --copy-files && node ./dist/app.js & npx serve -s frontend"
   },
   "author": "",
@@ -29,6 +30,7 @@
     "connect-mongodb-session": "^2.4.1",
     "core-js": "^3.12.1",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
@@ -52,7 +54,8 @@
     "tsc": "^1.20150623.0",
     "tsc-node": "0.0.3",
     "twilio": "^3.63.1",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "yargs": "^17.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",

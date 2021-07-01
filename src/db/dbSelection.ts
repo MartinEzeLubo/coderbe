@@ -1,4 +1,4 @@
-import * as CONFIG from '../app';
+const config = require('../config')
 import * as sqlite from '../repositories/sqlite.dao'
 
 
@@ -10,7 +10,8 @@ export let chatdb
 setTimeout(() => dbConfig(), 2000);
 
 async function dbConfig() {
-  let dbOption = CONFIG.DB_SELECTION
+
+  let dbOption = config.DB_SELECTION
   switch (dbOption) {
     case "sqlite": {db = sqlite; db.crearTablaProductos();}
       break
@@ -20,7 +21,7 @@ async function dbConfig() {
       return 'Error en la configuracion de DDBB'
   }
 
-  let ChatdbOption = CONFIG.DB_SELECTION_CHAT
+  let ChatdbOption = config.DB_SELECTION_CHAT
   switch (ChatdbOption) {
     case "sqlite": {
       chatdb = sqlite

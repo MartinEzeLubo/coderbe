@@ -35,17 +35,22 @@ router.use('/auth', routerAuth)
 
 
 router.get('/', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.render("home", {
-            nombre: req.user.displayName,
-            foto: req.user.photos[0].value,
-            email: req.user.emails[0].value
-        })
-    }
-    else {
-        console.log(process.cwd());
-        res.sendFile(process.cwd() +'/public/login.html')
-    }
+    res.render("home", {
+        nombre: "Hola invitado",
+        foto: "https://i.picsum.photos/id/237/200/300.jpg",
+        email: "invitado@invitado.com"
+    })
+    // if (req.isAuthenticated()) {
+    //     res.render("home", {
+    //         nombre: req.user.displayName,
+    //         foto: req.user.photos[0].value,
+    //         email: req.user.emails[0].value
+    //     })
+    // }
+    // else {
+    //     console.log(process.cwd());
+    //     res.sendFile(process.cwd() +'/public/login.html')
+    // }
 })
 
 
