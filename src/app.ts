@@ -28,16 +28,7 @@ const sessionStore = new mongoDBStore({
 })
 
 
-
-///////////////////////
-console.log(config);
-
-///////////////////////
-
-
-
 app.use(express.static('scripts'));
-// app.use("public",express.static(__dirname + "/public"));
 
 app.set('PORT', yargs.port || 8080);
 app.use(express.urlencoded({ extended: true }));

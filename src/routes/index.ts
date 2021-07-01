@@ -15,7 +15,7 @@ import passport from 'passport';
 import { sendMail, sendMailGmail } from '../service/send.email.service'
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
-import {listarProductos, listarProductosGraphQL, guardarProducto} from '../service/productos.service'
+import {listarProductos, listarProductosGraphQL, guardarProducto, eliminarProducto, actualizarProducto} from '../service/productos.service'
 
 const cpus = numCPUs.cpus().length;
 let router = express.Router();
@@ -81,10 +81,12 @@ router.get('/logout', (req, res) => {
 const schema = buildSchema(`
     type Query {
         product(id: String): Product,
-        products: [Product]
+        products: [Product],
+        deleteProduct(id: String!): String
     }
     type Mutation {
-        createProduct(nombre: String!, descripcion: String!, precio: Int!, codigo: String!, stock: Int!, foto: String!): Product
+        createProduct(nombre: String!, descripcion: String!, precio: Int!, codigo: String!, stock: Int!, foto: String!): Product,
+        updateProduct(id: String!, nombre: String!, descripcion: String!, precio: Int!, codigo: String!, stock: Int!, foto: String!): Product,
     }
     type Product {
         id: String
@@ -100,13 +102,17 @@ const schema = buildSchema(`
 const root = {
     product: getProduct,
     products: getProducts,
-    createProduct: createProduct
+    createProduct: createProduct,
+    deleteProduct: deleteProduct,
+    updateProduct: updateProduct
 }
 
 async function getProduct(args){
+    console.log(args);
     let data = await listarProductos(args)
     return data
 }
+
 
 async function getProducts(){
     let data = await listarProductosGraphQL()
@@ -120,7 +126,25 @@ async function createProduct(args){
         console.log(error);
     }
 }
+async function updateProduct(args){
+    try {
+        return await actualizarProducto(args.id, args.nombre, args.descripcion, args.precio, args.codigo, args. stock, args.foto)
+       
+    } catch (error) {
+        console.log(error);
+    }
+}
 
+async function deleteProduct(args){
+    try {
+        console.log(args.id);
+        let info = await eliminarProducto(args.id)
+        console.log(info);
+        return 'Eliminado'
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 router.use('/graphql', graphqlHTTP({

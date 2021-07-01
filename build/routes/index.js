@@ -77,10 +77,12 @@ router.get('/logout', (req, res) => {
 const schema = graphql_1.buildSchema(`
     type Query {
         product(id: String): Product,
-        products: [Product]
+        products: [Product],
+        deleteProduct(id: String!): String
     }
     type Mutation {
-        createProduct(nombre: String!, descripcion: String!, precio: Int!, codigo: String!, stock: Int!, foto: String!): Product
+        createProduct(nombre: String!, descripcion: String!, precio: Int!, codigo: String!, stock: Int!, foto: String!): Product,
+        updateProduct(id: String!, nombre: String!, descripcion: String!, precio: Int!, codigo: String!, stock: Int!, foto: String!): Product,
     }
     type Product {
         id: String
@@ -95,10 +97,13 @@ const schema = graphql_1.buildSchema(`
 const root = {
     product: getProduct,
     products: getProducts,
-    createProduct: createProduct
+    createProduct: createProduct,
+    deleteProduct: deleteProduct,
+    updateProduct: updateProduct
 };
 function getProduct(args) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(args);
         let data = yield productos_service_1.listarProductos(args);
         return data;
     });
@@ -114,6 +119,29 @@ function createProduct(args) {
         try {
             let info = yield productos_service_1.guardarProducto(args.nombre, args.descripcion, args.precio, args.codigo, args.stock, args.foto);
             return info;
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+function updateProduct(args) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            return yield productos_service_1.actualizarProducto(args.id, args.nombre, args.descripcion, args.precio, args.codigo, args.stock, args.foto);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+function deleteProduct(args) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            console.log(args.id);
+            let info = yield productos_service_1.eliminarProducto(args.id);
+            console.log(info);
+            return 'Eliminado';
         }
         catch (error) {
             console.log(error);

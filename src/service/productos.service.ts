@@ -53,6 +53,7 @@ async function actualizarProducto(id: string, nombre: string, descripcion: strin
   }
   try {
     return await db.updateProduct(id, nombre, descripcion, precio, codigo, stock, foto);
+    
   } catch (err) {
     return err;
   }

@@ -37,11 +37,7 @@ const sessionStore = new mongoDBStore({
     uri: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-shard-00-00.womr0.mongodb.net:27017,cluster0-shard-00-01.womr0.mongodb.net:27017,cluster0-shard-00-02.womr0.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-ftyf8w-shard-0&authSource=admin&retryWrites=true&w=majority`,
     collection: 'sessions'
 });
-///////////////////////
-console.log(config);
-///////////////////////
 app.use(express_1.default.static('scripts'));
-// app.use("public",express.static(__dirname + "/public"));
 app.set('PORT', yargs.port || 8080);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(cors_1.default({ origin: [`http://localhost:${yargs.port || 8080}`], credentials: true }));
